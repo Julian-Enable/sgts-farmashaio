@@ -1,6 +1,13 @@
 # 📋 SGTS FARMASHAIO - Sistema de Gestión de Tickets de Soporte TI
 
-Sistema integral de gestión de tickets de soporte técnico desarrollado específicamente para FARMASHAIO, implementando una arquitectura de 3 capas completamente desacoplada con hosting gratuito.
+[![GitHub release](https://img.shields.io/github/v/release/Julian-Enable/sgts-farmashaio?style=for-the-badge&logo=github)](https://github.com/Julian-Enable/sgts-farmashaio/releases)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
+[![React](https://img.shields.io/badge/React-18.x-61DAFB?style=for-the-badge&logo=react)](https://reactjs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-18.x-339933?style=for-the-badge&logo=node.js)](https://nodejs.org/)
+[![Material-UI](https://img.shields.io/badge/Material--UI-5.x-007FFF?style=for-the-badge&logo=mui)](https://mui.com/)
+
+> 🎯 **Sistema integral de gestión de tickets de soporte técnico desarrollado específicamente para FARMASHAIO**  
+> Implementando una arquitectura de 3 capas completamente desacoplada con hosting gratuito.
 
 ## 🏗️ Arquitectura del Sistema
 
