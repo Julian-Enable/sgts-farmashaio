@@ -33,27 +33,26 @@ const PORT = process.env.PORT || 3001;
 // Security middleware
 app.use(helmet());
 
-// CORS configuration - Allow multiple origins
-const allowedOrigins = [
-  'http://localhost:5173',
-  'https://sgts-farmashaio.vercel.app',
-  'https://sgts-farmashaio-git-main-julian-enables-projects.vercel.app',
-  process.env.CLIENT_URL
-].filter(Boolean);
-
+// CORS configuration - Allow all Vercel domains
 app.use(cors({
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    } else {
-      console.log(`❌ CORS blocked origin: ${origin}`);
-      return callback(new Error('Not allowed by CORS'));
-    }
+    // Allow localhost for development
+    if (origin.includes('localhost')) return callback(null, true);
+    
+    // Allow all vercel.app domains
+    if (origin.includes('vercel.app')) return callback(null, true);
+    
+    // Allow all onrender.com domains  
+    if (origin.includes('onrender.com')) return callback(null, true);
+    
+    console.log(`❌ CORS blocked origin: ${origin}`);
+    return callback(new Error('Not allowed by CORS'));
   },
-  credentials: true
+  credentials: true,
+  optionsSuccessStatus: 200
 }));
 
 // Rate limiting
