@@ -380,4 +380,5 @@ Este proyecto está licenciado bajo la Licencia MIT - ver el archivo [LICENSE](L
 ---
 
 **Desarrollado con ❤️ para FARMASHAIO**  
-*Sistema de Gestión de Tickets de Soporte TI v1.0.0*
+*Sistema de Gestión de Tickets de Soporte TI v1.0.0*#   B u i l d :   0 9 / 2 9 / 2 0 2 5   2 3 : 5 9 : 4 9  
+ 
