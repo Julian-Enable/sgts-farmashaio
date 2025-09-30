@@ -26,18 +26,81 @@ export class Ticket {
     this.status = data.status;
   }
 
+  // Generar número de ticket único
+  static async generateTicketNumber() {
+    const currentYear = new Date().getFullYear();
+    
+    // Obtener el siguiente número para el año actual
+    // Usar sintaxis compatible con ambas bases de datos
+    const isProduction = process.env.NODE_ENV === 'production';
+    const likeParam = `TKT-${currentYear}-%`;
+    
+    const result = await query(
+      `SELECT COUNT(*) as count FROM tickets WHERE ticket_number LIKE ${isProduction ? '$1' : '?'}`,
+      [likeParam]
+    );
+    
+    const nextNumber = parseInt(result.rows[0].count || 0) + 1;
+    return `TKT-${currentYear}-${nextNumber.toString().padStart(6, '0')}`;
+  }
+
   // Crear nuevo ticket
   static async create(ticketData) {
-    const { title, description, requesterId, categoryId, priorityId, statusId, dueDate, estimatedHours } = ticketData;
+    const { 
+      title, 
+      description, 
+      requesterId, 
+      categoryId = 'cat6', // Default: 'Otros'
+      priorityId = 'pri3',  // Default: 'Media'
+      statusId = 'st1',     // Default: 'Nuevo'
+      dueDate, 
+      estimatedHours 
+    } = ticketData;
 
-    const result = await query(
-      `INSERT INTO tickets (title, description, requester_id, category_id, priority_id, status_id, due_date, estimated_hours)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-       RETURNING *`,
-      [title, description, requesterId, categoryId, priorityId, statusId, dueDate, estimatedHours]
-    );
+    // Generar número de ticket único
+    const ticketNumber = await this.generateTicketNumber();
 
-    return new Ticket(result.rows[0]);
+    console.log('🔄 Creando ticket con datos:', { title, ticketNumber, requesterId, categoryId, priorityId, statusId });
+
+    const isProduction = process.env.NODE_ENV === 'production';
+
+    // Insertar el ticket con sintaxis adaptada al entorno
+    let result;
+    if (isProduction) {
+      // PostgreSQL con RETURNING
+      result = await query(
+        `INSERT INTO tickets (title, description, ticket_number, requester_id, category_id, priority_id, status_id, due_date, estimated_hours)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
+        [title, description, ticketNumber, requesterId, categoryId, priorityId, statusId, dueDate, estimatedHours]
+      );
+      console.log('✅ Ticket creado en PostgreSQL, ID:', result.rows[0].id);
+      return new Ticket(result.rows[0]);
+    } else {
+      // SQLite sin RETURNING
+      result = await query(
+        `INSERT INTO tickets (title, description, ticket_number, requester_id, category_id, priority_id, status_id, due_date, estimated_hours)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [title, description, ticketNumber, requesterId, categoryId, priorityId, statusId, dueDate, estimatedHours]
+      );
+      
+      console.log('✅ Ticket insertado en SQLite, lastID:', result.lastID);
+      
+      // Devolver datos básicos para SQLite
+      return new Ticket({
+        id: result.lastID,
+        title,
+        description,
+        ticket_number: ticketNumber,
+        requester_id: requesterId,
+        category_id: categoryId,
+        priority_id: priorityId,
+        status_id: statusId,
+        due_date: dueDate,
+        estimated_hours: estimatedHours,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      });
+    }
   }
 
   // Buscar ticket por ID con datos relacionados
@@ -64,7 +127,7 @@ export class Ticket {
        LEFT JOIN categories c ON t.category_id = c.id
        LEFT JOIN priorities p ON t.priority_id = p.id
        LEFT JOIN ticket_statuses s ON t.status_id = s.id
-       WHERE t.id = $1`,
+       WHERE t.id = ?`,
       [id]
     );
 
@@ -138,32 +201,34 @@ export class Ticket {
     
     if (filters.requesterId) {
       params.push(filters.requesterId);
-      queryText += ` AND t.requester_id = $${params.length}`;
+      queryText += ` AND t.requester_id = ?`;
     }
     
     if (filters.assignedTo) {
       params.push(filters.assignedTo);
-      queryText += ` AND t.assigned_to = $${params.length}`;
+      queryText += ` AND t.assigned_to = ?`;
     }
     
     if (filters.categoryId) {
       params.push(filters.categoryId);
-      queryText += ` AND t.category_id = $${params.length}`;
+      queryText += ` AND t.category_id = ?`;
     }
     
     if (filters.statusId) {
       params.push(filters.statusId);
-      queryText += ` AND t.status_id = $${params.length}`;
+      queryText += ` AND t.status_id = ?`;
     }
     
     if (filters.priorityId) {
       params.push(filters.priorityId);
-      queryText += ` AND t.priority_id = $${params.length}`;
+      queryText += ` AND t.priority_id = ?`;
     }
     
     if (filters.search) {
       params.push(`%${filters.search}%`);
-      queryText += ` AND (t.title ILIKE $${params.length} OR t.description ILIKE $${params.length} OR t.ticket_number ILIKE $${params.length})`;
+      queryText += ` AND (t.title LIKE ? OR t.description LIKE ? OR t.ticket_number LIKE ?)`;
+      params.push(`%${filters.search}%`);
+      params.push(`%${filters.search}%`);
     }
     
     // Ordenamiento
@@ -174,11 +239,11 @@ export class Ticket {
     // Paginación
     if (filters.limit) {
       params.push(filters.limit);
-      queryText += ` LIMIT $${params.length}`;
+      queryText += ` LIMIT ?`;
       
       if (filters.offset) {
         params.push(filters.offset);
-        queryText += ` OFFSET $${params.length}`;
+        queryText += ` OFFSET ?`;
       }
     }
 

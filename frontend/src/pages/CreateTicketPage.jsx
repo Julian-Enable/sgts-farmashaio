@@ -156,11 +156,16 @@ const CreateTicketPage = () => {
 
       const response = await ticketService.createTicket(ticketData);
       
+      // Debug temporal - ver qué respuesta llega
+      console.log('Respuesta del servidor:', response);
+      console.log('Ticket ID:', response.ticket?.id);
+      
       setSuccess(true);
       
-      // Redirigir después de un momento
+      // Redirigir después de un momento - temporalmente vamos a /tickets en lugar del ticket específico
       setTimeout(() => {
-        navigate(`/tickets/${response.ticket.id}`);
+        console.log('Redirecting to tickets list...');
+        navigate('/tickets');
       }, 2000);
       
     } catch (err) {

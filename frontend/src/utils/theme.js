@@ -3,15 +3,15 @@ import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#1976d2',
-      light: '#42a5f5',
-      dark: '#1565c0',
+      main: '#1e3a8a', // Azul rey (similar al del logo)
+      light: '#3b82f6',
+      dark: '#1e40af',
       contrastText: '#ffffff',
     },
     secondary: {
-      main: '#dc004e',
-      light: '#ff5983',
-      dark: '#9a0036',
+      main: '#dc2626', // Rojo corporativo (similar al del logo)
+      light: '#ef4444',
+      dark: '#b91c1c',
       contrastText: '#ffffff',
     },
     success: {
@@ -35,7 +35,7 @@ const theme = createTheme({
       dark: '#01579b',
     },
     background: {
-      default: '#fafafa',
+      default: '#f8fafc', // Fondo más limpio
       paper: '#ffffff',
     },
     text: {
@@ -207,31 +207,31 @@ const theme = createTheme({
   },
 });
 
-// Colores personalizados para estados de tickets
+// Colores personalizados para estados de tickets (usando paleta corporativa)
 theme.palette.ticketStatus = {
-  nuevo: '#2196f3',
-  asignado: '#ff9800',
-  enProgreso: '#9c27b0',
-  esperandoUsuario: '#ffc107',
-  resuelto: '#4caf50',
-  cerrado: '#757575',
-  cancelado: '#f44336',
+  nuevo: '#1e3a8a',     // Azul rey
+  asignado: '#dc2626',  // Rojo corporativo
+  enProgreso: '#7c3aed', // Púrpura (complementario)
+  esperandoUsuario: '#f59e0b', // Amarillo/naranja
+  resuelto: '#059669',  // Verde (éxito)
+  cerrado: '#6b7280',   // Gris neutro
+  cancelado: '#dc2626', // Rojo corporativo
 };
 
-// Colores personalizados para prioridades
+// Colores personalizados para prioridades (usando paleta corporativa)
 theme.palette.priority = {
-  muyBaja: '#4caf50',
-  baja: '#8bc34a',
-  media: '#ff9800',
-  alta: '#f44336',
-  critica: '#d32f2f',
+  muyBaja: '#059669',   // Verde
+  baja: '#10b981',      // Verde claro
+  media: '#f59e0b',     // Amarillo/naranja
+  alta: '#dc2626',      // Rojo corporativo
+  critica: '#b91c1c',   // Rojo oscuro
 };
 
-// Colores personalizados para roles
+// Colores personalizados para roles (usando paleta corporativa)
 theme.palette.userRole = {
-  empleado: '#2196f3',
-  tecnico: '#ff9800',
-  administrador: '#9c27b0',
+  empleado: '#1e3a8a',  // Azul rey
+  tecnico: '#dc2626',   // Rojo corporativo
+  administrador: '#7c3aed', // Púrpura
 };
 
 export default theme;

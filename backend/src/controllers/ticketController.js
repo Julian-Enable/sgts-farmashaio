@@ -14,15 +14,63 @@ export const createTicket = catchAsync(async (req, res) => {
     });
   }
 
-  const { title, description, category, priority } = req.body;
+  const { title, description, category, priority, dueDate } = req.body;
 
-  // Crear ticket usando el modelo simplificado
+  // Mapear los nombres a IDs según el entorno
+  const isProduction = process.env.NODE_ENV === 'production';
+  
+  const categoryMap = isProduction ? {
+    // UUIDs para PostgreSQL (producción)
+    'Hardware': '550e8400-e29b-41d4-a716-446655440001',
+    'Software': '550e8400-e29b-41d4-a716-446655440002', 
+    'Red': '550e8400-e29b-41d4-a716-446655440003',
+    'Acceso': '550e8400-e29b-41d4-a716-446655440004',
+    'Email': '550e8400-e29b-41d4-a716-446655440005',
+    'Otros': '550e8400-e29b-41d4-a716-446655440006'
+  } : {
+    // IDs para SQLite (desarrollo)
+    'Hardware': 'cat1',
+    'Software': 'cat2', 
+    'Red': 'cat3',
+    'Acceso': 'cat4',
+    'Email': 'cat5',
+    'Otros': 'cat6'
+  };
+
+  const priorityMap = isProduction ? {
+    // UUIDs para PostgreSQL (producción)
+    'Muy Baja': '550e8400-e29b-41d4-a716-446655441001',
+    'Baja': '550e8400-e29b-41d4-a716-446655441002',
+    'Media': '550e8400-e29b-41d4-a716-446655441003', 
+    'Alta': '550e8400-e29b-41d4-a716-446655441004',
+    'Crítica': '550e8400-e29b-41d4-a716-446655441005'
+  } : {
+    // IDs para SQLite (desarrollo)
+    'Muy Baja': 'pri1',
+    'Baja': 'pri2',
+    'Media': 'pri3', 
+    'Alta': 'pri4',
+    'Crítica': 'pri5'
+  };
+
+  const defaultStatusId = isProduction ? '550e8400-e29b-41d4-a716-446655442001' : 'st1'; // 'Nuevo'
+
+  // Crear ticket con los IDs correctos según el entorno
   const ticket = await Ticket.create({
     title,
     description,
-    createdBy: req.user.id,
-    category: category || 'otros',
-    priority: priority || 'media'
+    requesterId: req.user.id,
+    categoryId: categoryMap[category] || (isProduction ? '550e8400-e29b-41d4-a716-446655440006' : 'cat6'), // Default: 'Otros'
+    priorityId: priorityMap[priority] || (isProduction ? '550e8400-e29b-41d4-a716-446655441003' : 'pri3'),  // Default: 'Media'
+    statusId: defaultStatusId,
+    dueDate: dueDate || null
+  });
+
+  // Log temporal para debug
+  console.log('✅ Ticket creado:', {
+    id: ticket.id,
+    ticketNumber: ticket.ticketNumber,
+    title: ticket.title
   });
 
   res.status(201).json({

@@ -105,57 +105,96 @@ npm run dev       # Servidor en puerto 5173
 - **Técnico**: `tecnico1` / `tecnico123`
 - **Empleado**: `empleado1` / `empleado123`
 
-## 🌐 Deployment en Hosting Gratuito
+## 🚀 Deployment en Producción (100% Gratis)
 
-### Paso 1: Base de Datos en Render
+### Stack de Hosting
+- **Base de datos**: Render PostgreSQL (Free tier - 0.1 CPU, 256 MB RAM)
+- **Backend API**: Render Web Service (Free tier - 0.1 CPU, 512 MB RAM)  
+- **Frontend**: Vercel (Free tier - Edge Network global)
 
-1. **Crear cuenta en Render.com**
-2. **Crear PostgreSQL Database**:
-   - Dashboard → New → PostgreSQL
-   - Nombre: `sgts-farmashaio-db`
-   - Plan: Free
-   - Copiar `DATABASE_URL`
+### Paso 1: Preparar Código
 
-3. **Ejecutar Migraciones**:
 ```bash
-# Desde tu máquina local
-cd backend
-export DATABASE_URL="tu-database-url-de-render"
-npm run migrate
-npm run seed
+# 1. Commitear todos los cambios
+git add .
+git commit -m "Preparado para deployment en producción"
+git push origin main
+
+# 2. Ejecutar script de deployment (opcional)
+./deploy.ps1  # Windows PowerShell
+# o
+./deploy.sh   # Linux/Mac
 ```
 
-### Paso 2: Backend API en Render
+### Paso 2: Base de Datos en Render
 
-1. **Crear Web Service en Render**:
+1. **Crear cuenta en [render.com](https://render.com)**
+2. **Conectar repositorio GitHub**
+3. **Crear PostgreSQL Database**:
+   - Dashboard → New → PostgreSQL
+   - Name: `sgts-farmashaio-db`
+   - Database Name: `sgts_farmashaio`  
+   - User: `sgts_user`
+   - Plan: **Free**
+   
+4. **Ejecutar Schema**:
+   - Copiar contenido de `database/production_schema.sql`
+   - Ejecutar en el Query Tool del dashboard
+   - ✅ Usuarios creados automáticamente
+
+### Paso 3: Backend API en Render
+
+1. **Crear Web Service**:
    - Dashboard → New → Web Service
-   - Conectar repositorio GitHub
+   - Connect Repository: `Julian-Enable/sgts-farmashaio`
    - Configuración:
      - **Name**: `sgts-farmashaio-api`
+     - **Root Directory**: `backend`
      - **Environment**: Node
-     - **Build Command**: `cd backend && npm install`
-     - **Start Command**: `cd backend && npm start`
+     - **Build Command**: `npm install`
+     - **Start Command**: `npm start`
+     - **Plan**: Free
 
 2. **Variables de Entorno**:
 ```env
 NODE_ENV=production
-DATABASE_URL=postgresql://render-database-url
-JWT_SECRET=tu-jwt-secret-super-seguro-de-64-caracteres-minimo
-JWT_EXPIRES_IN=7d
-CLIENT_URL=https://sgts-farmashaio.vercel.app
-EMAIL_SERVICE=gmail
-EMAIL_USER=tu-email@gmail.com
-EMAIL_PASS=tu-app-password
-EMAIL_FROM=SGTS FARMASHAIO <noreply@farmashaio.com>
-BCRYPT_ROUNDS=12
+DATABASE_URL=[Auto-completado desde la DB]
+JWT_SECRET=tu_jwt_secret_super_seguro_de_al_menos_32_caracteres
+CORS_ORIGINS=https://sgts-farmashaio.vercel.app
+PORT=10000
 ```
 
-### Paso 3: Frontend en Vercel
+### Paso 4: Frontend en Vercel
 
-1. **Crear cuenta en Vercel.com**
-2. **Importar Proyecto**:
+1. **Crear cuenta en [vercel.com](https://vercel.com)**
+2. **Conectar repositorio GitHub**
+3. **Importar Proyecto**:
    - Dashboard → New Project
-   - Importar desde GitHub
+   - Import from GitHub: `Julian-Enable/sgts-farmashaio`
+   - Framework Preset: **Vite**
+   - Root Directory: `frontend`
+   - Build Command: `npm run build`
+   - Output Directory: `dist`
+
+4. **Variable de Entorno**:
+```env
+VITE_API_BASE_URL=https://sgts-farmashaio-api.onrender.com/api
+```
+
+### Paso 5: Verificar Deployment
+
+#### ✅ Checklist Post-Deployment
+- [ ] Base de datos PostgreSQL funcionando en Render
+- [ ] Backend API respondiendo (health check: `/health`)
+- [ ] Frontend cargando en Vercel
+- [ ] Login funcionando con usuarios de prueba:
+
+**Credenciales de Prueba:**
+```
+👑 Administrador: admin@farmashaio.com / admin123
+🔧 Técnico: tecnico1@farmashaio.com / tecnico123  
+👤 Empleado: empleado1@farmashaio.com / empleado123
+```
    - Seleccionar repositorio
 
 3. **Configuración de Build**:

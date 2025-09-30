@@ -150,7 +150,7 @@ const Layout = () => {
       <Box
         sx={{
           p: 2,
-          backgroundColor: theme.palette.primary.main,
+          background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
           color: 'white',
           display: 'flex',
           alignItems: 'center',
@@ -254,6 +254,7 @@ const Layout = () => {
           zIndex: theme.zIndex.drawer + 1,
           ml: { md: `${DRAWER_WIDTH}px` },
           width: { md: `calc(100% - ${DRAWER_WIDTH}px)` },
+          background: `linear-gradient(90deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
         }}
       >
         <Toolbar>
@@ -369,6 +370,8 @@ const Layout = () => {
         sx={{
           flexGrow: 1,
           width: { md: `calc(100% - ${DRAWER_WIDTH}px)` },
+          minHeight: '100vh',
+          background: `linear-gradient(180deg, ${theme.palette.background.default} 0%, rgba(30, 58, 138, 0.02) 100%)`,
         }}
       >
         <Toolbar /> {/* Spacer para el AppBar */}
