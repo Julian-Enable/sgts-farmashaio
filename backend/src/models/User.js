@@ -14,6 +14,11 @@ export class User {
     this.createdAt = data.created_at;
     this.updatedAt = data.updated_at;
     this.lastLogin = data.last_login;
+    
+    // Debug log
+    if (process.env.NODE_ENV === 'production') {
+      console.log(`👤 Usuario creado: ${this.email} (ID: ${this.id}, Activo: ${this.isActive})`);
+    }
   }
 
   // Crear nuevo usuario
@@ -99,16 +104,21 @@ export class User {
 
   // Validar contraseña
   async validatePassword(password) {
+    // Usar email en lugar de id para evitar problemas con UUIDs
     const result = await query(
-      'SELECT password_hash FROM users WHERE id = $1',
-      [this.id]
+      'SELECT password_hash FROM users WHERE email = $1 AND is_active = true',
+      [this.email]
     );
     
     if (!result.rows[0]) {
+      console.log(`❌ No se encontró usuario con email: ${this.email}`);
       return false;
     }
 
-    return await bcrypt.compare(password, result.rows[0].password_hash);
+    console.log(`🔐 Validando contraseña para: ${this.email}`);
+    const isValid = await bcrypt.compare(password, result.rows[0].password_hash);
+    console.log(`🔐 Resultado validación: ${isValid}`);
+    return isValid;
   }
 
   // Actualizar último login
