@@ -13,13 +13,6 @@ import {
   Divider,
   TextField,
   Avatar,
-  Timeline,
-  TimelineItem,
-  TimelineSeparator,
-  TimelineConnector,
-  TimelineContent,
-  TimelineDot,
-  TimelineOppositeContent,
   Paper,
   Alert,
   Dialog,
@@ -437,29 +430,32 @@ const TicketDetailPage = () => {
                   No hay historial disponible
                 </Typography>
               ) : (
-                <Timeline>
+                <Box>
                   {history.map((event, index) => (
-                    <TimelineItem key={event.id || index}>
-                      <TimelineOppositeContent sx={{ flex: 0.3 }}>
-                        <Typography variant="caption" color="text.secondary">
-                          {formatDate(event.createdAt)}
-                        </Typography>
-                      </TimelineOppositeContent>
-                      <TimelineSeparator>
-                        <TimelineDot color="primary" />
-                        {index < history.length - 1 && <TimelineConnector />}
-                      </TimelineSeparator>
-                      <TimelineContent>
-                        <Typography variant="body2">
+                    <Paper
+                      key={event.id || index}
+                      elevation={1}
+                      sx={{ 
+                        p: 2, 
+                        mb: 2, 
+                        borderLeft: '4px solid',
+                        borderLeftColor: 'primary.main'
+                      }}
+                    >
+                      <Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={1}>
+                        <Typography variant="body2" sx={{ flexGrow: 1 }}>
                           {event.description}
                         </Typography>
-                        <Typography variant="caption" color="text.secondary">
-                          por {event.user?.firstName} {event.user?.lastName}
+                        <Typography variant="caption" color="text.secondary" sx={{ ml: 2 }}>
+                          {formatDate(event.createdAt)}
                         </Typography>
-                      </TimelineContent>
-                    </TimelineItem>
+                      </Box>
+                      <Typography variant="caption" color="text.secondary">
+                        por {event.user?.firstName} {event.user?.lastName}
+                      </Typography>
+                    </Paper>
                   ))}
-                </Timeline>
+                </Box>
               )}
             </CardContent>
           </Card>
