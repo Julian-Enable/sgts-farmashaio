@@ -1,5 +1,5 @@
 import { Ticket } from '../models/Ticket.js';
-import { query } from '../utils/databaseSqlite.js';
+import { query } from '../utils/database.js';
 import { catchAsync, createValidationError, createNotFoundError, createForbiddenError } from '../middleware/errorHandler.js';
 import { validationResult } from 'express-validator';
 

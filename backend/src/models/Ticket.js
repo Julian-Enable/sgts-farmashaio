@@ -1,4 +1,4 @@
-import { query } from '../utils/databaseSqlite.js';
+import { query } from '../utils/database.js';
 
 export class Ticket {
   constructor(data) {

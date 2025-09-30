@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { query } from '../utils/databaseSqlite.js';
+import { query } from '../utils/database.js';
 
 class EmailService {
   constructor() {

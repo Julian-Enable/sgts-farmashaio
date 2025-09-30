@@ -1,4 +1,4 @@
-import { query } from '../utils/databaseSqlite.js';
+import { query } from '../utils/database.js';
 import bcrypt from 'bcryptjs';
 
 export class User {
