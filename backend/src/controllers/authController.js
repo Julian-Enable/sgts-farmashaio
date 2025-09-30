@@ -5,30 +5,54 @@ import { validationResult } from 'express-validator';
 
 // Iniciar sesión
 export const login = catchAsync(async (req, res) => {
+  console.log('🔥 === INICIO DE LOGIN ===');
+  console.log('📨 Request body:', JSON.stringify(req.body, null, 2));
+  console.log('🌍 Headers:', JSON.stringify(req.headers, null, 2));
+  
   // Verificar errores de validación
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
+    console.log('❌ Errores de validación:', errors.array());
     throw createValidationError('Datos de entrada inválidos');
   }
 
   const { email, password } = req.body;
+  console.log(`🔍 Buscando usuario con email: "${email}"`);
+  console.log(`🔐 Password recibida: "${password}" (length: ${password?.length})`);
 
   // Buscar usuario
   const user = await User.findByEmail(email);
   if (!user) {
+    console.log(`❌ Usuario NO encontrado para email: "${email}"`);
     throw createUnauthorizedError('Credenciales inválidas');
   }
+  
+  console.log(`✅ Usuario encontrado: ${user.email} (ID: ${user.id})`);
+  console.log(`👤 Datos usuario:`, {
+    username: user.username,
+    email: user.email,
+    role: user.role,
+    isActive: user.isActive,
+    department: user.department
+  });
 
   // Verificar contraseña
+  console.log('🔐 Iniciando validación de contraseña...');
   const isValidPassword = await user.validatePassword(password);
+  console.log(`🔐 Resultado validación contraseña: ${isValidPassword}`);
+  
   if (!isValidPassword) {
+    console.log('❌ Contraseña INVÁLIDA');
     throw createUnauthorizedError('Credenciales inválidas');
   }
 
   // Verificar que el usuario esté activo
   if (!user.isActive) {
+    console.log('❌ Usuario INACTIVO');
     throw createUnauthorizedError('Cuenta desactivada. Contacta al administrador.');
   }
+  
+  console.log('✅ Usuario ACTIVO, procediendo con login...');
 
   // Actualizar último login
   await user.updateLastLogin();

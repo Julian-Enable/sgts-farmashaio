@@ -61,10 +61,25 @@ export class User {
 
   // Buscar usuario por email
   static async findByEmail(email) {
+    console.log(`🔍 User.findByEmail() - Buscando: "${email}"`);
+    
     const result = await query(
       'SELECT * FROM users WHERE email = $1 AND is_active = true',
       [email]
     );
+    
+    console.log(`📊 Query result - Rows found: ${result.rows?.length || 0}`);
+    if (result.rows?.[0]) {
+      console.log(`✅ Usuario encontrado en DB:`, {
+        id: result.rows[0].id,
+        username: result.rows[0].username,
+        email: result.rows[0].email,
+        role: result.rows[0].role,
+        is_active: result.rows[0].is_active
+      });
+    } else {
+      console.log(`❌ NO se encontró usuario con email: "${email}"`);
+    }
 
     return result.rows[0] ? new User(result.rows[0]) : null;
   }
