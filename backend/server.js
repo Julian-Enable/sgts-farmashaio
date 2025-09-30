@@ -19,7 +19,7 @@ import { errorHandler } from './src/middleware/errorHandler.js';
 import { notFound } from './src/middleware/notFound.js';
 
 // Utils
-import { connectDB } from './src/utils/databaseSqlite.js';
+import { connectDB } from './src/utils/database.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
