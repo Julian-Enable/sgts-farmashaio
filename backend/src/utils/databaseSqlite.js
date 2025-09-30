@@ -100,5 +100,27 @@ const getClient = async () => {
   return db;
 };
 
-export { connectDB, query, getClient };
-export default { connectDB, query, getClient };
+// Verificar conexión
+const testConnection = async () => {
+  try {
+    if (!db) await connectDB();
+    await query('SELECT 1 as test');
+    console.log('✅ Conexión a SQLite verificada correctamente');
+    return true;
+  } catch (error) {
+    console.error('❌ Error verificando conexión SQLite:', error.message);
+    return false;
+  }
+};
+
+// Cerrar pool de conexiones (para compatibilidad con PostgreSQL)
+const closePool = async () => {
+  if (db) {
+    await db.close();
+    db = null;
+    console.log('🔒 Conexión SQLite cerrada');
+  }
+};
+
+export { connectDB, query, getClient, testConnection, closePool };
+export default { connectDB, query, getClient, testConnection, closePool };
