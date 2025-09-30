@@ -81,6 +81,24 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Debug endpoint to check users in production
+app.get('/debug/users', async (req, res) => {
+  try {
+    const { query } = await import('./src/utils/database.js');
+    const result = await query('SELECT email, role, created_at FROM users LIMIT 5');
+    res.json({
+      message: 'Users in database',
+      users: result.rows,
+      count: result.rows.length
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error fetching users',
+      error: error.message
+    });
+  }
+});
+
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
