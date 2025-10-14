@@ -127,7 +127,7 @@ export class Ticket {
        LEFT JOIN categories c ON t.category_id = c.id
        LEFT JOIN priorities p ON t.priority_id = p.id
        LEFT JOIN ticket_statuses s ON t.status_id = s.id
-       WHERE t.id = ?`,
+       WHERE t.id = $1`,
       [id]
     );
 
@@ -198,37 +198,41 @@ export class Ticket {
     `;
     
     const params = [];
+    let paramCount = 1;
     
     if (filters.requesterId) {
       params.push(filters.requesterId);
-      queryText += ` AND t.requester_id = ?`;
+      queryText += ` AND t.requester_id = $${paramCount++}`;
     }
     
     if (filters.assignedTo) {
       params.push(filters.assignedTo);
-      queryText += ` AND t.assigned_to = ?`;
+      queryText += ` AND t.assigned_to = $${paramCount++}`;
     }
     
     if (filters.categoryId) {
       params.push(filters.categoryId);
-      queryText += ` AND t.category_id = ?`;
+      queryText += ` AND t.category_id = $${paramCount++}`;
     }
     
     if (filters.statusId) {
       params.push(filters.statusId);
-      queryText += ` AND t.status_id = ?`;
+      queryText += ` AND t.status_id = $${paramCount++}`;
     }
     
     if (filters.priorityId) {
       params.push(filters.priorityId);
-      queryText += ` AND t.priority_id = ?`;
+      queryText += ` AND t.priority_id = $${paramCount++}`;
     }
     
     if (filters.search) {
       params.push(`%${filters.search}%`);
-      queryText += ` AND (t.title LIKE ? OR t.description LIKE ? OR t.ticket_number LIKE ?)`;
+      const searchParam1 = paramCount++;
       params.push(`%${filters.search}%`);
+      const searchParam2 = paramCount++;
       params.push(`%${filters.search}%`);
+      const searchParam3 = paramCount++;
+      queryText += ` AND (t.title LIKE $${searchParam1} OR t.description LIKE $${searchParam2} OR t.ticket_number LIKE $${searchParam3})`;
     }
     
     // Ordenamiento
@@ -239,11 +243,11 @@ export class Ticket {
     // Paginación
     if (filters.limit) {
       params.push(filters.limit);
-      queryText += ` LIMIT ?`;
+      queryText += ` LIMIT $${paramCount++}`;
       
       if (filters.offset) {
         params.push(filters.offset);
-        queryText += ` OFFSET ?`;
+        queryText += ` OFFSET $${paramCount++}`;
       }
     }
 
