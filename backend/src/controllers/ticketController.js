@@ -14,7 +14,7 @@ export const createTicket = catchAsync(async (req, res) => {
     });
   }
 
-  const { title, description, categoryId, priorityId, dueDate, affectedUsers } = req.body;
+  const { title, description, categoryId, priorityId, dueDate } = req.body;
 
   // Validar que se envíen los IDs requeridos
   if (!categoryId || !priorityId) {
@@ -35,8 +35,7 @@ export const createTicket = catchAsync(async (req, res) => {
     categoryId: parseInt(categoryId),
     priorityId: parseInt(priorityId),
     statusId: defaultStatusId,
-    dueDate: dueDate || null,
-    affectedUsers: affectedUsers || 1
+    dueDate: dueDate || null
   });
 
   // Log temporal para debug

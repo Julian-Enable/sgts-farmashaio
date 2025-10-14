@@ -54,8 +54,7 @@ export class Ticket {
       priorityId = 3,  // Default: 'Media'
       statusId = 1,     // Default: 'Nuevo'
       dueDate, 
-      estimatedHours,
-      affectedUsers = 1
+      estimatedHours
     } = ticketData;
 
     // Generar número de ticket único
@@ -70,18 +69,18 @@ export class Ticket {
     if (isProduction) {
       // PostgreSQL con RETURNING
       result = await query(
-        `INSERT INTO tickets (title, description, ticket_number, requester_id, category_id, priority_id, status_id, due_date, estimated_hours, affected_users)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *`,
-        [title, description, ticketNumber, requesterId, categoryId, priorityId, statusId, dueDate, estimatedHours, affectedUsers]
+        `INSERT INTO tickets (title, description, ticket_number, requester_id, category_id, priority_id, status_id, due_date, estimated_hours)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
+        [title, description, ticketNumber, requesterId, categoryId, priorityId, statusId, dueDate, estimatedHours]
       );
       console.log('✅ Ticket creado en PostgreSQL, ID:', result.rows[0].id);
       return new Ticket(result.rows[0]);
     } else {
       // SQLite sin RETURNING
       result = await query(
-        `INSERT INTO tickets (title, description, ticket_number, requester_id, category_id, priority_id, status_id, due_date, estimated_hours, affected_users)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [title, description, ticketNumber, requesterId, categoryId, priorityId, statusId, dueDate, estimatedHours, affectedUsers]
+        `INSERT INTO tickets (title, description, ticket_number, requester_id, category_id, priority_id, status_id, due_date, estimated_hours)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [title, description, ticketNumber, requesterId, categoryId, priorityId, statusId, dueDate, estimatedHours]
       );
       
       console.log('✅ Ticket insertado en SQLite, lastID:', result.lastID);
@@ -98,7 +97,6 @@ export class Ticket {
         status_id: statusId,
         due_date: dueDate,
         estimated_hours: estimatedHours,
-        affected_users: affectedUsers,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       });
