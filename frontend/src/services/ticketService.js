@@ -96,7 +96,8 @@ class TicketService {
     const url = queryString ? `${API_ENDPOINTS.TICKET_STATS}?${queryString}` : API_ENDPOINTS.TICKET_STATS;
     
     const response = await apiGet(url);
-    return response.data;
+    // Backend retorna { success: true, stats: {...} }
+    return response.data.stats || {};
   }
 
   // Obtener opciones para filtros

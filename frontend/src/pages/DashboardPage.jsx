@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Grid,
@@ -8,6 +8,8 @@ import {
   Chip,
   Button,
   useTheme,
+  CircularProgress,
+  Alert,
 } from '@mui/material';
 import {
   ConfirmationNumber,
@@ -19,20 +21,46 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../context/AuthContext.jsx';
+import { ticketService } from '../services/ticketService.js';
 
 const DashboardPage = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const { user } = useAuth();
-
-  // Stats de ejemplo (en producción vendrían de la API)
-  const stats = {
+  
+  const [stats, setStats] = useState({
     total: 0,
     nuevos: 0,
     enProgreso: 0,
     resueltos: 0,
     misTickets: 0,
-  };
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Cargar estadísticas
+  useEffect(() => {
+    const loadStats = async () => {
+      try {
+        setLoading(true);
+        const data = await ticketService.getTicketStats();
+        setStats(data || {
+          total: 0,
+          nuevos: 0,
+          enProgreso: 0,
+          resueltos: 0,
+          misTickets: 0,
+        });
+      } catch (err) {
+        console.error('Error loading stats:', err);
+        setError('Error al cargar estadísticas');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadStats();
+  }, []);
 
   const StatCard = ({ title, value, color, icon, description }) => (
     <Card sx={{ height: '100%' }}>
@@ -83,8 +111,22 @@ const DashboardPage = () => {
         </Box>
       </Box>
 
-      {/* Estadísticas */}
-      <Grid container spacing={3} mb={4}>
+      {/* Error Alert */}
+      {error && (
+        <Alert severity="error" sx={{ mb: 3 }} onClose={() => setError(null)}>
+          {error}
+        </Alert>
+      )}
+
+      {/* Loading State */}
+      {loading ? (
+        <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
+          <CircularProgress />
+        </Box>
+      ) : (
+        <>
+          {/* Estadísticas */}
+          <Grid container spacing={3} mb={4}>
         <Grid item xs={12} sm={6} md={3}>
           <StatCard
             title="Total de Tickets"
@@ -157,6 +199,8 @@ const DashboardPage = () => {
           </Box>
         </CardContent>
       </Card>
+        </>
+      )}
     </Box>
   );
 };
