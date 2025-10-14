@@ -546,7 +546,7 @@ const TicketDetailPage = () => {
             >
               {Array.isArray(technicians) && technicians.map((tech) => (
                 <MenuItem key={tech.id} value={tech.id}>
-                  {tech.firstName} {tech.lastName} - {tech.department}
+                  {tech.name} - {tech.department}
                 </MenuItem>
               ))}
             </Select>

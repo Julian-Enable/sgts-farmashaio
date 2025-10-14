@@ -46,7 +46,7 @@ class UserService {
   // Obtener técnicos disponibles
   async getTechnicians() {
     const response = await apiGet(API_ENDPOINTS.TECHNICIANS);
-    return response.data;
+    return response.data.technicians || [];
   }
 
   // Activar/Desactivar usuario

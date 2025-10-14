@@ -109,8 +109,8 @@ export class User {
   static async getTechnicians() {
     const result = await query(
       `SELECT * FROM users 
-       WHERE role = 'tecnico' AND is_active = true 
-       ORDER BY first_name, last_name`,
+       WHERE role IN ('tecnico', 'administrador') AND is_active = true 
+       ORDER BY role DESC, first_name, last_name`,
       []
     );
 
