@@ -86,6 +86,7 @@ const CreateTicketPage = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [priorities, setPriorities] = useState([]);
   const [attachments, setAttachments] = useState([]);
 
   // Form
@@ -102,7 +103,7 @@ const CreateTicketPage = () => {
       title: '',
       description: '',
       category: '',
-      priority: 'media',
+      priority: '',
     },
   });
 
@@ -112,10 +113,15 @@ const CreateTicketPage = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        // Cargar categorías desde el backend
-        const categoriesResponse = await ticketService.getCategories();
+        // Cargar categorías y prioridades desde el backend
+        const [categoriesResponse, prioritiesResponse] = await Promise.all([
+          ticketService.getCategories(),
+          ticketService.getPriorities()
+        ]);
         setCategories(categoriesResponse || []);
+        setPriorities(prioritiesResponse || []);
       } catch (err) {
+        console.error('Error cargando datos:', err);
         setError('Error al cargar los datos iniciales');
       }
     };
@@ -142,8 +148,12 @@ const CreateTicketPage = () => {
       setLoading(true);
       setError(null);
 
+      // Transformar category y priority a categoryId y priorityId
       const ticketData = {
-        ...data,
+        title: data.title,
+        description: data.description,
+        categoryId: data.category,  // Ya es un número (ID)
+        priorityId: data.priority,   // Ya es un número (ID)
         attachments: attachments.map(file => ({
           name: file.name,
           size: file.size,
@@ -403,16 +413,12 @@ const CreateTicketPage = () => {
                                 {...field}
                                 label="Prioridad"
                               >
-                                {Object.entries(TICKET_PRIORITY).map(([key, value]) => (
-                                  <MenuItem key={key} value={key}>
-                                    <Box display="flex" alignItems="center" gap={1}>
-                                      <Chip
-                                        size="small"
-                                        label={value.label}
-                                        color={getPriorityColor(key)}
-                                      />
-                                      <Typography variant="caption">
-                                        {value.description}
+                                {priorities.map((priority) => (
+                                  <MenuItem key={priority.id} value={priority.id}>
+                                    <Box>
+                                      <Typography variant="body2">{priority.name}</Typography>
+                                      <Typography variant="caption" color="text.secondary">
+                                        {priority.description}
                                       </Typography>
                                     </Box>
                                   </MenuItem>

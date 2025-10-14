@@ -131,19 +131,19 @@ class TicketService {
   // Obtener categorías
   async getCategories() {
     const response = await apiGet('/categories');
-    return response.data;
+    return response.data.data; // Extraer el array del objeto { success: true, data: [...] }
   }
 
   // Obtener prioridades
   async getPriorities() {
     const response = await apiGet('/priorities');
-    return response.data;
+    return response.data.data; // Extraer el array del objeto { success: true, data: [...] }
   }
 
   // Obtener estados
   async getStatuses() {
     const response = await apiGet('/ticket-statuses');
-    return response.data;
+    return response.data.data; // Extraer el array del objeto { success: true, data: [...] }
   }
 }
 
