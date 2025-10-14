@@ -16,13 +16,15 @@ class TicketService {
     const url = queryString ? `${API_ENDPOINTS.TICKETS}?${queryString}` : API_ENDPOINTS.TICKETS;
     
     const response = await apiGet(url);
-    return response.data;
+    // Backend retorna { success: true, tickets: [...] }
+    return response.data.tickets || [];
   }
 
   // Obtener ticket por ID
   async getTicketById(id) {
     const response = await apiGet(`${API_ENDPOINTS.TICKETS}/${id}`);
-    return response.data;
+    // Backend retorna { success: true, ticket: {...} }
+    return response.data.ticket;
   }
 
   // Crear nuevo ticket

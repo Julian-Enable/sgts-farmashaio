@@ -67,8 +67,8 @@ const TicketsPage = () => {
       setLoading(true);
       setError(null);
       
-      const response = await ticketService.getTickets(filters);
-      setTickets(response.tickets || []);
+      const tickets = await ticketService.getTickets(filters);
+      setTickets(tickets || []);
     } catch (err) {
       setError('Error al cargar los tickets');
       console.error('Error loading tickets:', err);
