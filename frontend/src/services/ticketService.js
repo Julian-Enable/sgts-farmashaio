@@ -1,5 +1,5 @@
 import { apiGet, apiPost, apiPut, apiDelete } from './api.js';
-import { API_ENDPOINTS } from '../utils/constants.js';
+import { API_ENDPOINTS, API_BASE_URL } from '../utils/constants.js';
 
 class TicketService {
   // Obtener lista de tickets con filtros
@@ -128,22 +128,40 @@ class TicketService {
     return response.data;
   }
 
-  // Obtener categorías
+  // Obtener categorías (public endpoint - no requiere auth)
   async getCategories() {
-    const response = await apiGet('/categories');
-    return response.data.data; // Extraer el array del objeto { success: true, data: [...] }
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/categories`);
+      const json = await response.json();
+      return json.data || [];
+    } catch (error) {
+      console.error('Error loading categories:', error);
+      return [];
+    }
   }
 
-  // Obtener prioridades
+  // Obtener prioridades (public endpoint - no requiere auth)
   async getPriorities() {
-    const response = await apiGet('/priorities');
-    return response.data.data; // Extraer el array del objeto { success: true, data: [...] }
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/priorities`);
+      const json = await response.json();
+      return json.data || [];
+    } catch (error) {
+      console.error('Error loading priorities:', error);
+      return [];
+    }
   }
 
-  // Obtener estados
+  // Obtener estados (public endpoint - no requiere auth)
   async getStatuses() {
-    const response = await apiGet('/ticket-statuses');
-    return response.data.data; // Extraer el array del objeto { success: true, data: [...] }
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/ticket-statuses`);
+      const json = await response.json();
+      return json.data || [];
+    } catch (error) {
+      console.error('Error loading statuses:', error);
+      return [];
+    }
   }
 }
 
