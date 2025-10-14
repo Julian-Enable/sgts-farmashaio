@@ -544,7 +544,7 @@ const TicketDetailPage = () => {
               label="Técnico"
               onChange={(e) => setSelectedTechnician(e.target.value)}
             >
-              {technicians.map((tech) => (
+              {Array.isArray(technicians) && technicians.map((tech) => (
                 <MenuItem key={tech.id} value={tech.id}>
                   {tech.firstName} {tech.lastName} - {tech.department}
                 </MenuItem>
