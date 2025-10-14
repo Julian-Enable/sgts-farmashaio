@@ -66,7 +66,7 @@ export const getTickets = catchAsync(async (req, res) => {
 
   // Filtrar por rol del usuario
   if (req.user.role === 'empleado') {
-    filters.createdBy = req.user.id;
+    filters.requesterId = req.user.id;
   }
 
   const tickets = await Ticket.findAll(filters);
@@ -88,7 +88,7 @@ export const getTicketById = catchAsync(async (req, res) => {
   }
 
   // Verificar permisos de acceso
-  if (req.user.role === 'empleado' && ticket.createdBy !== req.user.id) {
+  if (req.user.role === 'empleado' && ticket.requesterId !== req.user.id) {
     throw createForbiddenError('No tienes permisos para ver este ticket');
   }
 
@@ -119,7 +119,7 @@ export const updateTicket = catchAsync(async (req, res) => {
   }
 
   // Verificar permisos
-  if (req.user.role === 'empleado' && ticket.createdBy !== req.user.id) {
+  if (req.user.role === 'empleado' && ticket.requesterId !== req.user.id) {
     throw createForbiddenError('No tienes permisos para editar este ticket');
   }
 
@@ -169,7 +169,7 @@ export const updateTicketStatus = catchAsync(async (req, res) => {
   }
 
   // Verificar permisos
-  if (req.user.role === 'empleado' && ticket.createdBy !== req.user.id) {
+  if (req.user.role === 'empleado' && ticket.requesterId !== req.user.id) {
     throw createForbiddenError('No tienes permisos para cambiar el estado de este ticket');
   }
 
@@ -194,7 +194,7 @@ export const addComment = catchAsync(async (req, res) => {
   }
 
   // Verificar permisos de acceso
-  if (req.user.role === 'empleado' && ticket.createdBy !== req.user.id) {
+  if (req.user.role === 'empleado' && ticket.requesterId !== req.user.id) {
     throw createForbiddenError('No tienes permisos para comentar en este ticket');
   }
 
@@ -218,7 +218,7 @@ export const getTicketComments = catchAsync(async (req, res) => {
   }
 
   // Verificar permisos de acceso
-  if (req.user.role === 'empleado' && ticket.createdBy !== req.user.id) {
+  if (req.user.role === 'empleado' && ticket.requesterId !== req.user.id) {
     throw createForbiddenError('No tienes permisos para ver este ticket');
   }
 
@@ -241,7 +241,7 @@ export const getTicketHistory = catchAsync(async (req, res) => {
   }
 
   // Verificar permisos de acceso
-  if (req.user.role === 'empleado' && ticket.createdBy !== req.user.id) {
+  if (req.user.role === 'empleado' && ticket.requesterId !== req.user.id) {
     throw createForbiddenError('No tienes permisos para ver este ticket');
   }
 
