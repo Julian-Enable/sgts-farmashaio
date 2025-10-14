@@ -79,20 +79,36 @@ const TicketDetailPage = () => {
       setLoading(true);
       setError(null);
 
-      const [ticketResponse, commentsResponse, historyResponse] = await Promise.all([
-        ticketService.getTicketById(id),
-        ticketService.getTicketComments(id),
-        ticketService.getTicketHistory(id),
-      ]);
+      // getTicketById ya retorna el ticket directamente
+      const ticketData = await ticketService.getTicketById(id);
+      setTicket(ticketData);
 
-      setTicket(ticketResponse.ticket);
-      setComments(commentsResponse.comments || []);
-      setHistory(historyResponse.history || []);
+      // Cargar comentarios e historial (manejar si no existen los endpoints aún)
+      try {
+        const commentsData = await ticketService.getTicketComments(id);
+        setComments(commentsData || []);
+      } catch (err) {
+        console.log('Comments not available yet');
+        setComments([]);
+      }
+
+      try {
+        const historyData = await ticketService.getTicketHistory(id);
+        setHistory(historyData || []);
+      } catch (err) {
+        console.log('History not available yet');
+        setHistory([]);
+      }
 
       // Cargar técnicos si es admin o técnico
       if (user.role === 'administrador' || user.role === 'tecnico') {
-        const techResponse = await userService.getTechnicians();
-        setTechnicians(techResponse.technicians || []);
+        try {
+          const techData = await userService.getTechnicians();
+          setTechnicians(techData || []);
+        } catch (err) {
+          console.log('Technicians not available yet');
+          setTechnicians([]);
+        }
       }
     } catch (err) {
       setError('Error al cargar el ticket');
