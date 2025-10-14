@@ -13,6 +13,9 @@ import authRoutes from './src/routes/auth.js';
 import userRoutes from './src/routes/users.js';
 import ticketRoutes from './src/routes/tickets.js';
 import notificationRoutes from './src/routes/notifications.js';
+import categoriesRoutes from './src/routes/categories.js';
+import prioritiesRoutes from './src/routes/priorities.js';
+import ticketStatusesRoutes from './src/routes/ticketStatuses.js';
 
 // Middleware
 import { errorHandler } from './src/middleware/errorHandler.js';
@@ -104,6 +107,9 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/tickets', ticketRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/categories', categoriesRoutes);
+app.use('/api/priorities', prioritiesRoutes);
+app.use('/api/ticket-statuses', ticketStatusesRoutes);
 
 // Error handling middleware
 app.use(notFound);

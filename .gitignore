@@ -84,3 +84,5 @@ jspm_packages/
 
 # Yarn Integrity file
 .yarn-integrity
+# Deployment credentials
+DEPLOYMENT_VALUES.md

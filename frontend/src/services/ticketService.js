@@ -127,6 +127,24 @@ class TicketService {
     });
     return response.data;
   }
+
+  // Obtener categorías
+  async getCategories() {
+    const response = await apiGet('/categories');
+    return response.data;
+  }
+
+  // Obtener prioridades
+  async getPriorities() {
+    const response = await apiGet('/priorities');
+    return response.data;
+  }
+
+  // Obtener estados
+  async getStatuses() {
+    const response = await apiGet('/ticket-statuses');
+    return response.data;
+  }
 }
 
 export const ticketService = new TicketService();

@@ -112,12 +112,9 @@ const CreateTicketPage = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        // En un caso real, cargaríamos las categorías desde el backend
-        setCategories(Object.entries(TICKET_CATEGORIES).map(([key, value]) => ({
-          id: key,
-          name: value.label,
-          description: value.description,
-        })));
+        // Cargar categorías desde el backend
+        const categoriesResponse = await ticketService.getCategories();
+        setCategories(categoriesResponse || []);
       } catch (err) {
         setError('Error al cargar los datos iniciales');
       }

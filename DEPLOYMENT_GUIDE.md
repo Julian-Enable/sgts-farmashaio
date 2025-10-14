@@ -49,48 +49,96 @@ Antes de empezar, asegúrate de tener:
 1. Una vez creada, verás la página de información
 2. Copia y guarda estos datos (los necesitarás):
    ```
-   Internal Database URL: postgresql://...
-   External Database URL: postgresql://...
-   PSQL Command: PGPASSWORD=...
+   -Internal Database URL: postgresql://...
+   postgresql://sgts_user:OtfEGRj0XljH4C7HTvItnKUHwL3742iQ@dpg-d3n8dpi4d50c73f43kr0-a/sgts_farmashaio_u3b7
+   -External Database URL: postgresql://...
+   postgresql://sgts_user:OtfEGRj0XljH4C7HTvItnKUHwL3742iQ@dpg-d3n8dpi4d50c73f43kr0-a.oregon-postgres.render.com/sgts_farmashaio_u3b7
+   -PSQL Command: PGPASSWORD=...
+   PGPASSWORD=OtfEGRj0XljH4C7HTvItnKUHwL3742iQ psql -h dpg-d3n8dpi4d50c73f43kr0-a.oregon-postgres.render.com -U sgts_user sgts_farmashaio_u3b7
    ```
 
 ### 1.4 Ejecutar Schema de Producción
 
-**Opción A: Desde Render Dashboard (Recomendada)**
+**Método: Desde tu Terminal Local con PSQL Command**
 
-1. En la página de tu database, ve a la pestaña **"Console"** o **"Query"**
-2. Abre el archivo `database/production_schema.sql` de tu proyecto
-3. Copia TODO el contenido
-4. Pégalo en el Query Console de Render
-5. Click **"Execute"** o presiona `Ctrl+Enter`
-6. ✅ Deberías ver: "Database Initialized" con las estadísticas
+1. En tu dashboard de Render, **copia el PSQL Command** que aparece en la sección "Connections"
+   - Se ve así: `PGPASSWORD=OtfEGRj0XljH4C7HTvItnKUHwL3742iQ psql -h dpg-d3n8dpi4d50c73f43kr0-a.oregon-postgres.render.com -U sgts_user sgts_farmashaio_u3b7`
 
-**Opción B: Desde tu Terminal Local**
+2. Abre una terminal en tu proyecto local (PowerShell)
 
-```bash
-# Usa el PSQL Command que copiaste
-PGPASSWORD=tu_password_aqui psql -h dpg-xxxxx-a.oregon-postgres.render.com -U sgts_user sgts_farmashaio < database/production_schema.sql
+3. Navega a la carpeta del proyecto:
+   ```powershell
+   cd C:\Users\Desktop\Desktop\sgtsFarmashaio
+   ```
+
+4. Ejecuta el comando para cargar el schema (reemplaza con TU comando):
+   ```powershell
+   # Copia tu PSQL Command de Render y agrégale al final: < database/production_schema.sql
+   PGPASSWORD=TU_PASSWORD psql -h dpg-XXXXX-a.oregon-postgres.render.com -U sgts_user sgts_farmashaio_u3b7 < database/production_schema.sql
+   ```
+
+5. ⏳ Espera 5-10 segundos mientras se ejecuta
+
+6. ✅ Si todo va bien, verás mensajes como:
+   ```
+   CREATE EXTENSION
+   CREATE TABLE
+   INSERT 0 3
+   ...
+   Database Initialized
+   ```
+
+**⚠️ Si no tienes PostgreSQL instalado localmente:**
+
+```powershell
+# Instalar PostgreSQL client en Windows
+winget install PostgreSQL.PostgreSQL
 ```
+
+**Alternativa sin instalar PostgreSQL:**
+Usa una herramienta online como **pgAdmin** o **DBeaver** y conecta con las credenciales de Render.
 
 ### 1.5 Verificar Datos Iniciales
 
-En el Query Console, ejecuta:
+**Si ejecutaste el schema y viste "Exit Code: 0" ✅ YA ESTÁ LISTO**
 
-```sql
--- Ver usuarios creados
-SELECT username, email, role FROM users;
+Para verificar visualmente que todo se creó correctamente:
 
--- Ver categorías
-SELECT name, color FROM categories;
+**Opción A: Desde Render Dashboard**
+1. Ve a tu database en Render → Pestaña **"Connections"**
+2. Bajo "**Connect via**", encontrarás links para herramientas como:
+   - **pgAdmin** (recomendado para GUI)
+   - **psql** (línea de comandos)
+   - **DBeaver** (alternativa GUI)
 
--- Ver prioridades
-SELECT name, level, color FROM priorities;
-
--- Ver estados
-SELECT name, color, order_index FROM ticket_statuses ORDER BY order_index;
-```
+**Opción B: Instalar herramienta GUI (Recomendado)**
+1. Descarga **DBeaver** gratis: https://dbeaver.io/download/
+2. Conecta con estas credenciales:
+   ```
+   Host: dpg-d3n8dpi4d50c73f43kr0-a.oregon-postgres.render.com
+   Port: 5432
+   Database: sgts_farmashaio_u3b7
+   Username: sgts_user
+   Password: OtfEGRj0XljH4C7HTvItnKUHwL3742iQ
+   ```
+3. Ejecuta estas queries para verificar:
+   ```sql
+   -- Ver usuarios creados (deberías ver 3)
+   SELECT username, email, role FROM users;
+   
+   -- Ver categorías (deberías ver 6)
+   SELECT name, color FROM categories;
+   
+   -- Ver prioridades (deberías ver 5)
+   SELECT name, level, color FROM priorities;
+   
+   -- Ver estados (deberías ver 5)
+   SELECT name, color, order_index FROM ticket_statuses ORDER BY order_index;
+   ```
 
 ✅ **Checkpoint**: Deberías ver 3 usuarios, 6 categorías, 5 prioridades, 5 estados
+
+**⚠️ Si el comando dio Exit Code: 0, todo está bien.** La verificación visual es opcional.
 
 ---
 
