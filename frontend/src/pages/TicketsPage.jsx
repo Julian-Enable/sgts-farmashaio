@@ -363,13 +363,19 @@ const TicketsPage = () => {
                   {/* Estado y Prioridad */}
                   <Box display="flex" gap={1} mb={2} flexWrap="wrap">
                     <Chip
-                      label={TICKET_STATUS[ticket.status]?.label || ticket.status}
-                      color={getStatusColor(ticket.status)}
+                      label={ticket.status?.name || ticket.statusId}
+                      sx={{ 
+                        bgcolor: ticket.status?.color || '#2196f3',
+                        color: 'white'
+                      }}
                       size="small"
                     />
                     <Chip
-                      label={TICKET_PRIORITY[ticket.priority]?.label || ticket.priority}
-                      color={getPriorityColor(ticket.priority)}
+                      label={ticket.priority?.name || ticket.priorityId}
+                      sx={{ 
+                        borderColor: ticket.priority?.color || '#ff9800',
+                        color: ticket.priority?.color || '#ff9800'
+                      }}
                       variant="outlined"
                       size="small"
                     />
@@ -379,12 +385,14 @@ const TicketsPage = () => {
                   <Typography variant="caption" color="text.secondary" display="block">
                     Creado: {formatDate(ticket.createdAt)}
                   </Typography>
-                  <Typography variant="caption" color="text.secondary" display="block">
-                    Creado por: {ticket.createdBy?.firstName} {ticket.createdBy?.lastName}
-                  </Typography>
-                  {ticket.assignedTo && (
+                  {ticket.requester && (
                     <Typography variant="caption" color="text.secondary" display="block">
-                      Asignado a: {ticket.assignedTo?.firstName} {ticket.assignedTo?.lastName}
+                      Creado por: {ticket.requester.name} ({ticket.requester.department})
+                    </Typography>
+                  )}
+                  {ticket.assignedUser && (
+                    <Typography variant="caption" color="text.secondary" display="block">
+                      Asignado a: {ticket.assignedUser.name}
                     </Typography>
                   )}
                 </CardContent>
