@@ -288,12 +288,12 @@ const TicketDetailPage = () => {
               action={
                 <Box display="flex" gap={1}>
                   <Chip
-                    label={TICKET_STATUS[ticket.status]?.label || ticket.status}
-                    color={getStatusColor(ticket.status)}
+                    label={ticket.status?.name || 'Sin estado'}
+                    sx={{ bgcolor: ticket.status?.color || '#gray', color: 'white' }}
                   />
                   <Chip
-                    label={TICKET_PRIORITY[ticket.priority]?.label || ticket.priority}
-                    color={getPriorityColor(ticket.priority)}
+                    label={ticket.priority?.name || 'Sin prioridad'}
+                    sx={{ bgcolor: ticket.priority?.color || '#gray', color: 'white' }}
                     variant="outlined"
                   />
                 </Box>
@@ -311,16 +311,16 @@ const TicketDetailPage = () => {
                   <Box display="flex" alignItems="center" gap={1}>
                     <PersonIcon color="action" />
                     <Typography variant="body2">
-                      Creado por: {ticket.createdBy?.firstName} {ticket.createdBy?.lastName}
+                      Creado por: {ticket.requester?.name || 'Desconocido'}
                     </Typography>
                   </Box>
                 </Grid>
-                {ticket.assignedTo && (
+                {ticket.assignedUser && (
                   <Grid item xs={12} sm={6}>
                     <Box display="flex" alignItems="center" gap={1}>
                       <AssignIcon color="action" />
                       <Typography variant="body2">
-                        Asignado a: {ticket.assignedTo?.firstName} {ticket.assignedTo?.lastName}
+                        Asignado a: {ticket.assignedUser?.name || 'Sin asignar'}
                       </Typography>
                     </Box>
                   </Grid>
