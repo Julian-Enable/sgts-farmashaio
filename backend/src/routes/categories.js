@@ -1,12 +1,12 @@
 import express from 'express';
-import pool from '../config/database.js';
+import { query } from '../utils/database.js';
 
 const router = express.Router();
 
 // GET /api/categories - Obtener todas las categorías
 router.get('/', async (req, res) => {
   try {
-    const result = await pool.query(
+    const result = await query(
       'SELECT id, name, description, color FROM categories WHERE is_active = true ORDER BY name'
     );
     

@@ -1,12 +1,12 @@
 import express from 'express';
-import pool from '../config/database.js';
+import { query } from '../utils/database.js';
 
 const router = express.Router();
 
 // GET /api/priorities - Obtener todas las prioridades
 router.get('/', async (req, res) => {
   try {
-    const result = await pool.query(
+    const result = await query(
       'SELECT id, name, level, color, description FROM priorities WHERE is_active = true ORDER BY level'
     );
     
