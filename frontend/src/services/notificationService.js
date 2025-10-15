@@ -1,4 +1,4 @@
-import { apiGet, apiPut, apiDelete } from './api.js';
+import { apiGet, apiPatch, apiDelete } from './api.js';
 import { API_ENDPOINTS } from '../utils/constants.js';
 
 class NotificationService {
@@ -20,13 +20,13 @@ class NotificationService {
 
   // Marcar notificación como leída
   async markAsRead(notificationId) {
-    const response = await apiPut(`${API_ENDPOINTS.NOTIFICATIONS}/${notificationId}/read`);
+    const response = await apiPatch(`${API_ENDPOINTS.NOTIFICATIONS}/${notificationId}/read`);
     return response.data;
   }
 
   // Marcar todas como leídas
   async markAllAsRead() {
-    const response = await apiPut(`${API_ENDPOINTS.NOTIFICATIONS}/read-all`);
+    const response = await apiPatch(`${API_ENDPOINTS.NOTIFICATIONS}/mark-all-read`);
     return response.data;
   }
 
