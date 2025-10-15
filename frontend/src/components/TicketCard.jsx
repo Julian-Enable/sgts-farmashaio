@@ -111,18 +111,12 @@ const TicketCard = ({ ticket }) => {
             label={statusConfig.label || ticket.status}
             size="small"
             sx={{
-              bgcolor: alpha(theme.palette[statusConfig.color]?.main || '#000', 0.08),
+              bgcolor: alpha(theme.palette[statusConfig.color]?.main || '#000', 0.1),
+              color: `${statusConfig.color}.main`,
               fontWeight: 600,
               fontSize: '0.75rem',
-              '&::before': {
-                content: '""',
-                display: 'inline-block',
-                width: 8,
-                height: 8,
-                borderRadius: '50%',
-                bgcolor: `${statusConfig.color}.main`,
-                mr: 0.5,
-              },
+              borderLeft: `3px solid`,
+              borderLeftColor: `${statusConfig.color}.main`,
             }}
           />
           {ticket.categoryName && (
