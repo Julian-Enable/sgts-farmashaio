@@ -313,6 +313,20 @@ export class Ticket {
   async changeStatus(newStatusId, userId) {
     const oldStatusId = this.statusId;
     
+    // Si newStatusId es un UUID, buscar el ID numérico correspondiente
+    let statusIdToUse = newStatusId;
+    if (typeof newStatusId === 'string' && newStatusId.includes('-')) {
+      console.log('🔍 Convirtiendo UUID de status a ID numérico...');
+      const statusResult = await query(
+        'SELECT id FROM ticket_statuses WHERE id = $1',
+        [newStatusId]
+      );
+      if (statusResult.rows.length > 0) {
+        statusIdToUse = statusResult.rows[0].id;
+        console.log(`✅ Status encontrado: UUID ${newStatusId} -> ID ${statusIdToUse}`);
+      }
+    }
+    
     const result = await query(
       `UPDATE tickets 
        SET status_id = $1, updated_at = CURRENT_TIMESTAMP, 
@@ -320,12 +334,12 @@ export class Ticket {
                               THEN CURRENT_TIMESTAMP ELSE resolved_at END
        WHERE id = $2
        RETURNING *`,
-      [newStatusId, this.id]
+      [statusIdToUse, this.id]
     );
 
     // Registrar en historial - TEMPORALMENTE DESHABILITADO para debugging
     try {
-      await this.addToHistory(userId, 'status_id', oldStatusId, newStatusId);
+      await this.addToHistory(userId, 'status_id', oldStatusId, statusIdToUse);
     } catch (error) {
       console.error('⚠️ Error registrando en historial (no crítico):', error.message);
     }
