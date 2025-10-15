@@ -2,6 +2,12 @@ import { Ticket } from '../models/Ticket.js';
 import { query } from '../utils/database.js';
 import { catchAsync, createValidationError, createNotFoundError, createForbiddenError } from '../middleware/errorHandler.js';
 import { validationResult } from 'express-validator';
+import { 
+  createTicketNotifications,
+  createAssignmentNotifications,
+  createStatusChangeNotifications,
+  createCommentNotifications 
+} from './notificationController.js';
 
 // Crear nuevo ticket
 export const createTicket = catchAsync(async (req, res) => {
@@ -46,6 +52,19 @@ export const createTicket = catchAsync(async (req, res) => {
     categoryId: ticket.categoryId,
     priorityId: ticket.priorityId
   });
+
+  // Crear notificaciones para admins y técnicos (async, no bloqueante)
+  createTicketNotifications(
+    {
+      id: ticket.id,
+      ticketNumber: ticket.ticketNumber,
+      title: ticket.title
+    },
+    {
+      id: req.user.id,
+      name: `${req.user.firstName} ${req.user.lastName}`
+    }
+  ).catch(err => console.error('Error creando notificaciones:', err));
 
   res.status(201).json({
     success: true,
@@ -150,6 +169,36 @@ export const assignTicket = catchAsync(async (req, res) => {
 
   const updatedTicket = await ticket.assignTo(assignedTo, req.user.id);
 
+  // Obtener datos del técnico asignado
+  const techResult = await query(
+    'SELECT id, first_name, last_name FROM users WHERE id = $1',
+    [assignedTo]
+  );
+
+  if (techResult.rows.length > 0) {
+    const technician = techResult.rows[0];
+    
+    // Crear notificaciones (async, no bloqueante)
+    createAssignmentNotifications(
+      {
+        id: updatedTicket.id,
+        ticketNumber: updatedTicket.ticketNumber,
+        title: updatedTicket.title,
+        requester: {
+          id: updatedTicket.requesterId
+        }
+      },
+      {
+        id: technician.id,
+        name: `${technician.first_name} ${technician.last_name}`
+      },
+      {
+        id: req.user.id,
+        name: `${req.user.firstName} ${req.user.lastName}`
+      }
+    ).catch(err => console.error('Error creando notificaciones de asignación:', err));
+  }
+
   res.json({
     success: true,
     message: 'Ticket asignado exitosamente',
@@ -192,6 +241,28 @@ export const updateTicketStatus = catchAsync(async (req, res) => {
   const updatedTicket = await ticket.changeStatus(status, req.user.id);
   console.log('✅ Estado actualizado correctamente');
 
+  // Obtener nombre del nuevo estado
+  const statusResult = await query('SELECT name FROM ticket_statuses WHERE id = $1', [status]);
+  const newStatusName = statusResult.rows[0]?.name || 'Desconocido';
+
+  // Crear notificaciones (async, no bloqueante)
+  createStatusChangeNotifications(
+    {
+      id: updatedTicket.id,
+      ticketNumber: updatedTicket.ticketNumber,
+      title: updatedTicket.title,
+      requester: { id: updatedTicket.requesterId },
+      assignedUser: updatedTicket.assignedTo ? { id: updatedTicket.assignedTo } : null
+    },
+    {
+      name: newStatusName
+    },
+    {
+      id: req.user.id,
+      name: `${req.user.firstName} ${req.user.lastName}`
+    }
+  ).catch(err => console.error('Error creando notificaciones de cambio de estado:', err));
+
   // Si hay comentario, agregarlo
   if (comment && comment.trim()) {
     console.log('💬 Agregando comentario...');
@@ -222,6 +293,24 @@ export const addComment = catchAsync(async (req, res) => {
   }
 
   const newComment = await ticket.addComment(req.user.id, comment);
+
+  // Crear notificaciones (async, no bloqueante)
+  createCommentNotifications(
+    {
+      id: ticket.id,
+      ticketNumber: ticket.ticketNumber,
+      title: ticket.title,
+      requester: { id: ticket.requesterId },
+      assignedUser: ticket.assignedTo ? { id: ticket.assignedTo } : null
+    },
+    {
+      is_internal: false
+    },
+    {
+      id: req.user.id,
+      name: `${req.user.firstName} ${req.user.lastName}`
+    }
+  ).catch(err => console.error('Error creando notificaciones de comentario:', err));
 
   res.status(201).json({
     success: true,
