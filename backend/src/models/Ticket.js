@@ -412,11 +412,16 @@ export class Ticket {
 
   // Agregar entrada al historial
   async addToHistory(userId, fieldName, oldValue = null, newValue = null) {
-    await query(
-      `INSERT INTO ticket_history (ticket_id, user_id, field_name, old_value, new_value, change_type)
-       VALUES ($1, $2, $3, $4, $5, $6)`,
-      [this.id, userId, fieldName, oldValue, newValue, 'updated']
-    );
+    try {
+      await query(
+        `INSERT INTO ticket_history (ticket_id, user_id, field_name, old_value, new_value, change_type)
+         VALUES ($1, $2, $3, $4, $5, $6)`,
+        [this.id, userId, fieldName, String(oldValue || ''), String(newValue || ''), 'updated']
+      );
+    } catch (error) {
+      console.error('Error adding to history:', error.message);
+      // No fallar si el historial falla
+    }
   }
 
   // Obtener estadísticas de tickets
