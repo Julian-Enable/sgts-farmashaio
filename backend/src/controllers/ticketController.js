@@ -249,13 +249,26 @@ export const updateTicketStatus = catchAsync(async (req, res) => {
   console.log('✅ Ticket encontrado:', {
     id: ticket.id,
     currentStatus: ticket.statusId,
-    newStatus: status
+    newStatus: status,
+    requesterId: ticket.requesterId,
+    assignedTo: ticket.assignedTo,
+    userRole: req.user.role,
+    userId: req.user.id
   });
 
-  // Verificar permisos
-  if (req.user.role === 'empleado' && ticket.requesterId !== req.user.id) {
-    throw createForbiddenError('No tienes permisos para cambiar el estado de este ticket');
+  // Verificar permisos según rol
+  if (req.user.role === 'empleado') {
+    // Empleados solo pueden cambiar estado de sus propios tickets
+    if (ticket.requesterId !== req.user.id) {
+      throw createForbiddenError('No tienes permisos para cambiar el estado de este ticket');
+    }
+  } else if (req.user.role === 'tecnico') {
+    // Técnicos solo pueden cambiar estado de tickets asignados a ellos
+    if (ticket.assignedTo !== req.user.id) {
+      throw createForbiddenError('Solo puedes cambiar el estado de tickets asignados a ti');
+    }
   }
+  // Administradores pueden cambiar cualquier ticket (sin restricción)
 
   // Actualizar el estado usando el método especializado
   console.log('🔄 Llamando a ticket.changeStatus...');
