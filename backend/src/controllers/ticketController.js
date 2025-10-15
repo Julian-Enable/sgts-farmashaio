@@ -173,7 +173,13 @@ export const updateTicketStatus = catchAsync(async (req, res) => {
     throw createForbiddenError('No tienes permisos para cambiar el estado de este ticket');
   }
 
-  const updatedTicket = await Ticket.updateStatus(id, status, req.user.id, comment);
+  // Actualizar el estado usando el método update
+  const updatedTicket = await ticket.update({ status_id: status }, req.user.id);
+
+  // Si hay comentario, agregarlo
+  if (comment && comment.trim()) {
+    await updatedTicket.addComment(req.user.id, comment);
+  }
 
   res.json({
     success: true,
