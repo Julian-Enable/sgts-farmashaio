@@ -24,6 +24,8 @@ import {
   Fab,
   useTheme,
   useMediaQuery,
+  Paper,
+  alpha,
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -38,6 +40,7 @@ import {
 import { useAuth } from '../context/AuthContext.jsx';
 import { ticketService } from '../services/ticketService.js';
 import { TICKET_STATUS, TICKET_PRIORITY } from '../utils/constants.js';
+import TicketCard from '../components/TicketCard.jsx';
 
 const TicketsPage = () => {
   const theme = useTheme();
@@ -172,36 +175,58 @@ const TicketsPage = () => {
 
   return (
     <Box>
-      {/* Header */}
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        mb={3}
-        flexWrap="wrap"
-        gap={2}
-      >
-        <Typography variant="h4" component="h1">
-          Gestión de Tickets
-        </Typography>
-        <Box display="flex" gap={1} flexWrap="wrap">
-          <Button
-            variant="outlined"
-            startIcon={<FilterIcon />}
-            onClick={() => setFilterDialogOpen(true)}
-          >
-            Filtros
-          </Button>
-          {/* Solo empleados y admins pueden crear tickets */}
-          {(user.role === 'empleado' || user.role === 'administrador') && (
+      {/* Header moderno */}
+      <Box mb={4}>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          mb={2}
+          flexWrap="wrap"
+          gap={2}
+        >
+          <Box>
+            <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 700, mb: 0.5 }}>
+              Gestión de Tickets
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {tickets.length} {tickets.length === 1 ? 'ticket encontrado' : 'tickets encontrados'}
+            </Typography>
+          </Box>
+          <Box display="flex" gap={1} flexWrap="wrap">
             <Button
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={handleCreateTicket}
+              variant="outlined"
+              startIcon={<FilterIcon />}
+              onClick={() => setFilterDialogOpen(true)}
+              sx={{
+                borderRadius: 2,
+                borderWidth: 2,
+                '&:hover': {
+                  borderWidth: 2,
+                },
+              }}
             >
-              Crear Ticket
+              Filtros
             </Button>
-          )}
+            {/* Solo empleados y admins pueden crear tickets */}
+            {(user.role === 'empleado' || user.role === 'administrador') && (
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                onClick={handleCreateTicket}
+                sx={{
+                  borderRadius: 2,
+                  background: 'linear-gradient(135deg, #2563eb 0%, #1e40af 100%)',
+                  boxShadow: `0 4px 12px ${alpha(theme.palette.primary.main, 0.3)}`,
+                  '&:hover': {
+                    boxShadow: `0 6px 16px ${alpha(theme.palette.primary.main, 0.4)}`,
+                  },
+                }}
+              >
+                Crear Ticket
+              </Button>
+            )}
+          </Box>
         </Box>
       </Box>
 
@@ -300,106 +325,10 @@ const TicketsPage = () => {
           </CardContent>
         </Card>
       ) : (
-        <Grid container spacing={2}>
+        <Grid container spacing={3}>
           {tickets.map((ticket) => (
-            <Grid item xs={12} md={6} lg={4} key={ticket.id}>
-              <Card 
-                sx={{ 
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  '&:hover': {
-                    boxShadow: 4,
-                    transform: 'translateY(-2px)',
-                  },
-                  transition: 'all 0.2s ease-in-out',
-                }}
-              >
-                <CardContent sx={{ flexGrow: 1 }}>
-                  {/* Header del ticket */}
-                  <Box display="flex" justifyContent="space-between" alignItems="start" mb={2}>
-                    <Typography variant="h6" component="h3" noWrap>
-                      #{ticket.id}
-                    </Typography>
-                    <Box display="flex" gap={0.5}>
-                      <Tooltip title="Ver detalles">
-                        <IconButton
-                          size="small"
-                          onClick={() => handleViewTicket(ticket.id)}
-                        >
-                          <ViewIcon />
-                        </IconButton>
-                      </Tooltip>
-                      {(user.role === 'administrador' || ticket.assignedTo === user.id) && (
-                        <Tooltip title="Editar">
-                          <IconButton
-                            size="small"
-                            onClick={() => navigate(`/tickets/${ticket.id}/edit`)}
-                          >
-                            <EditIcon />
-                          </IconButton>
-                        </Tooltip>
-                      )}
-                    </Box>
-                  </Box>
-
-                  {/* Título */}
-                  <Typography variant="subtitle1" gutterBottom noWrap>
-                    {ticket.title}
-                  </Typography>
-
-                  {/* Descripción */}
-                  <Typography 
-                    variant="body2" 
-                    color="text.secondary" 
-                    sx={{ 
-                      mb: 2,
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden',
-                    }}
-                  >
-                    {ticket.description}
-                  </Typography>
-
-                  {/* Estado y Prioridad */}
-                  <Box display="flex" gap={1} mb={2} flexWrap="wrap">
-                    <Chip
-                      label={ticket.status?.name || ticket.statusId}
-                      sx={{ 
-                        bgcolor: ticket.status?.color || '#2196f3',
-                        color: 'white'
-                      }}
-                      size="small"
-                    />
-                    <Chip
-                      label={ticket.priority?.name || ticket.priorityId}
-                      sx={{ 
-                        borderColor: ticket.priority?.color || '#ff9800',
-                        color: ticket.priority?.color || '#ff9800'
-                      }}
-                      variant="outlined"
-                      size="small"
-                    />
-                  </Box>
-
-                  {/* Información adicional */}
-                  <Typography variant="caption" color="text.secondary" display="block">
-                    Creado: {formatDate(ticket.createdAt)}
-                  </Typography>
-                  {ticket.requester && (
-                    <Typography variant="caption" color="text.secondary" display="block">
-                      Creado por: {ticket.requester.name} ({ticket.requester.department})
-                    </Typography>
-                  )}
-                  {ticket.assignedUser && (
-                    <Typography variant="caption" color="text.secondary" display="block">
-                      Asignado a: {ticket.assignedUser.name}
-                    </Typography>
-                  )}
-                </CardContent>
-              </Card>
+            <Grid item xs={12} sm={6} lg={4} key={ticket.id}>
+              <TicketCard ticket={ticket} />
             </Grid>
           ))}
         </Grid>
