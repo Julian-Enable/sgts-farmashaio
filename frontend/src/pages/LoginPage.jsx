@@ -14,6 +14,7 @@ import {
   CircularProgress,
   useTheme,
   useMediaQuery,
+  alpha,
 } from '@mui/material';
 import {
   Visibility,
@@ -28,6 +29,7 @@ import * as yup from 'yup';
 
 import { useAuth } from '../context/AuthContext.jsx';
 import { APP_CONFIG, VALIDATION } from '../utils/constants.js';
+import Logo from '../components/Logo.jsx';
 
 // Schema de validación
 const loginSchema = yup.object({
@@ -92,45 +94,85 @@ const LoginPage = () => {
     <Box
       sx={{
         minHeight: '100vh',
-        background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+        background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #8b5cf6 100%)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         p: 2,
+        position: 'relative',
+        overflow: 'hidden',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.05\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
+          opacity: 0.1,
+        },
       }}
     >
-      <Container maxWidth="sm">
-        <Card
-          elevation={8}
+      <Container maxWidth="sm" sx={{ position: 'relative', zIndex: 1 }}>
+        {/* Logo flotante arriba de la tarjeta */}
+        <Box
           sx={{
-            borderRadius: 3,
-            overflow: 'visible',
-            position: 'relative',
+            display: 'flex',
+            justifyContent: 'center',
+            mb: 3,
+            animation: 'float 3s ease-in-out infinite',
+            '@keyframes float': {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-10px)' },
+            },
           }}
         >
-          {/* Header con logo */}
+          <Logo variant="full" size="large" />
+        </Box>
+
+        <Card
+          elevation={0}
+          sx={{
+            borderRadius: 4,
+            overflow: 'hidden',
+            position: 'relative',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+            backdropFilter: 'blur(10px)',
+            bgcolor: 'rgba(255, 255, 255, 0.98)',
+          }}
+        >
+          {/* Header con gradiente sutil */}
           <Box
             sx={{
-              background: `linear-gradient(45deg, ${theme.palette.primary.main} 30%, ${theme.palette.primary.light} 90%)`,
-              color: 'white',
+              background: 'linear-gradient(135deg, rgba(30, 58, 138, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%)',
               p: 4,
+              pb: 3,
               textAlign: 'center',
-              borderRadius: '12px 12px 0 0',
+              borderBottom: '1px solid',
+              borderColor: 'divider',
             }}
           >
-            <Box sx={{ fontSize: '3rem', mb: 1 }}>📋</Box>
-            <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 600 }}>
-              {APP_CONFIG.NAME}
+            <Typography 
+              variant="h4" 
+              component="h1" 
+              gutterBottom 
+              sx={{ 
+                fontWeight: 800,
+                background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                mb: 1,
+              }}
+            >
+              Bienvenido
             </Typography>
-            <Typography variant="subtitle1" sx={{ opacity: 0.9 }}>
-              {APP_CONFIG.DESCRIPTION}
+            <Typography variant="body1" sx={{ color: 'text.secondary', fontWeight: 500 }}>
+              Inicia sesión para continuar
             </Typography>
           </Box>
 
-          <CardContent sx={{ p: 4 }}>
-            <Typography variant="h5" component="h2" gutterBottom sx={{ mb: 3, textAlign: 'center' }}>
-              Iniciar Sesión
-            </Typography>
+          <CardContent sx={{ p: 4, pt: 4 }}>
 
             {/* Mostrar error si existe */}
             {error && (
@@ -206,47 +248,118 @@ const LoginPage = () => {
                 variant="contained"
                 size="large"
                 disabled={!isValid || isLoading}
-                startIcon={isLoading ? <CircularProgress size={20} /> : <LoginIcon />}
+                startIcon={isLoading ? <CircularProgress size={20} color="inherit" /> : <LoginIcon />}
                 sx={{
-                  py: 1.5,
-                  fontSize: '1.1rem',
-                  fontWeight: 600,
+                  py: 2,
+                  fontSize: '1.05rem',
+                  fontWeight: 700,
                   textTransform: 'none',
+                  borderRadius: 3,
+                  background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)',
+                  boxShadow: '0 8px 24px rgba(30, 58, 138, 0.4)',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    background: 'linear-gradient(135deg, #1e40af 0%, #2563eb 100%)',
+                    boxShadow: '0 12px 32px rgba(30, 58, 138, 0.5)',
+                    transform: 'translateY(-2px)',
+                  },
+                  '&:active': {
+                    transform: 'translateY(0)',
+                  },
+                  '&:disabled': {
+                    background: 'linear-gradient(135deg, #94a3b8 0%, #cbd5e1 100%)',
+                    boxShadow: 'none',
+                  },
                 }}
               >
                 {isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
               </Button>
             </Box>
 
-            {/* Información de usuarios de prueba */}
-            <Box sx={{ mt: 4, p: 2, bgcolor: 'grey.50', borderRadius: 1 }}>
-              <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 600 }}>
-                👥 Usuarios de Prueba:
+            {/* Información de usuarios de prueba con diseño moderno */}
+            <Box 
+              sx={{ 
+                mt: 4, 
+                p: 3, 
+                bgcolor: alpha(theme.palette.primary.main, 0.04),
+                borderRadius: 3,
+                border: '2px dashed',
+                borderColor: alpha(theme.palette.primary.main, 0.2),
+              }}
+            >
+              <Typography 
+                variant="subtitle2" 
+                gutterBottom 
+                sx={{ 
+                  fontWeight: 700,
+                  color: 'primary.main',
+                  mb: 2,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1,
+                }}
+              >
+                👥 Usuarios de Prueba
               </Typography>
-              <Box sx={{ display: 'grid', gap: 1, fontSize: '0.85rem' }}>
-                <Typography variant="body2">
-                  <strong>Admin:</strong> admin@farmashaio.com / admin123
-                </Typography>
-                <Typography variant="body2">
-                  <strong>Técnico:</strong> tecnico1@farmashaio.com / tecnico123
-                </Typography>
-                <Typography variant="body2">
-                  <strong>Empleado:</strong> empleado1@farmashaio.com / empleado123
-                </Typography>
+              <Box sx={{ display: 'grid', gap: 1.5, fontSize: '0.9rem' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Box 
+                    sx={{ 
+                      width: 8, 
+                      height: 8, 
+                      borderRadius: '50%', 
+                      bgcolor: 'error.main' 
+                    }} 
+                  />
+                  <Typography variant="body2" sx={{ fontWeight: 600 }}>Admin:</Typography>
+                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>admin@farmashaio.com / admin123</Typography>
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Box 
+                    sx={{ 
+                      width: 8, 
+                      height: 8, 
+                      borderRadius: '50%', 
+                      bgcolor: 'warning.main' 
+                    }} 
+                  />
+                  <Typography variant="body2" sx={{ fontWeight: 600 }}>Técnico:</Typography>
+                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>tecnico1@farmashaio.com / tecnico123</Typography>
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Box 
+                    sx={{ 
+                      width: 8, 
+                      height: 8, 
+                      borderRadius: '50%', 
+                      bgcolor: 'info.main' 
+                    }} 
+                  />
+                  <Typography variant="body2" sx={{ fontWeight: 600 }}>Empleado:</Typography>
+                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>empleado1@farmashaio.com / empleado123</Typography>
+                </Box>
               </Box>
             </Box>
           </CardContent>
 
-          {/* Footer */}
+          {/* Footer mejorado */}
           <Box
             sx={{
               textAlign: 'center',
-              p: 2,
-              bgcolor: 'grey.50',
-              borderRadius: '0 0 12px 12px',
+              p: 3,
+              bgcolor: alpha(theme.palette.primary.main, 0.02),
+              borderTop: '1px solid',
+              borderColor: 'divider',
             }}
           >
-            <Typography variant="caption" color="textSecondary">
+            <Typography 
+              variant="caption" 
+              sx={{ 
+                color: 'text.secondary',
+                fontWeight: 600,
+                fontSize: '0.8rem',
+              }}
+            >
               v{APP_CONFIG.VERSION} • {APP_CONFIG.COMPANY}
             </Typography>
           </Box>
