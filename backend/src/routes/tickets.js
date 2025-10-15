@@ -32,7 +32,7 @@ const createTicketValidation = [
 
 const updateTicketValidation = [
   param('id')
-    .isNumeric()
+    .isUUID()
     .withMessage('ID de ticket inválido'),
   body('title')
     .optional()
@@ -44,39 +44,39 @@ const updateTicketValidation = [
     .withMessage('La descripción debe tener al menos 10 caracteres'),
   body('category')
     .optional()
-    .isString()
+    .isUUID()
     .withMessage('Categoría inválida'),
   body('priority')
     .optional()
-    .isString()
+    .isUUID()
     .withMessage('Prioridad inválida'),
   body('status')
     .optional()
-    .isIn(['abierto', 'en_progreso', 'resuelto', 'cerrado'])
+    .isUUID()
     .withMessage('Estado inválido')
 ];
 
 const assignTicketValidation = [
   param('id')
-    .isNumeric()
+    .isUUID()
     .withMessage('ID de ticket inválido'),
   body('assignedTo')
-    .isNumeric()
+    .isUUID()
     .withMessage('ID del técnico inválido')
 ];
 
 const changeStatusValidation = [
   param('id')
-    .isNumeric()
+    .isUUID()
     .withMessage('ID de ticket inválido'),
   body('status')
-    .isIn(['abierto', 'en_progreso', 'resuelto', 'cerrado'])
-    .withMessage('Estado inválido')
+    .isUUID()
+    .withMessage('Estado inválido (debe ser UUID)')
 ];
 
 const addCommentValidation = [
   param('id')
-    .isNumeric()
+    .isUUID()
     .withMessage('ID de ticket inválido'),
   body('content')
     .notEmpty()
@@ -100,7 +100,7 @@ const queryValidation = [
     .withMessage('Prioridad inválida'),
   query('assignedTo')
     .optional()
-    .isNumeric()
+    .isUUID()
     .withMessage('ID de usuario asignado inválido'),
   query('page')
     .optional()
