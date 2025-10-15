@@ -268,7 +268,7 @@ const Layout = () => {
         })}
       </List>
 
-      {/* Footer limpio */}
+      {/* Footer con versión y créditos */}
       <Box 
         sx={{ 
           p: 2.5,
@@ -283,9 +283,22 @@ const Layout = () => {
             fontSize: '0.7rem',
             color: '#64748b',
             fontWeight: 500,
+            display: 'block',
+            mb: 0.5,
           }}
         >
           v{APP_CONFIG.VERSION}
+        </Typography>
+        <Typography 
+          variant="caption"
+          sx={{ 
+            fontSize: '0.65rem',
+            color: '#94a3b8',
+            fontWeight: 400,
+            display: 'block',
+          }}
+        >
+          Developed by Julian Merchán
         </Typography>
       </Box>
     </Box>
