@@ -141,7 +141,14 @@ const TicketDetailPage = () => {
 
   const handleStatusChange = async () => {
     try {
-      await ticketService.updateTicketStatus(id, selectedStatus, statusComment);
+      // Obtener el ID del estado seleccionado
+      const statusId = TICKET_STATUS[selectedStatus]?.id;
+      if (!statusId) {
+        setError('Estado inválido seleccionado');
+        return;
+      }
+      
+      await ticketService.updateTicketStatus(id, statusId, statusComment);
       setStatusDialogOpen(false);
       setSelectedStatus('');
       setStatusComment('');

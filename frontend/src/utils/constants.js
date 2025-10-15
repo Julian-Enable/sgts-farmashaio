@@ -46,34 +46,40 @@ export const USER_ROLES = {
   ADMINISTRADOR: 'administrador',
 };
 
-// Estados de tickets
+// Estados de tickets con sus IDs de base de datos
 export const TICKET_STATUS = {
   'nuevo': {
+    id: '550e8400-e29b-41d4-a716-446655442001',
     label: 'Nuevo',
     description: 'Ticket recién creado',
     color: '#2196f3'
   },
   'asignado': {
+    id: '550e8400-e29b-41d4-a716-446655442002',
     label: 'Asignado',
     description: 'Ticket asignado a un técnico',
     color: '#ff9800'
   },
   'en-progreso': {
+    id: '550e8400-e29b-41d4-a716-446655442003',
     label: 'En Progreso',
     description: 'El técnico está trabajando en el ticket',
     color: '#9c27b0'
   },
   'esperando-usuario': {
+    id: '550e8400-e29b-41d4-a716-446655442004',
     label: 'Esperando Usuario',
     description: 'Esperando respuesta del usuario',
     color: '#ffc107'
   },
   'resuelto': {
+    id: '550e8400-e29b-41d4-a716-446655442005',
     label: 'Resuelto',
     description: 'Problema resuelto',
     color: '#4caf50'
   },
   'cerrado': {
+    id: '550e8400-e29b-41d4-a716-446655442006',
     label: 'Cerrado',
     description: 'Ticket completamente finalizado',
     color: '#757575'
