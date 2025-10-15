@@ -29,7 +29,6 @@ import {
 } from '@mui/material';
 import {
   ArrowBack as BackIcon,
-  Edit as EditIcon,
   Person as PersonIcon,
   AccessTime as TimeIcon,
   Comment as CommentIcon,
@@ -199,12 +198,6 @@ const TicketDetailPage = () => {
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleString('es-ES');
-  };
-
-  const canEditTicket = () => {
-    return user.role === 'administrador' || 
-           ticket?.assignedTo?.id === user.id ||
-           ticket?.createdBy?.id === user.id;
   };
 
   if (loading) {
