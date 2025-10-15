@@ -84,8 +84,24 @@ export const getTickets = catchAsync(async (req, res) => {
   if (search) filters.search = search;
 
   // Filtrar por rol del usuario
-  if (req.user.role === 'empleado') {
-    filters.requesterId = req.user.id;
+  switch (req.user.role) {
+    case 'empleado':
+      // Empleados solo ven tickets que ellos crearon
+      filters.requesterId = req.user.id;
+      break;
+    
+    case 'tecnico':
+      // Técnicos solo ven tickets asignados a ellos
+      filters.assignedTo = req.user.id;
+      break;
+    
+    case 'administrador':
+      // Administradores ven todos los tickets (sin filtro adicional)
+      break;
+    
+    default:
+      // Por seguridad, si el rol no es reconocido, solo mostrar los propios
+      filters.requesterId = req.user.id;
   }
 
   const tickets = await Ticket.findAll(filters);
