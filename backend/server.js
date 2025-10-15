@@ -36,30 +36,17 @@ const PORT = process.env.PORT || 3001;
 // Security middleware
 app.use(helmet());
 
-// CORS configuration - Allow all Vercel domains
+// CORS configuration - Allow all origins in production
 app.use(cors({
-  origin: function (origin, callback) {
-    console.log(`🌐 CORS request from origin: ${origin}`);
-    
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    
-    // Allow localhost for development
-    if (origin && origin.includes('localhost')) return callback(null, true);
-    
-    // Allow all vercel.app domains
-    if (origin && origin.includes('vercel.app')) return callback(null, true);
-    
-    // Allow all onrender.com domains  
-    if (origin && origin.includes('onrender.com')) return callback(null, true);
-    
-    // For debugging - allow all origins temporarily
-    console.log(`✅ CORS allowing origin: ${origin}`);
-    return callback(null, true);
-  },
-  credentials: true,
+  origin: '*', // Allow all origins
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: false, // Set to false when using origin: '*'
   optionsSuccessStatus: 200
 }));
+
+// Handle preflight requests explicitly
+app.options('*', cors());
 
 // Rate limiting
 const limiter = rateLimit({
