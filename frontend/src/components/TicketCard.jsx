@@ -2,20 +2,15 @@ import React from 'react';
 import {
   Card,
   CardContent,
-  CardActions,
   Box,
   Typography,
   Chip,
-  IconButton,
-  Tooltip,
   Avatar,
   Divider,
   alpha,
   useTheme,
 } from '@mui/material';
 import {
-  Visibility as ViewIcon,
-  Person as PersonIcon,
   CalendarToday as CalendarIcon,
   Category as CategoryIcon,
 } from '@mui/icons-material';
@@ -38,108 +33,109 @@ const TicketCard = ({ ticket }) => {
     navigate(`/tickets/${ticket.id}`);
   };
 
+  // Gradiente según prioridad
+  const getGradient = () => {
+    const gradients = {
+      error: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+      warning: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+      info: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+      success: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+      default: 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)',
+    };
+    return gradients[priorityConfig.color] || gradients.default;
+  };
+
   return (
     <Card
+      onClick={handleView}
       sx={{
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
+        position: 'relative',
+        overflow: 'hidden',
         transition: 'all 0.3s ease',
         border: '1px solid',
         borderColor: 'divider',
+        cursor: 'pointer',
         '&:hover': {
           transform: 'translateY(-4px)',
-          boxShadow: `0 8px 24px ${alpha(theme.palette.primary.main, 0.15)}`,
-          borderColor: 'primary.main',
+          boxShadow: `0 12px 24px ${alpha(theme.palette[priorityConfig.color]?.main || theme.palette.grey.main, 0.15)}`,
         },
       }}
     >
-      {/* Header con prioridad */}
+      {/* Gradiente de fondo sutil */}
       <Box
         sx={{
-          px: 2,
-          py: 1.5,
-          bgcolor: alpha(theme.palette[priorityConfig.color]?.main || '#000', 0.05),
-          borderBottom: '1px solid',
-          borderColor: 'divider',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          width: '120px',
+          height: '120px',
+          background: getGradient(),
+          opacity: 0.08,
+          borderRadius: '50%',
+          transform: 'translate(30%, -30%)',
         }}
-      >
-        <Typography
-          variant="caption"
-          sx={{
-            fontWeight: 700,
-            color: 'text.secondary',
-            textTransform: 'uppercase',
-            letterSpacing: '0.5px',
-          }}
-        >
-          #{ticket.ticketNumber}
-        </Typography>
-        <Chip
-          label={priorityConfig.label || priorityKey || 'Sin prioridad'}
-          size="small"
-          sx={{
-            bgcolor: alpha(theme.palette[priorityConfig.color]?.main || '#9e9e9e', 0.1),
-            color: `${priorityConfig.color || 'grey'}.main`,
-            fontWeight: 600,
-            fontSize: '0.7rem',
-            height: '22px',
-          }}
-        />
-      </Box>
+      />
 
-      <CardContent sx={{ flexGrow: 1, p: 2.5 }}>
+      <CardContent sx={{ position: 'relative', p: 3, flexGrow: 1 }}>
+        {/* Número de ticket y prioridad */}
+        <Box display="flex" alignItems="flex-start" justifyContent="space-between" mb={2}>
+          <Typography
+            variant="caption"
+            sx={{
+              fontWeight: 700,
+              color: 'text.secondary',
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px',
+              fontSize: '0.75rem',
+            }}
+          >
+            #{ticket.ticketNumber}
+          </Typography>
+          <Chip
+            label={priorityConfig.label || priorityKey || 'Sin prioridad'}
+            size="small"
+            sx={{
+              height: 24,
+              bgcolor: alpha(theme.palette[priorityConfig.color]?.main || '#9e9e9e', 0.1),
+              color: `${priorityConfig.color || 'grey'}.main`,
+              fontWeight: 600,
+              fontSize: '0.75rem',
+            }}
+          />
+        </Box>
+
         {/* Título */}
         <Typography
           variant="h6"
-          gutterBottom
           sx={{
             fontWeight: 600,
-            fontSize: '1rem',
+            fontSize: '1.1rem',
             mb: 1,
             display: '-webkit-box',
             WebkitLineClamp: 2,
             WebkitBoxOrient: 'vertical',
             overflow: 'hidden',
-            minHeight: '3em',
+            minHeight: '2.6em',
+            lineHeight: 1.3,
           }}
         >
           {ticket.title}
         </Typography>
 
-        {/* Descripción */}
-        {ticket.description && (
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{
-              mb: 2,
-              display: '-webkit-box',
-              WebkitLineClamp: 3,
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden',
-              lineHeight: 1.5,
-            }}
-          >
-            {ticket.description}
-          </Typography>
-        )}
-
-        {/* Estado y categoría */}
-        <Box display="flex" gap={1} mb={2} flexWrap="wrap">
+        {/* Estado */}
+        <Box display="flex" gap={1} mb={2} flexWrap="wrap" alignItems="center">
           <Chip
             label={statusConfig.label || statusKey || 'Sin estado'}
             size="small"
             sx={{
+              height: 24,
               bgcolor: alpha(theme.palette[statusConfig.color]?.main || '#9e9e9e', 0.1),
               color: `${statusConfig.color || 'grey'}.main`,
               fontWeight: 600,
               fontSize: '0.75rem',
-              borderLeft: `3px solid`,
-              borderLeftColor: `${statusConfig.color || 'grey'}.main`,
             }}
           />
           {ticket.categoryName && (
@@ -148,6 +144,7 @@ const TicketCard = ({ ticket }) => {
               size="small"
               icon={<CategoryIcon sx={{ fontSize: 14 }} />}
               sx={{
+                height: 24,
                 bgcolor: alpha(theme.palette.info.main, 0.08),
                 fontSize: '0.75rem',
               }}
@@ -155,77 +152,82 @@ const TicketCard = ({ ticket }) => {
           )}
         </Box>
 
+        {/* Descripción breve */}
+        {ticket.description && (
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{
+              mb: 2,
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              lineHeight: 1.5,
+              fontSize: '0.875rem',
+            }}
+          >
+            {ticket.description}
+          </Typography>
+        )}
+
         {/* Divider */}
         <Divider sx={{ my: 2 }} />
 
-        {/* Info adicional */}
-        <Box display="flex" flexDirection="column" gap={1.5}>
-          <Box display="flex" alignItems="center" gap={1}>
-            <PersonIcon sx={{ fontSize: 18, color: 'text.secondary' }} />
-            <Typography variant="body2" color="text.secondary">
-              <strong style={{ color: theme.palette.text.primary }}>
-                {ticket.requesterName || 'Sin creador'}
-              </strong>
-            </Typography>
-          </Box>
+        {/* Info compacta */}
+        <Box display="flex" flexDirection="column" gap={1}>
+          <Typography 
+            variant="caption" 
+            color="text.secondary" 
+            sx={{ 
+              fontWeight: 500,
+              fontSize: '0.75rem',
+            }}
+          >
+            Creado por: {ticket.requesterName || 'Sin creador'}
+          </Typography>
           
           {ticket.assignedName && (
             <Box display="flex" alignItems="center" gap={1}>
               <Avatar
                 sx={{
-                  width: 24,
-                  height: 24,
-                  fontSize: '0.75rem',
+                  width: 20,
+                  height: 20,
+                  fontSize: '0.7rem',
                   bgcolor: 'success.main',
                 }}
               >
                 {ticket.assignedName?.charAt(0)}
               </Avatar>
-              <Typography variant="body2" color="text.secondary">
-                Asignado: <strong style={{ color: theme.palette.text.primary }}>
-                  {ticket.assignedName}
-                </strong>
+              <Typography 
+                variant="caption" 
+                color="text.secondary"
+                sx={{ 
+                  fontWeight: 500,
+                  fontSize: '0.75rem',
+                }}
+              >
+                {ticket.assignedName}
               </Typography>
             </Box>
           )}
           
-          <Box display="flex" alignItems="center" gap={1}>
-            <CalendarIcon sx={{ fontSize: 18, color: 'text.secondary' }} />
-            <Typography variant="body2" color="text.secondary">
-              {formatDate(ticket.createdAt)}
-            </Typography>
-          </Box>
-        </Box>
-      </CardContent>
-
-      <CardActions
-        sx={{
-          px: 2,
-          py: 1.5,
-          borderTop: '1px solid',
-          borderColor: 'divider',
-          bgcolor: alpha(theme.palette.primary.main, 0.02),
-        }}
-      >
-        <Tooltip title="Ver detalles">
-          <IconButton
-            size="small"
-            onClick={handleView}
-            sx={{
-              color: 'primary.main',
-              '&:hover': {
-                bgcolor: alpha(theme.palette.primary.main, 0.1),
-              },
+          <Typography 
+            variant="caption" 
+            color="text.secondary"
+            sx={{ 
+              fontWeight: 500,
+              fontSize: '0.75rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 0.5,
             }}
           >
-            <ViewIcon />
-          </IconButton>
-        </Tooltip>
-        <Box sx={{ flexGrow: 1 }} />
-        <Typography variant="caption" color="text.secondary">
-          ID: {ticket.id}
-        </Typography>
-      </CardActions>
+            <CalendarIcon sx={{ fontSize: 14 }} />
+            {formatDate(ticket.createdAt)}
+          </Typography>
+        </Box>
+      </CardContent>
     </Card>
   );
 };
