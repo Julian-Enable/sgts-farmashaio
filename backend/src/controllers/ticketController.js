@@ -162,11 +162,25 @@ export const updateTicketStatus = catchAsync(async (req, res) => {
   const { id } = req.params;
   const { status, comment } = req.body;
 
+  console.log('🔍 DEBUG updateTicketStatus:', {
+    ticketId: id,
+    statusId: status,
+    userId: req.user.id,
+    hasComment: !!comment
+  });
+
   const ticket = await Ticket.findById(id);
   
   if (!ticket) {
+    console.error('❌ Ticket no encontrado:', id);
     throw createNotFoundError('Ticket no encontrado');
   }
+
+  console.log('✅ Ticket encontrado:', {
+    id: ticket.id,
+    currentStatus: ticket.statusId,
+    newStatus: status
+  });
 
   // Verificar permisos
   if (req.user.role === 'empleado' && ticket.requesterId !== req.user.id) {
@@ -174,10 +188,13 @@ export const updateTicketStatus = catchAsync(async (req, res) => {
   }
 
   // Actualizar el estado usando el método especializado
+  console.log('🔄 Llamando a ticket.changeStatus...');
   const updatedTicket = await ticket.changeStatus(status, req.user.id);
+  console.log('✅ Estado actualizado correctamente');
 
   // Si hay comentario, agregarlo
   if (comment && comment.trim()) {
+    console.log('💬 Agregando comentario...');
     await updatedTicket.addComment(req.user.id, comment);
   }
 
