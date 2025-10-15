@@ -267,16 +267,6 @@ const TicketDetailPage = () => {
             </Typography>
           </Box>
         </Box>
-        
-        {canEditTicket() && (
-          <Button
-            variant="outlined"
-            startIcon={<EditIcon />}
-            onClick={() => navigate(`/tickets/${id}/edit`)}
-          >
-            Editar
-          </Button>
-        )}
       </Box>
 
       {/* Error Alert */}
