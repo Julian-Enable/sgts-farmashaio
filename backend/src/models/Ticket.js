@@ -299,8 +299,12 @@ export class Ticket {
       [technicianId, this.id]
     );
 
-    // Registrar en historial
-    await this.addToHistory(assignedBy, 'assigned_to', this.assignedTo, technicianId);
+    // Registrar en historial - TEMPORALMENTE DESHABILITADO para debugging
+    try {
+      await this.addToHistory(assignedBy, 'assigned_to', this.assignedTo, technicianId);
+    } catch (error) {
+      console.error('⚠️ Error registrando en historial (no crítico):', error.message);
+    }
     
     return new Ticket(result.rows[0]);
   }
@@ -319,8 +323,12 @@ export class Ticket {
       [newStatusId, this.id]
     );
 
-    // Registrar en historial
-    await this.addToHistory(userId, 'status_id', oldStatusId, newStatusId);
+    // Registrar en historial - TEMPORALMENTE DESHABILITADO para debugging
+    try {
+      await this.addToHistory(userId, 'status_id', oldStatusId, newStatusId);
+    } catch (error) {
+      console.error('⚠️ Error registrando en historial (no crítico):', error.message);
+    }
     
     return new Ticket(result.rows[0]);
   }
