@@ -9,6 +9,7 @@ import {
   IconButton,
   Tooltip,
   Avatar,
+  Divider,
   alpha,
   useTheme,
 } from '@mui/material';
@@ -98,7 +99,7 @@ const TicketCard = ({ ticket }) => {
           sx={{
             fontWeight: 600,
             fontSize: '1rem',
-            mb: 2,
+            mb: 1,
             display: '-webkit-box',
             WebkitLineClamp: 2,
             WebkitBoxOrient: 'vertical',
@@ -108,6 +109,24 @@ const TicketCard = ({ ticket }) => {
         >
           {ticket.title}
         </Typography>
+
+        {/* Descripción */}
+        {ticket.description && (
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{
+              mb: 2,
+              display: '-webkit-box',
+              WebkitLineClamp: 3,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              lineHeight: 1.5,
+            }}
+          >
+            {ticket.description}
+          </Typography>
+        )}
 
         {/* Estado y categoría */}
         <Box display="flex" gap={1} mb={2} flexWrap="wrap">
@@ -136,12 +155,17 @@ const TicketCard = ({ ticket }) => {
           )}
         </Box>
 
+        {/* Divider */}
+        <Divider sx={{ my: 2 }} />
+
         {/* Info adicional */}
-        <Box display="flex" flexDirection="column" gap={1}>
+        <Box display="flex" flexDirection="column" gap={1.5}>
           <Box display="flex" alignItems="center" gap={1}>
-            <PersonIcon sx={{ fontSize: 16, color: 'text.secondary' }} />
-            <Typography variant="caption" color="text.secondary">
-              Creado por: <strong>{ticket.requesterName}</strong>
+            <PersonIcon sx={{ fontSize: 18, color: 'text.secondary' }} />
+            <Typography variant="body2" color="text.secondary">
+              <strong style={{ color: theme.palette.text.primary }}>
+                {ticket.requesterName || 'Sin creador'}
+              </strong>
             </Typography>
           </Box>
           
@@ -149,23 +173,25 @@ const TicketCard = ({ ticket }) => {
             <Box display="flex" alignItems="center" gap={1}>
               <Avatar
                 sx={{
-                  width: 20,
-                  height: 20,
-                  fontSize: '0.65rem',
-                  bgcolor: 'primary.main',
+                  width: 24,
+                  height: 24,
+                  fontSize: '0.75rem',
+                  bgcolor: 'success.main',
                 }}
               >
                 {ticket.assignedName?.charAt(0)}
               </Avatar>
-              <Typography variant="caption" color="text.secondary">
-                Asignado a: <strong>{ticket.assignedName}</strong>
+              <Typography variant="body2" color="text.secondary">
+                Asignado: <strong style={{ color: theme.palette.text.primary }}>
+                  {ticket.assignedName}
+                </strong>
               </Typography>
             </Box>
           )}
           
           <Box display="flex" alignItems="center" gap={1}>
-            <CalendarIcon sx={{ fontSize: 16, color: 'text.secondary' }} />
-            <Typography variant="caption" color="text.secondary">
+            <CalendarIcon sx={{ fontSize: 18, color: 'text.secondary' }} />
+            <Typography variant="body2" color="text.secondary">
               {formatDate(ticket.createdAt)}
             </Typography>
           </Box>
