@@ -175,17 +175,17 @@ const TicketsPage = () => {
 
   return (
     <Box>
-      {/* Header con gradiente y diseño moderno */}
+      {/* Header con gradiente azul como Dashboard */}
       <Box 
         sx={{ 
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          background: 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)',
           borderRadius: 3,
           p: 4,
           mb: 4,
           color: 'white',
           position: 'relative',
           overflow: 'hidden',
-          boxShadow: '0 8px 32px rgba(102, 126, 234, 0.3)',
+          boxShadow: '0 8px 32px rgba(25, 118, 210, 0.3)',
           '&::before': {
             content: '""',
             position: 'absolute',
@@ -260,7 +260,7 @@ const TicketsPage = () => {
                 sx={{
                   borderRadius: 2,
                   background: 'white',
-                  color: '#667eea',
+                  color: '#1976d2',
                   fontWeight: 600,
                   px: 3,
                   boxShadow: '0 4px 14px rgba(0, 0, 0, 0.25)',
@@ -376,7 +376,7 @@ const TicketsPage = () => {
             borderRadius: 3,
             textAlign: 'center', 
             py: 8,
-            background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%)',
+            background: 'linear-gradient(135deg, rgba(25, 118, 210, 0.05) 0%, rgba(21, 101, 192, 0.05) 100%)',
             border: '2px dashed',
             borderColor: 'divider',
           }}
@@ -388,7 +388,7 @@ const TicketsPage = () => {
                 height: 120,
                 margin: '0 auto 24px',
                 borderRadius: '50%',
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                background: 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -423,13 +423,13 @@ const TicketsPage = () => {
                 onClick={handleCreateTicket}
                 sx={{
                   borderRadius: 2,
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  background: 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)',
                   px: 4,
                   py: 1.5,
                   fontSize: '1rem',
-                  boxShadow: '0 4px 14px rgba(102, 126, 234, 0.4)',
+                  boxShadow: '0 4px 14px rgba(25, 118, 210, 0.4)',
                   '&:hover': {
-                    boxShadow: '0 6px 20px rgba(102, 126, 234, 0.6)',
+                    boxShadow: '0 6px 20px rgba(25, 118, 210, 0.6)',
                     transform: 'translateY(-2px)',
                   },
                   transition: 'all 0.3s ease',
