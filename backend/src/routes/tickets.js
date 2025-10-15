@@ -32,7 +32,7 @@ const createTicketValidation = [
 
 const updateTicketValidation = [
   param('id')
-    .isUUID()
+    .isInt()
     .withMessage('ID de ticket inválido'),
   body('title')
     .optional()
@@ -58,7 +58,7 @@ const updateTicketValidation = [
 
 const assignTicketValidation = [
   param('id')
-    .isUUID()
+    .isInt()
     .withMessage('ID de ticket inválido'),
   body('assignedTo')
     .isUUID()
@@ -67,7 +67,7 @@ const assignTicketValidation = [
 
 const changeStatusValidation = [
   param('id')
-    .isUUID()
+    .isInt()
     .withMessage('ID de ticket inválido'),
   body('status')
     .isUUID()
@@ -76,7 +76,7 @@ const changeStatusValidation = [
 
 const addCommentValidation = [
   param('id')
-    .isUUID()
+    .isInt()
     .withMessage('ID de ticket inválido'),
   body('content')
     .notEmpty()
