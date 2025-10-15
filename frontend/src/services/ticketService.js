@@ -47,7 +47,7 @@ class TicketService {
 
   // Asignar ticket a técnico
   async assignTicket(id, technicianId) {
-    const response = await apiPut(`${API_ENDPOINTS.TICKETS}/${id}/assign`, {
+    const response = await apiPost(`${API_ENDPOINTS.TICKETS}/${id}/assign`, {
       assignedTo: technicianId
     });
     return response.data;
