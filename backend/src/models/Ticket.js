@@ -569,11 +569,19 @@ export class Ticket {
       dueDate: this.dueDate,
       estimatedHours: this.estimatedHours,
       actualHours: this.actualHours,
+      // Objetos completos (para compatibilidad)
       requester: this.requester,
       assignedUser: this.assignedUser,
       category: this.category,
       priority: this.priority,
-      status: this.status
+      status: this.status,
+      // Campos planos para fácil acceso en frontend
+      requesterName: this.requester?.name,
+      assignedName: this.assignedUser?.name,
+      categoryName: this.category?.name,
+      categoryColor: this.category?.color,
+      priorityName: this.priority?.name,
+      statusName: this.status?.name
     };
   }
 }
