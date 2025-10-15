@@ -313,17 +313,24 @@ export class Ticket {
   async changeStatus(newStatusId, userId) {
     const oldStatusId = this.statusId;
     
-    // Si newStatusId es un UUID, buscar el ID numérico correspondiente
+    // Mapeo de UUIDs a IDs numéricos (basado en la BD actual)
+    const STATUS_UUID_TO_ID = {
+      '550e8400-e29b-41d4-a716-446655442001': 1, // Nuevo
+      '550e8400-e29b-41d4-a716-446655442002': 2, // Asignado
+      '550e8400-e29b-41d4-a716-446655442003': 3, // En Progreso
+      '550e8400-e29b-41d4-a716-446655442004': 4, // Esperando Usuario
+      '550e8400-e29b-41d4-a716-446655442005': 5, // Resuelto
+      '550e8400-e29b-41d4-a716-446655442006': 6  // Cerrado
+    };
+    
+    // Si newStatusId es un UUID, convertir a ID numérico
     let statusIdToUse = newStatusId;
     if (typeof newStatusId === 'string' && newStatusId.includes('-')) {
-      console.log('🔍 Convirtiendo UUID de status a ID numérico...');
-      const statusResult = await query(
-        'SELECT id FROM ticket_statuses WHERE id = $1',
-        [newStatusId]
-      );
-      if (statusResult.rows.length > 0) {
-        statusIdToUse = statusResult.rows[0].id;
-        console.log(`✅ Status encontrado: UUID ${newStatusId} -> ID ${statusIdToUse}`);
+      statusIdToUse = STATUS_UUID_TO_ID[newStatusId];
+      console.log(`🔄 Convirtiendo UUID ${newStatusId} -> ID ${statusIdToUse}`);
+      
+      if (!statusIdToUse) {
+        throw new Error(`UUID de status no válido: ${newStatusId}`);
       }
     }
     
