@@ -148,7 +148,7 @@ export const assignTicket = catchAsync(async (req, res) => {
     throw createNotFoundError('Ticket no encontrado');
   }
 
-  const updatedTicket = await ticket.update({ assigned_to: assignedTo }, req.user.id);
+  const updatedTicket = await ticket.assignTo(assignedTo, req.user.id);
 
   res.json({
     success: true,
@@ -173,8 +173,8 @@ export const updateTicketStatus = catchAsync(async (req, res) => {
     throw createForbiddenError('No tienes permisos para cambiar el estado de este ticket');
   }
 
-  // Actualizar el estado usando el método update
-  const updatedTicket = await ticket.update({ status_id: status }, req.user.id);
+  // Actualizar el estado usando el método especializado
+  const updatedTicket = await ticket.changeStatus(status, req.user.id);
 
   // Si hay comentario, agregarlo
   if (comment && comment.trim()) {
@@ -204,7 +204,7 @@ export const addComment = catchAsync(async (req, res) => {
     throw createForbiddenError('No tienes permisos para comentar en este ticket');
   }
 
-  const newComment = await Ticket.addComment(id, req.user.id, comment);
+  const newComment = await ticket.addComment(req.user.id, comment);
 
   res.status(201).json({
     success: true,
@@ -228,7 +228,7 @@ export const getTicketComments = catchAsync(async (req, res) => {
     throw createForbiddenError('No tienes permisos para ver este ticket');
   }
 
-  const comments = await Ticket.getComments(id);
+  const comments = await ticket.getComments();
 
   res.json({
     success: true,
@@ -251,7 +251,7 @@ export const getTicketHistory = catchAsync(async (req, res) => {
     throw createForbiddenError('No tienes permisos para ver este ticket');
   }
 
-  const history = await Ticket.getHistory(id);
+  const history = await ticket.getHistory();
 
   res.json({
     success: true,
