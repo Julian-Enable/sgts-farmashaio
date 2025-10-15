@@ -175,19 +175,22 @@ const TicketsPage = () => {
 
   return (
     <Box>
-      {/* Header con gradiente azul como Dashboard */}
-      <Box 
+      {/* Header moderno con gradiente - Idéntico al Dashboard */}
+      <Paper 
+        elevation={0}
         sx={{ 
-          background: 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)',
-          borderRadius: 3,
-          p: 4,
           mb: 4,
+          p: 4,
+          borderRadius: 3,
+          background: 'linear-gradient(135deg, #2563eb 0%, #1e40af 100%)',
           color: 'white',
           position: 'relative',
           overflow: 'hidden',
-          boxShadow: '0 8px 32px rgba(25, 118, 210, 0.3)',
-          '&::before': {
-            content: '""',
+        }}
+      >
+        {/* Pattern de fondo */}
+        <Box
+          sx={{
             position: 'absolute',
             top: 0,
             right: 0,
@@ -196,42 +199,41 @@ const TicketsPage = () => {
             background: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)',
             borderRadius: '50%',
             transform: 'translate(30%, -30%)',
-          },
-        }}
-      >
-        <Box
+          }}
+        />
+        
+        <Box 
+          position="relative" 
+          zIndex={1}
           display="flex"
           justifyContent="space-between"
           alignItems="center"
           flexWrap="wrap"
           gap={2}
-          sx={{ position: 'relative', zIndex: 1 }}
         >
           <Box>
-            <Box display="flex" alignItems="center" gap={2} mb={1}>
-              <Box
-                sx={{
-                  width: 48,
-                  height: 48,
-                  borderRadius: 2,
-                  background: 'rgba(255, 255, 255, 0.2)',
-                  backdropFilter: 'blur(10px)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <TicketIcon sx={{ fontSize: 28 }} />
-              </Box>
-              <Typography variant="h4" component="h1" sx={{ fontWeight: 700 }}>
-                Gestión de Tickets
-              </Typography>
-            </Box>
-            <Typography variant="body1" sx={{ opacity: 0.95, fontSize: '1rem' }}>
+            <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 700, mb: 1 }}>
+              Gestión de Tickets 🎫
+            </Typography>
+            <Typography variant="h6" sx={{ opacity: 0.9, mb: 2, fontWeight: 400 }}>
               {tickets.length} {tickets.length === 1 ? 'ticket encontrado' : 'tickets encontrados'}
             </Typography>
+            <Box display="flex" alignItems="center" gap={2}>
+              <Chip
+                label={user?.role === 'empleado' ? 'Empleado' : user?.role === 'tecnico' ? 'Técnico' : 'Administrador'}
+                sx={{
+                  bgcolor: 'rgba(255,255,255,0.2)',
+                  color: 'white',
+                  fontWeight: 600,
+                  backdropFilter: 'blur(10px)',
+                }}
+              />
+              <Typography variant="body1" sx={{ opacity: 0.9 }}>
+                {user?.department}
+              </Typography>
+            </Box>
           </Box>
-          <Box display="flex" gap={2} flexWrap="wrap">
+          <Box display="flex" gap={2} flexWrap="wrap" alignItems="flex-start">
             <Button
               variant="outlined"
               startIcon={<FilterIcon />}
@@ -260,7 +262,7 @@ const TicketsPage = () => {
                 sx={{
                   borderRadius: 2,
                   background: 'white',
-                  color: '#1976d2',
+                  color: '#2563eb',
                   fontWeight: 600,
                   px: 3,
                   boxShadow: '0 4px 14px rgba(0, 0, 0, 0.25)',
@@ -277,7 +279,7 @@ const TicketsPage = () => {
             )}
           </Box>
         </Box>
-      </Box>
+      </Paper>
 
       {/* Barra de búsqueda y filtros rápidos con diseño moderno */}
       <Card 
