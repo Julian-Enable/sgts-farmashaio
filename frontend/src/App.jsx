@@ -1,11 +1,11 @@
 import React, { Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { Box, CircularProgress } from '@mui/material';
+import { Box, CircularProgress, Typography } from '@mui/material';
 
 import { useAuth } from './context/AuthContext.jsx';
 import Layout from './components/Layout.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
-import LoadingScreen from './components/LoadingScreen.jsx';
+import Logo from './components/Logo.jsx';
 
 // Lazy loading de componentes
 const LoginPage = React.lazy(() => import('./pages/LoginPage.jsx'));
@@ -18,15 +18,24 @@ const ProfilePage = React.lazy(() => import('./pages/ProfilePage.jsx'));
 const NotificationsPage = React.lazy(() => import('./pages/NotificationsPage.jsx'));
 const NotFoundPage = React.lazy(() => import('./pages/NotFoundPage.jsx'));
 
-// Componente de loading para Suspense
-const SuspenseLoading = () => (
+// Componente de loading unificado
+const LoadingScreen = () => (
   <Box
-    display="flex"
-    justifyContent="center"
-    alignItems="center"
-    minHeight="400px"
+    sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)',
+      gap: 3,
+    }}
   >
-    <CircularProgress size={40} />
+    <Logo variant="full" size="large" />
+    <CircularProgress size={40} sx={{ color: 'white' }} />
+    <Typography variant="body2" color="white" sx={{ opacity: 0.9 }}>
+      Cargando sistema...
+    </Typography>
   </Box>
 );
 
@@ -39,7 +48,7 @@ function App() {
   }
 
   return (
-    <Suspense fallback={<SuspenseLoading />}>
+    <Suspense fallback={<LoadingScreen />}>
       <Routes>
         {/* Ruta de login */}
         <Route
