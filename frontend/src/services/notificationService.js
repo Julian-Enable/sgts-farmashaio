@@ -12,7 +12,10 @@ class NotificationService {
     });
 
     const response = await apiGet(`${API_ENDPOINTS.NOTIFICATIONS}?${params.toString()}`);
-    return response.data;
+    // Backend retorna: { success: true, data: { notifications: [...], pagination: {...} } }
+    // Axios lo envuelve: response.data = { success: true, data: { notifications: [...], pagination: {...} } }
+    // Retornamos el objeto 'data' interno
+    return response.data.data || { notifications: [], pagination: {} };
   }
 
   // Marcar notificación como leída
