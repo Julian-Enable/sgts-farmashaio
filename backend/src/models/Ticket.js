@@ -300,7 +300,7 @@ export class Ticket {
     );
 
     // Registrar en historial
-    await this.addToHistory(assignedBy, 'assigned', this.assignedTo, technicianId);
+    await this.addToHistory(assignedBy, 'assigned_to', this.assignedTo, technicianId);
     
     return new Ticket(result.rows[0]);
   }
@@ -320,7 +320,7 @@ export class Ticket {
     );
 
     // Registrar en historial
-    await this.addToHistory(userId, 'status_change', oldStatusId, newStatusId);
+    await this.addToHistory(userId, 'status_id', oldStatusId, newStatusId);
     
     return new Ticket(result.rows[0]);
   }
@@ -411,11 +411,11 @@ export class Ticket {
   }
 
   // Agregar entrada al historial
-  async addToHistory(userId, changeType, oldValue = null, newValue = null) {
+  async addToHistory(userId, fieldName, oldValue = null, newValue = null) {
     await query(
       `INSERT INTO ticket_history (ticket_id, user_id, field_name, old_value, new_value, change_type)
        VALUES ($1, $2, $3, $4, $5, $6)`,
-      [this.id, userId, changeType, oldValue, newValue, changeType]
+      [this.id, userId, fieldName, oldValue, newValue, 'update']
     );
   }
 
