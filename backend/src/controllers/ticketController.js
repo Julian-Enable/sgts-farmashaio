@@ -123,7 +123,7 @@ export const updateTicket = catchAsync(async (req, res) => {
     throw createForbiddenError('No tienes permisos para editar este ticket');
   }
 
-  const updatedTicket = await Ticket.update(id, updateData);
+  const updatedTicket = await ticket.update(updateData, req.user.id);
 
   res.json({
     success: true,
@@ -148,7 +148,7 @@ export const assignTicket = catchAsync(async (req, res) => {
     throw createNotFoundError('Ticket no encontrado');
   }
 
-  const updatedTicket = await Ticket.update(id, { assignedTo });
+  const updatedTicket = await ticket.update({ assigned_to: assignedTo }, req.user.id);
 
   res.json({
     success: true,
