@@ -35,6 +35,7 @@ const TicketCard = ({ ticket }) => {
 
   // Gradiente según prioridad
   const getGradient = () => {
+    const color = priorityConfig.color || 'default';
     const gradients = {
       error: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
       warning: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
@@ -42,7 +43,7 @@ const TicketCard = ({ ticket }) => {
       success: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
       default: 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)',
     };
-    return gradients[priorityConfig.color] || gradients.default;
+    return gradients[color] || gradients.default;
   };
 
   return (
@@ -60,7 +61,7 @@ const TicketCard = ({ ticket }) => {
         cursor: 'pointer',
         '&:hover': {
           transform: 'translateY(-4px)',
-          boxShadow: `0 12px 24px ${alpha(theme.palette[priorityConfig.color]?.main || theme.palette.grey.main, 0.15)}`,
+          boxShadow: `0 12px 24px ${alpha(theme.palette[priorityConfig.color]?.main || '#9e9e9e', 0.15)}`,
         },
       }}
     >
@@ -99,8 +100,8 @@ const TicketCard = ({ ticket }) => {
             size="small"
             sx={{
               height: 24,
-              bgcolor: alpha(theme.palette[priorityConfig.color]?.main || '#9e9e9e', 0.1),
-              color: `${priorityConfig.color || 'grey'}.main`,
+              bgcolor: priorityConfig.color ? alpha(theme.palette[priorityConfig.color]?.main || '#9e9e9e', 0.1) : alpha('#9e9e9e', 0.1),
+              color: priorityConfig.color ? `${priorityConfig.color}.main` : 'grey.500',
               fontWeight: 600,
               fontSize: '0.75rem',
             }}
@@ -132,8 +133,8 @@ const TicketCard = ({ ticket }) => {
             size="small"
             sx={{
               height: 24,
-              bgcolor: alpha(theme.palette[statusConfig.color]?.main || '#9e9e9e', 0.1),
-              color: `${statusConfig.color || 'grey'}.main`,
+              bgcolor: statusConfig.color ? alpha(theme.palette[statusConfig.color]?.main || '#9e9e9e', 0.1) : alpha('#9e9e9e', 0.1),
+              color: statusConfig.color ? `${statusConfig.color}.main` : 'grey.500',
               fontWeight: 600,
               fontSize: '0.75rem',
             }}
