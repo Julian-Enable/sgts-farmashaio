@@ -33,7 +33,7 @@ import {
   Clear as ClearIcon,
   Visibility as ViewIcon,
   Edit as EditIcon,
-  Assignment as TicketIcon,
+  ConfirmationNumber as TicketIcon,
   Search as SearchIcon,
 } from '@mui/icons-material';
 
@@ -175,25 +175,63 @@ const TicketsPage = () => {
 
   return (
     <Box>
-      {/* Header moderno */}
-      <Box mb={4}>
+      {/* Header con gradiente y diseño moderno */}
+      <Box 
+        sx={{ 
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          borderRadius: 3,
+          p: 4,
+          mb: 4,
+          color: 'white',
+          position: 'relative',
+          overflow: 'hidden',
+          boxShadow: '0 8px 32px rgba(102, 126, 234, 0.3)',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            width: '300px',
+            height: '300px',
+            background: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)',
+            borderRadius: '50%',
+            transform: 'translate(30%, -30%)',
+          },
+        }}
+      >
         <Box
           display="flex"
           justifyContent="space-between"
           alignItems="center"
-          mb={2}
           flexWrap="wrap"
           gap={2}
+          sx={{ position: 'relative', zIndex: 1 }}
         >
           <Box>
-            <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 700, mb: 0.5 }}>
-              Gestión de Tickets
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Box display="flex" alignItems="center" gap={2} mb={1}>
+              <Box
+                sx={{
+                  width: 48,
+                  height: 48,
+                  borderRadius: 2,
+                  background: 'rgba(255, 255, 255, 0.2)',
+                  backdropFilter: 'blur(10px)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <TicketIcon sx={{ fontSize: 28 }} />
+              </Box>
+              <Typography variant="h4" component="h1" sx={{ fontWeight: 700 }}>
+                Gestión de Tickets
+              </Typography>
+            </Box>
+            <Typography variant="body1" sx={{ opacity: 0.95, fontSize: '1rem' }}>
               {tickets.length} {tickets.length === 1 ? 'ticket encontrado' : 'tickets encontrados'}
             </Typography>
           </Box>
-          <Box display="flex" gap={1} flexWrap="wrap">
+          <Box display="flex" gap={2} flexWrap="wrap">
             <Button
               variant="outlined"
               startIcon={<FilterIcon />}
@@ -201,8 +239,13 @@ const TicketsPage = () => {
               sx={{
                 borderRadius: 2,
                 borderWidth: 2,
+                borderColor: 'rgba(255, 255, 255, 0.5)',
+                color: 'white',
+                backdropFilter: 'blur(10px)',
                 '&:hover': {
                   borderWidth: 2,
+                  borderColor: 'white',
+                  background: 'rgba(255, 255, 255, 0.1)',
                 },
               }}
             >
@@ -216,11 +259,17 @@ const TicketsPage = () => {
                 onClick={handleCreateTicket}
                 sx={{
                   borderRadius: 2,
-                  background: 'linear-gradient(135deg, #2563eb 0%, #1e40af 100%)',
-                  boxShadow: `0 4px 12px ${alpha(theme.palette.primary.main, 0.3)}`,
+                  background: 'white',
+                  color: '#667eea',
+                  fontWeight: 600,
+                  px: 3,
+                  boxShadow: '0 4px 14px rgba(0, 0, 0, 0.25)',
                   '&:hover': {
-                    boxShadow: `0 6px 16px ${alpha(theme.palette.primary.main, 0.4)}`,
+                    background: 'rgba(255, 255, 255, 0.95)',
+                    boxShadow: '0 6px 20px rgba(0, 0, 0, 0.3)',
+                    transform: 'translateY(-2px)',
                   },
+                  transition: 'all 0.3s ease',
                 }}
               >
                 Crear Ticket
@@ -230,18 +279,36 @@ const TicketsPage = () => {
         </Box>
       </Box>
 
-      {/* Barra de búsqueda y filtros rápidos */}
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
+      {/* Barra de búsqueda y filtros rápidos con diseño moderno */}
+      <Card 
+        sx={{ 
+          mb: 4,
+          borderRadius: 3,
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+          border: '1px solid',
+          borderColor: 'divider',
+        }}
+      >
+        <CardContent sx={{ p: 3 }}>
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={4}>
               <TextField
                 fullWidth
-                placeholder="Buscar tickets..."
+                placeholder="Buscar por título, número o descripción..."
                 value={filters.search}
                 onChange={(e) => handleFilterChange('search', e.target.value)}
                 InputProps={{
                   startAdornment: <SearchIcon color="action" sx={{ mr: 1 }} />,
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 2,
+                    '&:hover': {
+                      '& .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'primary.main',
+                      },
+                    },
+                  },
                 }}
               />
             </Grid>
@@ -302,32 +369,102 @@ const TicketsPage = () => {
         </Alert>
       )}
 
-      {/* Lista de tickets */}
+      {/* Lista de tickets con animación */}
       {tickets.length === 0 ? (
-        <Card>
-          <CardContent sx={{ textAlign: 'center', py: 8 }}>
-            <TicketIcon sx={{ fontSize: 64, color: 'text.secondary', mb: 2 }} />
-            <Typography variant="h6" color="text.secondary" gutterBottom>
+        <Card 
+          sx={{ 
+            borderRadius: 3,
+            textAlign: 'center', 
+            py: 8,
+            background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%)',
+            border: '2px dashed',
+            borderColor: 'divider',
+          }}
+        >
+          <CardContent>
+            <Box
+              sx={{
+                width: 120,
+                height: 120,
+                margin: '0 auto 24px',
+                borderRadius: '50%',
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                animation: 'pulse 2s ease-in-out infinite',
+                '@keyframes pulse': {
+                  '0%, 100%': {
+                    transform: 'scale(1)',
+                    opacity: 1,
+                  },
+                  '50%': {
+                    transform: 'scale(1.05)',
+                    opacity: 0.9,
+                  },
+                },
+              }}
+            >
+              <TicketIcon sx={{ fontSize: 64, color: 'white' }} />
+            </Box>
+            <Typography variant="h5" gutterBottom sx={{ fontWeight: 600, color: 'text.primary' }}>
               No hay tickets disponibles
             </Typography>
-            <Typography variant="body2" color="text.secondary" mb={3}>
+            <Typography variant="body1" color="text.secondary" mb={4} sx={{ maxWidth: 500, mx: 'auto' }}>
               {Object.values(filters).some(f => f) 
-                ? 'No se encontraron tickets con los filtros aplicados.'
-                : 'Crea tu primer ticket para empezar.'}
+                ? 'No se encontraron tickets con los filtros aplicados. Intenta ajustar tus criterios de búsqueda.'
+                : 'Aún no tienes tickets creados. Crea tu primer ticket para comenzar a gestionar solicitudes.'}
             </Typography>
-            <Button
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={handleCreateTicket}
-            >
-              Crear Primer Ticket
-            </Button>
+            {(user.role === 'empleado' || user.role === 'administrador') && (
+              <Button
+                variant="contained"
+                size="large"
+                startIcon={<AddIcon />}
+                onClick={handleCreateTicket}
+                sx={{
+                  borderRadius: 2,
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  px: 4,
+                  py: 1.5,
+                  fontSize: '1rem',
+                  boxShadow: '0 4px 14px rgba(102, 126, 234, 0.4)',
+                  '&:hover': {
+                    boxShadow: '0 6px 20px rgba(102, 126, 234, 0.6)',
+                    transform: 'translateY(-2px)',
+                  },
+                  transition: 'all 0.3s ease',
+                }}
+              >
+                Crear Primer Ticket
+              </Button>
+            )}
           </CardContent>
         </Card>
       ) : (
         <Grid container spacing={3}>
-          {tickets.map((ticket) => (
-            <Grid item xs={12} sm={6} lg={4} key={ticket.id}>
+          {tickets.map((ticket, index) => (
+            <Grid 
+              item 
+              xs={12} 
+              sm={6} 
+              lg={4} 
+              key={ticket.id}
+              sx={{
+                animation: 'fadeInUp 0.5s ease-out',
+                animationDelay: `${index * 0.1}s`,
+                animationFillMode: 'both',
+                '@keyframes fadeInUp': {
+                  '0%': {
+                    opacity: 0,
+                    transform: 'translateY(20px)',
+                  },
+                  '100%': {
+                    opacity: 1,
+                    transform: 'translateY(0)',
+                  },
+                },
+              }}
+            >
               <TicketCard ticket={ticket} />
             </Grid>
           ))}
