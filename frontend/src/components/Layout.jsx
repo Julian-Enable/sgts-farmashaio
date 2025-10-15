@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import {
   Box,
@@ -53,6 +53,13 @@ const Layout = () => {
   
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+
+  // Cerrar drawer automáticamente en móvil cuando cambia la ruta
+  useEffect(() => {
+    if (isMobile && mobileOpen) {
+      setMobileOpen(false);
+    }
+  }, [location.pathname]); // Solo dependemos de location.pathname para evitar loops
 
   // Navegación principal
   const navigationItems = [
