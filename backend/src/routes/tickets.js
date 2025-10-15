@@ -129,7 +129,12 @@ router.post('/', createTicketValidation, ticketController.createTicket);
 // Rutas para tickets específicos
 router.get('/:id', requireTicketAccess, ticketController.getTicketById);
 router.put('/:id', requireTicketAccess, updateTicketValidation, ticketController.updateTicket);
+router.delete('/:id', requireTechnicianOrAdmin, ticketController.deleteTicket);
+
+// Rutas de comentarios e historial
+router.get('/:id/comments', requireTicketAccess, ticketController.getTicketComments);
 router.post('/:id/comments', requireTicketAccess, addCommentValidation, ticketController.addComment);
+router.get('/:id/history', requireTicketAccess, ticketController.getTicketHistory);
 
 // Rutas que requieren permisos de técnico o administrador
 router.post('/:id/assign', requireTechnicianOrAdmin, assignTicketValidation, ticketController.assignTicket);

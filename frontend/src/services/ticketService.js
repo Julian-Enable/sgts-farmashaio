@@ -1,4 +1,4 @@
-import { apiGet, apiPost, apiPut, apiDelete } from './api.js';
+import { apiGet, apiPost, apiPut, apiPatch, apiDelete } from './api.js';
 import { API_ENDPOINTS, API_BASE_URL } from '../utils/constants.js';
 
 class TicketService {
@@ -55,7 +55,7 @@ class TicketService {
 
   // Cambiar estado del ticket
   async updateTicketStatus(id, status, comment = null) {
-    const response = await apiPut(`${API_ENDPOINTS.TICKETS}/${id}/status`, {
+    const response = await apiPatch(`${API_ENDPOINTS.TICKETS}/${id}/status`, {
       status,
       comment
     });
@@ -73,13 +73,15 @@ class TicketService {
   // Obtener comentarios del ticket
   async getTicketComments(ticketId) {
     const response = await apiGet(`${API_ENDPOINTS.TICKETS}/${ticketId}/comments`);
-    return response.data;
+    // Backend retorna { success: true, comments: [...] }
+    return response.data.comments || [];
   }
 
   // Obtener historial del ticket
   async getTicketHistory(ticketId) {
     const response = await apiGet(`${API_ENDPOINTS.TICKETS}/${ticketId}/history`);
-    return response.data;
+    // Backend retorna { success: true, history: [...] }
+    return response.data.history || [];
   }
 
   // Obtener estadísticas de tickets
@@ -106,30 +108,30 @@ class TicketService {
     return response.data;
   }
 
-  // Exportar tickets
-  async exportTickets(format = 'csv', filters = {}) {
-    const params = new URLSearchParams();
-    params.append('format', format);
-    
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value) {
-        params.append(key, value);
-      }
-    });
+  // TODO: Exportar tickets (not implemented in backend yet)
+  // async exportTickets(format = 'csv', filters = {}) {
+  //   const params = new URLSearchParams();
+  //   params.append('format', format);
+  //   
+  //   Object.entries(filters).forEach(([key, value]) => {
+  //     if (value) {
+  //       params.append(key, value);
+  //     }
+  //   });
+  //
+  //   const response = await apiGet(`${API_ENDPOINTS.TICKETS}/export?${params.toString()}`, {
+  //     responseType: 'blob'
+  //   });
+  //   return response.data;
+  // }
 
-    const response = await apiGet(`${API_ENDPOINTS.TICKETS}/export?${params.toString()}`, {
-      responseType: 'blob'
-    });
-    return response.data;
-  }
-
-  // Búsqueda avanzada de tickets
-  async searchTickets(searchQuery) {
-    const response = await apiPost(`${API_ENDPOINTS.TICKETS}/search`, {
-      query: searchQuery
-    });
-    return response.data;
-  }
+  // TODO: Búsqueda avanzada de tickets (not implemented in backend yet)
+  // async searchTickets(searchQuery) {
+  //   const response = await apiPost(`${API_ENDPOINTS.TICKETS}/search`, {
+  //     query: searchQuery
+  //   });
+  //   return response.data;
+  // }
 
   // Obtener categorías (public endpoint - no requiere auth)
   async getCategories() {
