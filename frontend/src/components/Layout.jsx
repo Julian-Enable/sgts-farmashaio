@@ -148,34 +148,25 @@ const Layout = () => {
 
   // Contenido del drawer
   const drawerContent = (
-    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', bgcolor: '#f8fafc' }}>
-      {/* Header del drawer con Logo */}
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', bgcolor: 'white' }}>
+      {/* Header del drawer con gradiente azul limpio */}
       <Box
         sx={{
-          p: 3,
-          background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)',
-          position: 'relative',
-          overflow: 'hidden',
-          '&::before': {
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.05\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
-          },
+          p: 2.5,
+          background: 'linear-gradient(135deg, #2563eb 0%, #1e40af 100%)',
+          borderBottom: '3px solid rgba(255,255,255,0.15)',
         }}
       >
-        <Box sx={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Logo variant="full" size="medium" />
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Logo variant="full" size="medium" showSubtitle={true} />
           {isMobile && (
             <IconButton
               onClick={handleDrawerToggle}
+              size="small"
               sx={{ 
                 color: 'white',
                 '&:hover': {
-                  bgcolor: 'rgba(255,255,255,0.1)',
+                  bgcolor: 'rgba(255,255,255,0.15)',
                 },
               }}
             >
@@ -185,37 +176,35 @@ const Layout = () => {
         </Box>
       </Box>
 
-      {/* Información del usuario con diseño moderno */}
+      {/* Información del usuario - Diseño limpio y elegante */}
       <Box 
         sx={{ 
-          p: 2.5,
+          p: 2,
           mx: 2,
-          mt: 2,
-          borderRadius: 3,
-          bgcolor: 'white',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-          border: '1px solid',
-          borderColor: 'divider',
+          mt: 2.5,
+          borderRadius: 2.5,
+          bgcolor: '#f8fafc',
+          border: '1px solid #e2e8f0',
         }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1.5 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
           <Avatar 
             sx={{ 
-              bgcolor: 'primary.main',
-              width: 44,
-              height: 44,
-              fontSize: '1.1rem',
-              fontWeight: 700,
-              boxShadow: '0 4px 12px rgba(30, 58, 138, 0.3)',
+              bgcolor: '#2563eb',
+              width: 40,
+              height: 40,
+              fontSize: '1rem',
+              fontWeight: 600,
+              boxShadow: '0 2px 8px rgba(37, 99, 235, 0.25)',
             }}
           >
             {user?.firstName?.charAt(0)}{user?.lastName?.charAt(0)}
           </Avatar>
           <Box sx={{ flex: 1, minWidth: 0 }}>
-            <Typography variant="subtitle1" noWrap sx={{ fontWeight: 700, fontSize: '0.95rem' }}>
+            <Typography variant="subtitle2" noWrap sx={{ fontWeight: 600, fontSize: '0.9rem', color: '#1e293b' }}>
               {user?.firstName} {user?.lastName}
             </Typography>
-            <Typography variant="caption" color="text.secondary" noWrap sx={{ fontSize: '0.8rem' }}>
+            <Typography variant="caption" noWrap sx={{ fontSize: '0.75rem', color: '#64748b' }}>
               {user?.department}
             </Typography>
           </Box>
@@ -225,14 +214,14 @@ const Layout = () => {
           size="small"
           color={getRoleColor(user?.role)}
           sx={{ 
-            fontWeight: 700,
-            fontSize: '0.75rem',
-            height: '26px',
+            height: '24px',
+            fontSize: '0.7rem',
+            fontWeight: 600,
           }}
         />
       </Box>
 
-      {/* Navegación con diseño moderno */}
+      {/* Navegación con diseño limpio */}
       <List sx={{ flex: 1, pt: 2, px: 2 }}>
         {navigationItems.map((item) => {
           if (!item.roles.includes(user?.role)) return null;
@@ -245,39 +234,22 @@ const Layout = () => {
                 onClick={() => handleNavigation(item.path)}
                 selected={isActive}
                 sx={{
-                  borderRadius: 2.5,
-                  py: 1.5,
-                  px: 2,
-                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                  position: 'relative',
-                  overflow: 'hidden',
-                  '&::before': isActive ? {
-                    content: '""',
-                    position: 'absolute',
-                    left: 0,
-                    top: 0,
-                    bottom: 0,
-                    width: '4px',
-                    bgcolor: 'primary.main',
-                    borderRadius: '0 4px 4px 0',
-                  } : {},
-                  '&.Mui-selected': {
-                    bgcolor: alpha(theme.palette.primary.main, 0.12),
-                    '&:hover': {
-                      bgcolor: alpha(theme.palette.primary.main, 0.18),
-                    },
-                  },
+                  borderRadius: 2,
+                  py: 1.2,
+                  px: 1.8,
+                  transition: 'all 0.2s ease',
+                  bgcolor: isActive ? '#eff6ff' : 'transparent',
+                  borderLeft: isActive ? '3px solid #2563eb' : '3px solid transparent',
                   '&:hover': {
-                    bgcolor: alpha(theme.palette.primary.main, 0.08),
-                    transform: 'translateX(4px)',
+                    bgcolor: isActive ? '#dbeafe' : '#f8fafc',
                   },
                 }}
               >
                 <ListItemIcon
                   sx={{
-                    color: isActive ? 'primary.main' : 'text.secondary',
-                    minWidth: 40,
-                    transition: 'color 0.3s ease',
+                    color: isActive ? '#2563eb' : '#64748b',
+                    minWidth: 38,
+                    fontSize: '1.25rem',
                   }}
                 >
                   {item.icon}
@@ -285,9 +257,9 @@ const Layout = () => {
                 <ListItemText 
                   primary={item.text}
                   primaryTypographyProps={{
-                    fontWeight: isActive ? 700 : 600,
-                    fontSize: '0.9rem',
-                    color: isActive ? 'primary.main' : 'text.primary',
+                    fontWeight: isActive ? 600 : 500,
+                    fontSize: '0.875rem',
+                    color: isActive ? '#1e293b' : '#475569',
                   }}
                 />
               </ListItemButton>
@@ -296,23 +268,22 @@ const Layout = () => {
         })}
       </List>
 
-      {/* Footer del drawer moderno */}
+      {/* Footer limpio */}
       <Box 
         sx={{ 
           p: 2.5,
-          m: 2,
-          borderRadius: 3,
-          background: 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)',
-          border: '1px solid',
-          borderColor: 'divider',
+          textAlign: 'center',
+          borderTop: '1px solid #e2e8f0',
+          bgcolor: '#f8fafc',
         }}
       >
         <Typography 
-          variant="caption" 
-          color="text.secondary" 
-          align="center" 
-          display="block"
-          sx={{ fontWeight: 600, fontSize: '0.75rem' }}
+          variant="caption"
+          sx={{ 
+            fontSize: '0.7rem',
+            color: '#64748b',
+            fontWeight: 500,
+          }}
         >
           v{APP_CONFIG.VERSION}
         </Typography>

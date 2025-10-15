@@ -1,12 +1,12 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
-import { LocalPharmacy } from '@mui/icons-material';
+import logoImage from '../assets/logo.png';
 
-const Logo = ({ variant = 'full', size = 'medium', color = 'primary' }) => {
+const Logo = ({ variant = 'full', size = 'medium', showSubtitle = true }) => {
   const sizes = {
-    small: { icon: 24, text: '1.25rem', height: 40 },
-    medium: { icon: 32, text: '1.5rem', height: 50 },
-    large: { icon: 48, text: '2rem', height: 70 },
+    small: { height: 35, text: '1.1rem', subtitle: '0.65rem' },
+    medium: { height: 45, text: '1.35rem', subtitle: '0.7rem' },
+    large: { height: 60, text: '1.75rem', subtitle: '0.8rem' },
   };
 
   const currentSize = sizes[size] || sizes.medium;
@@ -20,15 +20,19 @@ const Logo = ({ variant = 'full', size = 'medium', color = 'primary' }) => {
           justifyContent: 'center',
           width: currentSize.height,
           height: currentSize.height,
-          borderRadius: '12px',
-          background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)',
-          boxShadow: '0 4px 12px rgba(30, 58, 138, 0.3)',
+          borderRadius: 2,
+          overflow: 'hidden',
+          bgcolor: 'white',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
         }}
       >
-        <LocalPharmacy
-          sx={{
-            fontSize: currentSize.icon,
-            color: '#ffffff',
+        <img
+          src={logoImage}
+          alt="FARMASHAIO Logo"
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'contain',
           }}
         />
       </Box>
@@ -41,43 +45,30 @@ const Logo = ({ variant = 'full', size = 'medium', color = 'primary' }) => {
         display: 'flex',
         alignItems: 'center',
         gap: 1.5,
-        cursor: 'pointer',
-        transition: 'transform 0.3s ease',
-        '&:hover': {
-          transform: 'scale(1.05)',
-        },
       }}
     >
-      {/* Icono con gradiente */}
+      {/* Logo image */}
       <Box
         sx={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          width: currentSize.height,
           height: currentSize.height,
-          borderRadius: '12px',
-          background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)',
-          boxShadow: '0 4px 12px rgba(30, 58, 138, 0.3)',
-          position: 'relative',
+          minWidth: currentSize.height,
+          borderRadius: 2,
           overflow: 'hidden',
-          '&::before': {
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%)',
-          },
+          bgcolor: 'white',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+          p: 0.5,
         }}
       >
-        <LocalPharmacy
-          sx={{
-            fontSize: currentSize.icon,
-            color: '#ffffff',
-            position: 'relative',
-            zIndex: 1,
+        <img
+          src={logoImage}
+          alt="FARMASHAIO Logo"
+          style={{
+            height: '100%',
+            width: 'auto',
+            objectFit: 'contain',
           }}
         />
       </Box>
@@ -89,30 +80,29 @@ const Logo = ({ variant = 'full', size = 'medium', color = 'primary' }) => {
             variant="h6"
             sx={{
               fontSize: currentSize.text,
-              fontWeight: 800,
-              background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              letterSpacing: '-0.5px',
+              fontWeight: 700,
+              color: 'white',
+              letterSpacing: '-0.3px',
               lineHeight: 1.2,
             }}
           >
             FARMASHAIO
           </Typography>
-          <Typography
-            variant="caption"
-            sx={{
-              fontSize: '0.7rem',
-              fontWeight: 600,
-              color: '#64748b',
-              letterSpacing: '1px',
-              textTransform: 'uppercase',
-              mt: 0.5,
-            }}
-          >
-            Soporte TI
-          </Typography>
+          {showSubtitle && (
+            <Typography
+              variant="caption"
+              sx={{
+                fontSize: currentSize.subtitle,
+                fontWeight: 500,
+                color: 'rgba(255, 255, 255, 0.85)',
+                letterSpacing: '0.5px',
+                textTransform: 'uppercase',
+                mt: 0.3,
+              }}
+            >
+              Soporte TI
+            </Typography>
+          )}
         </Box>
       )}
     </Box>
