@@ -410,9 +410,14 @@ export class Ticket {
   async getComments() {
     const result = await query(
       `SELECT 
-        tc.*,
-        u.first_name || ' ' || u.last_name as user_name,
-        u.role as user_role
+        tc.id,
+        tc.content,
+        tc.is_internal as "isInternal",
+        tc.created_at,
+        u.id as user_id,
+        u.first_name,
+        u.last_name,
+        u.role
        FROM ticket_comments tc
        JOIN users u ON tc.user_id = u.id
        WHERE tc.ticket_id = $1
@@ -420,15 +425,34 @@ export class Ticket {
       [this.id]
     );
 
-    return result.rows;
+    // Transformar a camelCase
+    return result.rows.map(row => ({
+      id: row.id,
+      content: row.content,
+      isInternal: row.isInternal,
+      createdAt: row.created_at,
+      user: {
+        id: row.user_id,
+        firstName: row.first_name,
+        lastName: row.last_name,
+        role: row.role
+      }
+    }));
   }
 
   // Obtener historial del ticket
   async getHistory() {
     const result = await query(
       `SELECT 
-        th.*,
-        u.first_name || ' ' || u.last_name as user_name
+        th.id,
+        th.field_name,
+        th.old_value,
+        th.new_value,
+        th.change_type,
+        th.created_at,
+        u.id as user_id,
+        u.first_name,
+        u.last_name
        FROM ticket_history th
        JOIN users u ON th.user_id = u.id
        WHERE th.ticket_id = $1
@@ -436,7 +460,48 @@ export class Ticket {
       [this.id]
     );
 
-    return result.rows;
+    // Transformar a camelCase y crear descripción legible
+    return result.rows.map(row => {
+      let description = '';
+      
+      switch (row.field_name) {
+        case 'status':
+          description = `Estado cambiado de "${row.old_value}" a "${row.new_value}"`;
+          break;
+        case 'assigned_to':
+          description = row.new_value ? `Ticket asignado` : `Asignación removida`;
+          break;
+        case 'priority':
+          description = `Prioridad cambiada de "${row.old_value}" a "${row.new_value}"`;
+          break;
+        case 'category':
+          description = `Categoría cambiada de "${row.old_value}" a "${row.new_value}"`;
+          break;
+        case 'comment':
+          description = 'Comentario agregado';
+          break;
+        case 'updated':
+          description = row.new_value || 'Ticket actualizado';
+          break;
+        default:
+          description = `${row.field_name} modificado`;
+      }
+
+      return {
+        id: row.id,
+        fieldName: row.field_name,
+        oldValue: row.old_value,
+        newValue: row.new_value,
+        changeType: row.change_type,
+        description: description,
+        createdAt: row.created_at,
+        user: {
+          id: row.user_id,
+          firstName: row.first_name,
+          lastName: row.last_name
+        }
+      };
+    });
   }
 
   // Agregar entrada al historial
