@@ -110,18 +110,19 @@ const TicketCard = ({ ticket }) => {
           <Chip
             label={statusConfig.label || ticket.status}
             size="small"
-            icon={<Box
-              sx={{
-                width: 8,
-                height: 8,
-                borderRadius: '50%',
-                bgcolor: `${statusConfig.color}.main`,
-              }}
-            />}
             sx={{
               bgcolor: alpha(theme.palette[statusConfig.color]?.main || '#000', 0.08),
               fontWeight: 600,
               fontSize: '0.75rem',
+              '&::before': {
+                content: '""',
+                display: 'inline-block',
+                width: 8,
+                height: 8,
+                borderRadius: '50%',
+                bgcolor: `${statusConfig.color}.main`,
+                mr: 0.5,
+              },
             }}
           />
           {ticket.categoryName && (
