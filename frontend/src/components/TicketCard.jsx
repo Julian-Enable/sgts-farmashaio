@@ -26,8 +26,12 @@ const TicketCard = ({ ticket }) => {
   const theme = useTheme();
   const navigate = useNavigate();
 
-  const statusConfig = TICKET_STATUS[ticket.status] || {};
-  const priorityConfig = TICKET_PRIORITY[ticket.priority] || {};
+  // Manejar si status/priority son objetos o strings
+  const statusKey = typeof ticket.status === 'object' ? ticket.status?.name : ticket.status;
+  const priorityKey = typeof ticket.priority === 'object' ? ticket.priority?.name : ticket.priority;
+  
+  const statusConfig = TICKET_STATUS[statusKey] || {};
+  const priorityConfig = TICKET_PRIORITY[priorityKey] || {};
 
   const handleView = () => {
     navigate(`/tickets/${ticket.id}`);
@@ -74,11 +78,11 @@ const TicketCard = ({ ticket }) => {
           #{ticket.ticketNumber}
         </Typography>
         <Chip
-          label={priorityConfig.label || ticket.priority}
+          label={priorityConfig.label || priorityKey || 'Sin prioridad'}
           size="small"
           sx={{
-            bgcolor: alpha(theme.palette[priorityConfig.color]?.main || '#000', 0.1),
-            color: `${priorityConfig.color}.main`,
+            bgcolor: alpha(theme.palette[priorityConfig.color]?.main || '#9e9e9e', 0.1),
+            color: `${priorityConfig.color || 'grey'}.main`,
             fontWeight: 600,
             fontSize: '0.7rem',
             height: '22px',
@@ -108,15 +112,15 @@ const TicketCard = ({ ticket }) => {
         {/* Estado y categoría */}
         <Box display="flex" gap={1} mb={2} flexWrap="wrap">
           <Chip
-            label={statusConfig.label || ticket.status}
+            label={statusConfig.label || statusKey || 'Sin estado'}
             size="small"
             sx={{
-              bgcolor: alpha(theme.palette[statusConfig.color]?.main || '#000', 0.1),
-              color: `${statusConfig.color}.main`,
+              bgcolor: alpha(theme.palette[statusConfig.color]?.main || '#9e9e9e', 0.1),
+              color: `${statusConfig.color || 'grey'}.main`,
               fontWeight: 600,
               fontSize: '0.75rem',
               borderLeft: `3px solid`,
-              borderLeftColor: `${statusConfig.color}.main`,
+              borderLeftColor: `${statusConfig.color || 'grey'}.main`,
             }}
           />
           {ticket.categoryName && (
