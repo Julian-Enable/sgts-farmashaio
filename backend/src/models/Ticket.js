@@ -415,7 +415,7 @@ export class Ticket {
     await query(
       `INSERT INTO ticket_history (ticket_id, user_id, field_name, old_value, new_value, change_type)
        VALUES ($1, $2, $3, $4, $5, $6)`,
-      [this.id, userId, fieldName, oldValue, newValue, 'update']
+      [this.id, userId, fieldName, oldValue, newValue, 'updated']
     );
   }
 
