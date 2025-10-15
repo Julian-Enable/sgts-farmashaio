@@ -1,4 +1,4 @@
-import { apiGet, apiPost, apiPut, apiDelete } from './api.js';
+import { apiGet, apiPost, apiPut, apiPatch, apiDelete } from './api.js';
 import { API_ENDPOINTS } from '../utils/constants.js';
 
 class UserService {
@@ -16,7 +16,10 @@ class UserService {
     const url = queryString ? `${API_ENDPOINTS.USERS}?${queryString}` : API_ENDPOINTS.USERS;
     
     const response = await apiGet(url);
-    return response.data;
+    // Backend retorna: { success: true, data: { users: [...], total: ... } }
+    // Axios lo envuelve: response.data = { success: true, data: { users: [...], total: ... } }
+    // Retornamos el objeto 'data' interno que contiene users y total
+    return response.data.data || { users: [], total: 0 };
   }
 
   // Obtener usuario por ID
@@ -49,11 +52,9 @@ class UserService {
     return response.data?.data?.technicians || [];
   }
 
-  // Activar/Desactivar usuario
-  async toggleUserStatus(id, isActive) {
-    const response = await apiPut(`${API_ENDPOINTS.USERS}/${id}/status`, {
-      isActive
-    });
+  // Activar/Desactivar usuario (toggle - no necesita parámetro isActive)
+  async toggleUserStatus(userId) {
+    const response = await apiPatch(`${API_ENDPOINTS.USERS}/${userId}/toggle-status`);
     return response.data;
   }
 

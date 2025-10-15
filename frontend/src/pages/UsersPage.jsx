@@ -78,6 +78,9 @@ const UsersPage = () => {
       if (departmentFilter) filters.department = departmentFilter;
       
       const response = await userService.getUsers(filters);
+      console.log('📊 Usuarios recibidos:', response);
+      // Backend retorna: { success: true, data: { users: [...], total: ... } }
+      // userService.getUsers retorna response.data, entonces aquí tenemos { users: [...], total: ... }
       setUsers(response.users || []);
     } catch (err) {
       setError('Error al cargar usuarios: ' + err.message);
@@ -165,7 +168,8 @@ const UsersPage = () => {
   const handleToggleStatus = async (userId, currentStatus) => {
     try {
       setError(null);
-      await userService.toggleUserStatus(userId, !currentStatus);
+      // toggleUserStatus hace el toggle automático en el backend
+      await userService.toggleUserStatus(userId);
       setSuccess(`Usuario ${currentStatus ? 'desactivado' : 'activado'} exitosamente`);
       loadUsers();
     } catch (err) {
