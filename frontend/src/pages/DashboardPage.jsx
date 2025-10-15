@@ -175,25 +175,28 @@ const DashboardPage = () => {
             Acciones Rápidas
           </Typography>
           <Box display="flex" gap={2} flexWrap="wrap">
-            <Button
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={() => navigate('/tickets/new')}
-            >
-              Crear Ticket
-            </Button>
+            {/* Solo empleados y admins pueden crear tickets */}
+            {(user?.role === 'empleado' || user?.role === 'administrador') && (
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                onClick={() => navigate('/tickets/new')}
+              >
+                Crear Ticket
+              </Button>
+            )}
             <Button
               variant="outlined"
               onClick={() => navigate('/tickets')}
             >
               Ver Todos los Tickets
             </Button>
-            {user?.role !== 'empleado' && (
+            {(user?.role === 'tecnico' || user?.role === 'administrador') && (
               <Button
                 variant="outlined"
                 onClick={() => navigate('/tickets?assignedTo=me')}
               >
-                Mis Asignados
+                Mis Tickets Asignados
               </Button>
             )}
           </Box>

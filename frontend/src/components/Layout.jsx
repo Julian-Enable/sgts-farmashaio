@@ -69,7 +69,7 @@ const Layout = () => {
       text: 'Crear Ticket',
       icon: <Add />,
       path: '/tickets/new',
-      roles: ['empleado', 'tecnico', 'administrador'],
+      roles: ['empleado', 'administrador'], // Técnicos NO crean tickets, solo los resuelven
     },
     {
       text: 'Usuarios',

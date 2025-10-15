@@ -192,13 +192,16 @@ const TicketsPage = () => {
           >
             Filtros
           </Button>
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={handleCreateTicket}
-          >
-            Crear Ticket
-          </Button>
+          {/* Solo empleados y admins pueden crear tickets */}
+          {(user.role === 'empleado' || user.role === 'administrador') && (
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              onClick={handleCreateTicket}
+            >
+              Crear Ticket
+            </Button>
+          )}
         </Box>
       </Box>
 
