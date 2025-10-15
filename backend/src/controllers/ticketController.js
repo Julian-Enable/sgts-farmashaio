@@ -11,6 +11,11 @@ import {
 
 // Crear nuevo ticket
 export const createTicket = catchAsync(async (req, res) => {
+  // Validar que técnicos no puedan crear tickets
+  if (req.user.role === 'tecnico') {
+    throw createForbiddenError('Los técnicos no pueden crear tickets. Solo empleados y administradores.');
+  }
+
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({
