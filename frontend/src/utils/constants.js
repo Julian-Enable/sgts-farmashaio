@@ -41,10 +41,37 @@ export const PAGINATION = {
 
 // Roles de usuario
 export const USER_ROLES = {
-  EMPLEADO: 'empleado',
-  TECNICO: 'tecnico',
-  ADMINISTRADOR: 'administrador',
+  empleado: {
+    value: 'empleado',
+    label: 'Empleado',
+    description: 'Usuario final del sistema'
+  },
+  tecnico: {
+    value: 'tecnico',
+    label: 'Técnico',
+    description: 'Personal de soporte técnico'
+  },
+  administrador: {
+    value: 'administrador',
+    label: 'Administrador',
+    description: 'Administrador del sistema'
+  }
 };
+
+// Departamentos
+export const DEPARTMENTS = [
+  { value: 'ti', label: 'Tecnología de la Información' },
+  { value: 'rrhh', label: 'Recursos Humanos' },
+  { value: 'ventas', label: 'Ventas' },
+  { value: 'compras', label: 'Compras' },
+  { value: 'contabilidad', label: 'Contabilidad' },
+  { value: 'logistica', label: 'Logística' },
+  { value: 'marketing', label: 'Marketing' },
+  { value: 'operaciones', label: 'Operaciones' },
+  { value: 'farmacia', label: 'Farmacia' },
+  { value: 'administracion', label: 'Administración' },
+  { value: 'otros', label: 'Otros' }
+];
 
 // Estados de tickets con sus IDs de base de datos
 export const TICKET_STATUS = {
@@ -240,6 +267,10 @@ export default {
   APP_CONFIG,
   PAGINATION,
   USER_ROLES,
+  DEPARTMENTS,
+  TICKET_STATUS,
+  TICKET_PRIORITY,
+  TICKET_CATEGORIES,
   TICKET_STATUSES,
   PRIORITIES,
   NOTIFICATION_TYPES,
