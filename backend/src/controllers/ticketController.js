@@ -383,11 +383,40 @@ export const getTicketHistory = catchAsync(async (req, res) => {
 
 // Obtener estadísticas
 export const getTicketStats = catchAsync(async (req, res) => {
-  const stats = await Ticket.getStats(req.user);
+  const filters = {};
+  
+  // Aplicar los mismos filtros por rol que en getTickets
+  switch (req.user.role) {
+    case 'empleado':
+      // Empleados solo ven estadísticas de sus tickets
+      filters.requesterId = req.user.id;
+      break;
+    
+    case 'tecnico':
+      // Técnicos solo ven estadísticas de tickets asignados
+      filters.assignedTo = req.user.id;
+      break;
+    
+    case 'administrador':
+      // Administradores ven estadísticas de todos los tickets
+      break;
+  }
+
+  const stats = await Ticket.getStats(filters);
+
+  // Transformar nombres de keys a camelCase para el frontend
+  const formattedStats = {
+    total: parseInt(stats.total) || 0,
+    nuevos: parseInt(stats.nuevos) || 0,
+    enProgreso: parseInt(stats.en_progreso) || 0,  // Convertir en_progreso a enProgreso
+    resueltos: parseInt(stats.resueltos) || 0,
+    cerrados: parseInt(stats.cerrados) || 0,
+    altaPrioridad: parseInt(stats.alta_prioridad) || 0
+  };
 
   res.json({
     success: true,
-    stats: stats
+    stats: formattedStats
   });
 });
 
