@@ -227,14 +227,28 @@ export const assignTicket = catchAsync(async (req, res) => {
   });
 });
 
+// Mapeo de UUIDs a IDs de estados (por inconsistencia base de datos)
+const STATUS_UUID_TO_ID = {
+  '550e8400-e29b-41d4-a716-446655442001': 1, // Nuevo
+  '550e8400-e29b-41d4-a716-446655442002': 2, // Asignado
+  '550e8400-e29b-41d4-a716-446655442003': 3, // En Progreso
+  '550e8400-e29b-41d4-a716-446655442004': 4, // Resuelto
+  '550e8400-e29b-41d4-a716-446655442005': 5, // Cerrado
+  '550e8400-e29b-41d4-a716-446655442006': 6  // Cancelado
+};
+
 // Cambiar estado del ticket
 export const updateTicketStatus = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const { status, comment } = req.body;
+  const { status: statusInput, comment } = req.body;
+
+  // Convertir UUID a INTEGER si es necesario
+  const status = STATUS_UUID_TO_ID[statusInput] || statusInput;
 
   console.log('🔍 DEBUG updateTicketStatus:', {
     ticketId: id,
-    statusId: status,
+    statusInput: statusInput,
+    statusConverted: status,
     userId: req.user.id,
     hasComment: !!comment
   });
