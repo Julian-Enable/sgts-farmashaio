@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
+import { Box, CircularProgress } from '@mui/material';
 import { useAuth } from '../context/AuthContext.jsx';
-import LoadingScreen from './LoadingScreen.jsx';
 
 const ProtectedRoute = ({ children, requiredRole = null }) => {
   const { isAuthenticated, isLoading, user, hasRole } = useAuth();
@@ -9,7 +9,18 @@ const ProtectedRoute = ({ children, requiredRole = null }) => {
 
   // Mostrar loading mientras se verifica la autenticación
   if (isLoading) {
-    return <LoadingScreen />;
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '100vh',
+        }}
+      >
+        <CircularProgress size={40} />
+      </Box>
+    );
   }
 
   // Redirigir a login si no está autenticado
