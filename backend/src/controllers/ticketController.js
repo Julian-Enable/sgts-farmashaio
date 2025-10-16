@@ -99,13 +99,54 @@ export const createTicket = catchAsync(async (req, res) => {
 
 // Obtener todos los tickets con filtros
 export const getTickets = catchAsync(async (req, res) => {
-  const { status, category, priority, search } = req.query;
+  const { status, category, priority, search, assignedTo } = req.query;
+
+  console.log('🔍 Filtros recibidos:', { status, category, priority, search, assignedTo });
 
   const filters = {};
-  if (status) filters.status = status;
-  if (category) filters.category = category;
-  if (priority) filters.priority = priority;
-  if (search) filters.search = search;
+  
+  // Convertir nombres de filtros a IDs para el modelo
+  if (status) {
+    // Obtener el ID del estado por nombre
+    const statusResult = await query(
+      'SELECT id FROM ticket_statuses WHERE LOWER(name) = LOWER($1) OR id::text = $1',
+      [status]
+    );
+    if (statusResult.rows[0]) {
+      filters.statusId = statusResult.rows[0].id;
+    }
+  }
+  
+  if (category) {
+    // Obtener el ID de la categoría por nombre
+    const categoryResult = await query(
+      'SELECT id FROM categories WHERE LOWER(name) = LOWER($1) OR id::text = $1',
+      [category]
+    );
+    if (categoryResult.rows[0]) {
+      filters.categoryId = categoryResult.rows[0].id;
+    }
+  }
+  
+  if (priority) {
+    // Obtener el ID de la prioridad por nombre
+    const priorityResult = await query(
+      'SELECT id FROM priorities WHERE LOWER(name) = LOWER($1) OR id::text = $1',
+      [priority]
+    );
+    if (priorityResult.rows[0]) {
+      filters.priorityId = priorityResult.rows[0].id;
+    }
+  }
+  
+  if (search) {
+    filters.search = search;
+  }
+
+  // Filtro de asignación (para administradores que filtran por técnico)
+  if (assignedTo) {
+    filters.assignedTo = assignedTo;
+  }
 
   // Filtrar por rol del usuario
   switch (req.user.role) {
@@ -115,8 +156,10 @@ export const getTickets = catchAsync(async (req, res) => {
       break;
     
     case 'tecnico':
-      // Técnicos solo ven tickets asignados a ellos
-      filters.assignedTo = req.user.id;
+      // Técnicos solo ven tickets asignados a ellos (a menos que se especifique otro filtro de asignación)
+      if (!filters.assignedTo) {
+        filters.assignedTo = req.user.id;
+      }
       break;
     
     case 'administrador':
@@ -128,7 +171,11 @@ export const getTickets = catchAsync(async (req, res) => {
       filters.requesterId = req.user.id;
   }
 
+  console.log('🔧 Filtros procesados para modelo:', filters);
+
   const tickets = await Ticket.findAll(filters);
+
+  console.log(`✅ Tickets encontrados: ${tickets.length}`);
 
   res.json({
     success: true,
