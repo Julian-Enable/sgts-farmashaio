@@ -102,12 +102,12 @@ const TicketDetailPage = () => {
       // Cargar técnicos si es admin o técnico
       if (user.role === 'administrador' || user.role === 'tecnico') {
         try {
-          console.log('🔧 Cargando técnicos...');
+          console.log('Cargando técnicos...');
           const techData = await userService.getTechnicians();
-          console.log('✅ Técnicos cargados:', techData);
+          console.log('Técnicos cargados:', techData);
           setTechnicians(techData || []);
         } catch (err) {
-          console.error('❌ Error cargando técnicos:', err);
+          console.error('Error cargando técnicos:', err);
           setTechnicians([]);
         }
       }

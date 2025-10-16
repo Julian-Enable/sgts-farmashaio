@@ -191,7 +191,7 @@ const DashboardPage = () => {
         
         <Box position="relative" zIndex={1}>
           <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 700, mb: 1 }}>
-            ¡Hola, {user?.firstName}! 👋
+            ¡Hola, {user?.firstName}!
           </Typography>
           <Typography variant="h6" sx={{ opacity: 0.9, mb: 2, fontWeight: 400 }}>
             Aquí está el resumen de tus tickets
@@ -370,7 +370,7 @@ const DashboardPage = () => {
               >
                 <CardContent sx={{ p: 3 }}>
                   <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, mb: 2 }}>
-                    📊 Resumen
+                    Resumen
                   </Typography>
                   <Box display="flex" flexDirection="column" gap={2}>
                     <Box>

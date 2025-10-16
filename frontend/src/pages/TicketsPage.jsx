@@ -213,7 +213,7 @@ const TicketsPage = () => {
         >
           <Box>
             <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 700, mb: 1 }}>
-              Gestión de Tickets 🎫
+              Gestión de Tickets
             </Typography>
             <Typography variant="h6" sx={{ opacity: 0.9, mb: 2, fontWeight: 400 }}>
               {tickets.length} {tickets.length === 1 ? 'ticket encontrado' : 'tickets encontrados'}

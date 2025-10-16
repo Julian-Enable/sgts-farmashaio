@@ -78,7 +78,7 @@ const UsersPage = () => {
       if (departmentFilter) filters.department = departmentFilter;
       
       const response = await userService.getUsers(filters);
-      console.log('📊 Usuarios recibidos:', response);
+      console.log('Usuarios recibidos:', response);
       // Backend retorna: { success: true, data: { users: [...], total: ... } }
       // userService.getUsers retorna response.data, entonces aquí tenemos { users: [...], total: ... }
       setUsers(response.users || []);
