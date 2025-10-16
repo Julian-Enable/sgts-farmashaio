@@ -22,7 +22,25 @@ import {
   TrendingUp,
   AccessTime,
   People,
+  PieChart as PieChartIcon,
+  BarChart as BarChartIcon,
+  ShowChart as ShowChartIcon,
 } from '@mui/icons-material';
+import {
+  PieChart,
+  Pie,
+  BarChart,
+  Bar,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  Cell,
+} from 'recharts';
 import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../context/AuthContext.jsx';
@@ -40,32 +58,116 @@ const DashboardPage = () => {
     resueltos: 0,
     misTickets: 0,
   });
+  const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Cargar estadísticas
+  // Cargar estadísticas y tickets
   useEffect(() => {
-    const loadStats = async () => {
+    const loadDashboardData = async () => {
       try {
         setLoading(true);
-        const data = await ticketService.getTicketStats();
-        setStats(data || {
+        const [statsData, ticketsData] = await Promise.all([
+          ticketService.getTicketStats(),
+          ticketService.getTickets(),
+        ]);
+        
+        setStats(statsData || {
           total: 0,
           nuevos: 0,
           enProgreso: 0,
           resueltos: 0,
           misTickets: 0,
         });
+        setTickets(ticketsData || []);
       } catch (err) {
-        console.error('Error loading stats:', err);
-        setError('Error al cargar estadísticas');
+        console.error('Error loading dashboard data:', err);
+        setError('Error al cargar datos del dashboard');
       } finally {
         setLoading(false);
       }
     };
 
-    loadStats();
+    loadDashboardData();
   }, []);
+
+  // Procesar datos para gráficos
+  const getStatusChartData = () => {
+    const statusCount = {};
+    tickets.forEach(ticket => {
+      const status = ticket.statusName || 'Sin estado';
+      statusCount[status] = (statusCount[status] || 0) + 1;
+    });
+
+    return Object.entries(statusCount).map(([name, value]) => ({
+      name,
+      value,
+    }));
+  };
+
+  const getCategoryChartData = () => {
+    const categoryCount = {};
+    tickets.forEach(ticket => {
+      const category = ticket.categoryName || 'Sin categoría';
+      categoryCount[category] = (categoryCount[category] || 0) + 1;
+    });
+
+    return Object.entries(categoryCount).map(([name, value]) => ({
+      name,
+      value,
+    }));
+  };
+
+  const getPriorityChartData = () => {
+    const priorityCount = {};
+    tickets.forEach(ticket => {
+      const priority = ticket.priorityName || 'Sin prioridad';
+      priorityCount[priority] = (priorityCount[priority] || 0) + 1;
+    });
+
+    return Object.entries(priorityCount).map(([name, value]) => ({
+      name,
+      value,
+    }));
+  };
+
+  const getTimelineChartData = () => {
+    const last7Days = [];
+    const today = new Date();
+    
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date(today);
+      date.setDate(date.getDate() - i);
+      const dateStr = date.toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
+      
+      const dayTickets = tickets.filter(ticket => {
+        const ticketDate = new Date(ticket.createdAt);
+        return ticketDate.toDateString() === date.toDateString();
+      });
+
+      last7Days.push({
+        date: dateStr,
+        nuevos: dayTickets.filter(t => t.statusName === 'Nuevo').length,
+        resueltos: dayTickets.filter(t => t.statusName === 'Resuelto' || t.statusName === 'Cerrado').length,
+        total: dayTickets.length,
+      });
+    }
+
+    return last7Days;
+  };
+
+  // Colores para los gráficos
+  const STATUS_COLORS = {
+    'Nuevo': '#2563eb',
+    'Asignado': '#0ea5e9',
+    'En Progreso': '#f59e0b',
+    'Esperando Usuario': '#fbbf24',
+    'Resuelto': '#10b981',
+    'Cerrado': '#6b7280',
+    'Cancelado': '#ef4444',
+  };
+
+  const CHART_COLORS = ['#2563eb', '#0ea5e9', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
 
   const StatCard = ({ title, value, color, icon, trend, gradient }) => (
     <Card 
@@ -411,6 +513,185 @@ const DashboardPage = () => {
                       </Typography>
                     </Box>
                   </Box>
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+
+          {/* Gráficos de Análisis */}
+          <Grid container spacing={3} mt={1}>
+            {/* Gráfico de Estado de Tickets (Dona) */}
+            <Grid item xs={12} md={6}>
+              <Card sx={{ height: '100%', border: '1px solid', borderColor: 'divider' }}>
+                <CardContent sx={{ p: 3 }}>
+                  <Box display="flex" alignItems="center" gap={2} mb={3}>
+                    <Box
+                      sx={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: 2,
+                        bgcolor: alpha(theme.palette.primary.main, 0.1),
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'primary.main',
+                      }}
+                    >
+                      <PieChartIcon />
+                    </Box>
+                    <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                      Tickets por Estado
+                    </Typography>
+                  </Box>
+                  
+                  <ResponsiveContainer width="100%" height={300}>
+                    <PieChart>
+                      <Pie
+                        data={getStatusChartData()}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                        outerRadius={80}
+                        fill="#8884d8"
+                        dataKey="value"
+                      >
+                        {getStatusChartData().map((entry, index) => (
+                          <Cell 
+                            key={`cell-${index}`} 
+                            fill={STATUS_COLORS[entry.name] || CHART_COLORS[index % CHART_COLORS.length]} 
+                          />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                      <Legend />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            {/* Gráfico de Tickets por Prioridad (Barras) */}
+            <Grid item xs={12} md={6}>
+              <Card sx={{ height: '100%', border: '1px solid', borderColor: 'divider' }}>
+                <CardContent sx={{ p: 3 }}>
+                  <Box display="flex" alignItems="center" gap={2} mb={3}>
+                    <Box
+                      sx={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: 2,
+                        bgcolor: alpha(theme.palette.warning.main, 0.1),
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'warning.main',
+                      }}
+                    >
+                      <BarChartIcon />
+                    </Box>
+                    <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                      Tickets por Prioridad
+                    </Typography>
+                  </Box>
+                  
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={getPriorityChartData()}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip />
+                      <Bar dataKey="value" fill="#f59e0b" radius={[8, 8, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            {/* Gráfico de Evolución (Línea) */}
+            <Grid item xs={12} md={6}>
+              <Card sx={{ height: '100%', border: '1px solid', borderColor: 'divider' }}>
+                <CardContent sx={{ p: 3 }}>
+                  <Box display="flex" alignItems="center" gap={2} mb={3}>
+                    <Box
+                      sx={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: 2,
+                        bgcolor: alpha(theme.palette.success.main, 0.1),
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'success.main',
+                      }}
+                    >
+                      <ShowChartIcon />
+                    </Box>
+                    <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                      Evolución Últimos 7 Días
+                    </Typography>
+                  </Box>
+                  
+                  <ResponsiveContainer width="100%" height={300}>
+                    <LineChart data={getTimelineChartData()}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                      <XAxis dataKey="date" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Line 
+                        type="monotone" 
+                        dataKey="nuevos" 
+                        stroke="#2563eb" 
+                        strokeWidth={2}
+                        name="Nuevos"
+                      />
+                      <Line 
+                        type="monotone" 
+                        dataKey="resueltos" 
+                        stroke="#10b981" 
+                        strokeWidth={2}
+                        name="Resueltos"
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            {/* Gráfico de Tickets por Categoría (Barras) */}
+            <Grid item xs={12} md={6}>
+              <Card sx={{ height: '100%', border: '1px solid', borderColor: 'divider' }}>
+                <CardContent sx={{ p: 3 }}>
+                  <Box display="flex" alignItems="center" gap={2} mb={3}>
+                    <Box
+                      sx={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: 2,
+                        bgcolor: alpha(theme.palette.info.main, 0.1),
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'info.main',
+                      }}
+                    >
+                      <BarChartIcon />
+                    </Box>
+                    <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                      Tickets por Categoría
+                    </Typography>
+                  </Box>
+                  
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={getCategoryChartData()}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                      <XAxis dataKey="name" angle={-45} textAnchor="end" height={80} />
+                      <YAxis />
+                      <Tooltip />
+                      <Bar dataKey="value" fill="#0ea5e9" radius={[8, 8, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
                 </CardContent>
               </Card>
             </Grid>
