@@ -9,6 +9,9 @@ import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
+// SGTS FARMASHAIO - Sistema de Gestión de Tickets de Soporte TI
+// Backend API con WebSocket para notificaciones en tiempo real
+
 // Routes
 import authRoutes from './src/routes/auth.js';
 import userRoutes from './src/routes/users.js';
