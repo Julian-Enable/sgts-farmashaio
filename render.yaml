@@ -19,6 +19,15 @@ services:
         value: https://sgts-farmashaio.vercel.app
       - key: PORT
         value: 10000
+      # Email Configuration - Para notificaciones automáticas
+      - key: EMAIL_SERVICE
+        value: gmail
+      - key: EMAIL_USER
+        value: soporte.invfs@gmail.com
+      - key: EMAIL_PASS
+        value: ljgr cxdv wgkx pvfn
+      - key: EMAIL_FROM
+        value: "SGTS FARMASHAIO" <soporte.invfs@gmail.com>
 
 databases:
   - name: sgts-farmashaio-db
