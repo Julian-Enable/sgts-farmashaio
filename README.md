@@ -1,4 +1,4 @@
-# SGTS FARMASHAIO# SGTS FARMASHAIO# SGTS FARMASHAIO
+# SGTS FARMASHAIO# SGTS FARMASHAIO# SGTS FARMASHAIO# SGTS FARMASHAIO
 
 
 
@@ -6,303 +6,609 @@
 
 
 
-[![GitHub release](https://img.shields.io/github/v/release/Julian-Enable/sgts-farmashaio?style=flat-square)](https://github.com/Julian-Enable/sgts-farmashaio/releases)### Sistema de Gestión de Tickets de Soporte TI### Sistema de Gestión de Tickets de Soporte TI
-
-[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)## Sistema de Gestión de Tickets de Soporte TI
 
 [![React](https://img.shields.io/badge/React-18.2-61DAFB?style=flat-square&logo=react)](https://reactjs.org/)
 
 [![Node.js](https://img.shields.io/badge/Node.js-18.x-339933?style=flat-square&logo=node.js)](https://nodejs.org/)
 
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14.x-316192?style=flat-square&logo=postgresql)](https://www.postgresql.org/)[![GitHub release](https://img.shields.io/github/v/release/Julian-Enable/sgts-farmashaio?style=flat-square)](https://github.com/Julian-Enable/sgts-farmashaio/releases)[![GitHub release](https://img.shields.io/github/v/release/Julian-Enable/sgts-farmashaio?style=flat-square)](https://github.com/Julian-Enable/sgts-farmashaio/releases)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14.x-316192?style=flat-square&logo=postgresql)](https://www.postgresql.org/)
+
+[![Status](https://img.shields.io/badge/Status-Production-success?style=flat-square)]()[![GitHub release](https://img.shields.io/github/v/release/Julian-Enable/sgts-farmashaio?style=flat-square)](https://github.com/Julian-Enable/sgts-farmashaio/releases)### Sistema de Gestión de Tickets de Soporte TI### Sistema de Gestión de Tickets de Soporte TI
 
 
 
-Sistema integral de gestión de tickets de soporte técnico para FARMASHAIO. Arquitectura de 3 capas completamente desacoplada con autenticación JWT, gestión de roles y notificaciones en tiempo real.[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
+Sistema empresarial de gestión de tickets de soporte técnico para FARMASHAIO. Arquitectura de 3 capas con autenticación JWT, gestión de roles y notificaciones en tiempo real.[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 
 
 
-**Production:** [https://sgts-farmashaio.vercel.app](https://sgts-farmashaio.vercel.app)  [![React](https://img.shields.io/badge/React-18.2-61DAFB?style=flat-square&logo=react)](https://reactjs.org/)[![React](https://img.shields.io/badge/React-18.2-61DAFB?style=flat-square&logo=react)](https://reactjs.org/)
+**Aplicación:** [https://sgts-farmashaio.vercel.app](https://sgts-farmashaio.vercel.app)[![React](https://img.shields.io/badge/React-18.2-61DAFB?style=flat-square&logo=react)](https://reactjs.org/)
 
-**API:** [https://sgts-farmashaio-api.onrender.com](https://sgts-farmashaio-api.onrender.com)
+
+
+---[![Node.js](https://img.shields.io/badge/Node.js-18.x-339933?style=flat-square&logo=node.js)](https://nodejs.org/)
+
+
+
+## Descripción[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14.x-316192?style=flat-square&logo=postgresql)](https://www.postgresql.org/)[![GitHub release](https://img.shields.io/github/v/release/Julian-Enable/sgts-farmashaio?style=flat-square)](https://github.com/Julian-Enable/sgts-farmashaio/releases)[![GitHub release](https://img.shields.io/github/v/release/Julian-Enable/sgts-farmashaio?style=flat-square)](https://github.com/Julian-Enable/sgts-farmashaio/releases)
+
+
+
+SGTS FARMASHAIO es una solución integral para la gestión de tickets de soporte técnico interno, diseñada específicamente para optimizar la comunicación entre empleados y el departamento de TI de FARMASHAIO.
+
+
+
+### Características PrincipalesSistema integral de gestión de tickets de soporte técnico para FARMASHAIO. Arquitectura de 3 capas completamente desacoplada con autenticación JWT, gestión de roles y notificaciones en tiempo real.[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
+
+
+
+**Gestión de Tickets**
+
+- Sistema de ticketing con numeración automática
+
+- Categorización y priorización de solicitudes**Production:** [https://sgts-farmashaio.vercel.app](https://sgts-farmashaio.vercel.app)  [![React](https://img.shields.io/badge/React-18.2-61DAFB?style=flat-square&logo=react)](https://reactjs.org/)[![React](https://img.shields.io/badge/React-18.2-61DAFB?style=flat-square&logo=react)](https://reactjs.org/)
+
+- Estados configurables del ciclo de vida
+
+- Asignación inteligente a técnicos**API:** [https://sgts-farmashaio-api.onrender.com](https://sgts-farmashaio-api.onrender.com)
+
+- Historial completo de cambios con auditoría
 
 [![Node.js](https://img.shields.io/badge/Node.js-18.x-339933?style=flat-square&logo=node.js)](https://nodejs.org/)[![Node.js](https://img.shields.io/badge/Node.js-18.x-339933?style=flat-square&logo=node.js)](https://nodejs.org/)
 
----
+**Control de Acceso**
 
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14.x-316192?style=flat-square&logo=postgresql)](https://www.postgresql.org/)[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14.x-316192?style=flat-square&logo=postgresql)](https://www.postgresql.org/)
+- Autenticación segura con JWT---
+
+- Tres niveles de usuario: Empleado, Técnico, Administrador
+
+- Protección de rutas basada en roles[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14.x-316192?style=flat-square&logo=postgresql)](https://www.postgresql.org/)[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14.x-316192?style=flat-square&logo=postgresql)](https://www.postgresql.org/)
+
+- Sesiones persistentes
 
 ## Tabla de Contenidos
 
+**Sistema de Comunicación**
 
+- Comentarios públicos e internos
 
-- [Arquitectura del Sistema](#arquitectura-del-sistema)
+- Notificaciones automáticas por email
+
+- Notificaciones en tiempo real en la aplicación- [Arquitectura del Sistema](#arquitectura-del-sistema)
+
+- Historial de interacciones
 
 - [Características Principales](#características-principales)Sistema integral de gestión de tickets de soporte técnico para FARMASHAIO. Arquitectura de 3 capas completamente desacoplada con autenticación JWT, gestión de roles y notificaciones en tiempo real.Sistema integral de gestión de tickets de soporte técnico para FARMASHAIO. Arquitectura de 3 capas completamente desacoplada con autenticación JWT, gestión de roles y notificaciones en tiempo real.
 
-- [Tecnologías Utilizadas](#tecnologías-utilizadas)
+**Panel de Administración**
 
-- [Instalación Local](#instalación-local)
+- Gestión completa de usuarios- [Tecnologías Utilizadas](#tecnologías-utilizadas)
+
+- Reportes y estadísticas
+
+- Configuración de categorías y prioridades- [Instalación Local](#instalación-local)
+
+- Monitoreo del sistema
 
 - [Deployment en Producción](#deployment-en-producción)
 
+---
+
 - [API Reference](#api-reference)**Production:** [https://sgts-farmashaio.vercel.app](https://sgts-farmashaio.vercel.app)  **Production:** [https://sgts-farmashaio.vercel.app](https://sgts-farmashaio.vercel.app)  
+
+## Arquitectura Técnica
 
 - [Estructura del Proyecto](#estructura-del-proyecto)
 
+### Stack Tecnológico
+
 - [Base de Datos](#base-de-datos)**API:** [https://sgts-farmashaio-api.onrender.com](https://sgts-farmashaio-api.onrender.com)**API:** [https://sgts-farmashaio-api.onrender.com](https://sgts-farmashaio-api.onrender.com)
 
-- [Seguridad](#seguridad)
+| Capa | Tecnología | Versión |
 
-- [Troubleshooting](#troubleshooting)
+|------|-----------|---------|- [Seguridad](#seguridad)
 
-- [Roadmap](#roadmap)
+| **Frontend** | React + Vite + Material-UI | 18.2 / 4.4 / 5.14 |
+
+| **Backend** | Node.js + Express | 18.x / 4.18 |- [Troubleshooting](#troubleshooting)
+
+| **Database** | PostgreSQL | 14.x |
+
+| **Auth** | JWT + bcrypt | - |- [Roadmap](#roadmap)
+
+| **Email** | NodeMailer | 6.9 |
 
 - [Licencia](#licencia)------
 
+### Diagrama de Arquitectura
 
+
+
+```
+
+┌─────────────────────────────────────────────────┐---
+
+│          PRESENTATION LAYER                     │
+
+│  React 18 + Material-UI + Vite                 │
+
+│  Vercel Edge Network                           │
+
+└──────────────────┬──────────────────────────────┘## Arquitectura del Sistema## Tabla de Contenidos## Tabla de Contenidos
+
+                   │ REST API (HTTPS)
+
+┌──────────────────▼──────────────────────────────┐
+
+│          APPLICATION LAYER                      │
+
+│  Node.js + Express.js                          │### Stack Completo
+
+│  Render Cloud Platform                         │
+
+└──────────────────┬──────────────────────────────┘
+
+                   │ SQL Queries
+
+┌──────────────────▼──────────────────────────────┐| Capa | Tecnología | Versión | Hosting |- [Arquitectura del Sistema](#arquitectura-del-sistema)- [Arquitectura del Sistema](#arquitectura-del-sistema)
+
+│          DATA LAYER                             │
+
+│  PostgreSQL 14.x                               │|------|-----------|---------|---------|
+
+│  Render Managed Database                       │
+
+└─────────────────────────────────────────────────┘| **Frontend** | React + Vite + Material-UI | 18.2 / 4.4 / 5.14 | Vercel |- [Características Principales](#características-principales)- [Características Principales](#características-principales)
+
+```
+
+| **Backend** | Node.js + Express | 18.x / 4.18 | Render |
+
+---
+
+| **Database** | PostgreSQL | 14.x | Render |- [Tecnologías Utilizadas](#tecnologías-utilizadas)- [Tecnologías Utilizadas](#tecnologías-utilizadas)
+
+## Seguridad
+
+| **Auth** | JWT + bcrypt | - | - |
+
+### Medidas Implementadas
+
+| **Email** | NodeMailer | 6.9 | - |- [Instalación Local](#instalación-local)- [Instalación Local](#instalación-local)
+
+**Autenticación y Autorización**
+
+- Tokens JWT con expiración configurable
+
+- Contraseñas hasheadas con bcrypt (12 rounds)
+
+- Control de acceso basado en roles (RBAC)### Arquitectura de 3 Capas- [Deployment en Producción](#deployment-en-producción)- [Deployment en Producción](#deployment-en-producción)
+
+- Protección de rutas en frontend y backend
+
+
+
+**Protección de Datos**
+
+- Validación y sanitización de inputs```- [API Reference](#api-reference)- [API Reference](#api-reference)
+
+- Prevención de SQL injection mediante consultas parametrizadas
+
+- Prevención de XSS (Cross-Site Scripting)┌─────────────────────────────────────────────────────────────┐
+
+- CORS configurado con whitelist de orígenes
+
+│                    PRESENTATION LAYER                        │- [Estructura del Proyecto](#estructura-del-proyecto)- [Estructura del Proyecto](#estructura-del-proyecto)
+
+**Comunicación Segura**
+
+- HTTPS enforced en producción│  React 18 + Material-UI + Vite                              │
+
+- Headers de seguridad HTTP
+
+- Encriptación de datos en tránsito│  https://sgts-farmashaio.vercel.app                         │- [Base de Datos](#base-de-datos)- [Seguridad](#seguridad)
+
+
+
+**Base de Datos**└──────────────────────┬──────────────────────────────────────┘
+
+- Backups automáticos diarios
+
+- Índices optimizados para performance                       │ REST API (HTTPS)- [Seguridad](#seguridad)- [Licencia](#licencia)
+
+- Foreign keys con integridad referencial
+
+┌──────────────────────▼──────────────────────────────────────┐
+
+---
+
+│                    APPLICATION LAYER                         │- [Troubleshooting](#troubleshooting)
+
+## Estructura del Sistema
+
+│  Node.js + Express.js                                       │
+
+### Base de Datos
+
+│  https://sgts-farmashaio-api.onrender.com                  │- [Roadmap](#roadmap)---
+
+**Tablas Principales:**
+
+└──────────────────────┬──────────────────────────────────────┘
+
+| Tabla | Función |
+
+|-------|---------|                       │ SQL Queries- [Licencia](#licencia)
+
+| `users` | Usuarios del sistema con roles |
+
+| `tickets` | Tickets de soporte con estados |┌──────────────────────▼──────────────────────────────────────┐
+
+| `ticket_comments` | Comunicación en tickets |
+
+| `ticket_history` | Auditoría de cambios |│                    DATA LAYER                                │## Arquitectura del Sistema
+
+| `categories` | Categorías de tickets |
+
+| `priorities` | Niveles de prioridad |│  PostgreSQL 14.x                                            │
+
+| `ticket_statuses` | Estados del workflow |
+
+| `notifications` | Notificaciones del usuario |│  Render Managed Database                                    │---
+
+
+
+### API Endpoints└─────────────────────────────────────────────────────────────┘
+
+
+
+**Autenticación**```### Stack Completo
+
+```
+
+POST   /api/auth/login              # Login de usuario
+
+GET    /api/auth/profile            # Perfil actual
+
+POST   /api/auth/change-password    # Cambio de contraseña---## Arquitectura del Sistema
+
+```
+
+
+
+**Gestión de Tickets**
+
+```## Características Principales| Capa | Tecnología | Versión | Hosting |
+
+GET    /api/tickets                 # Listar tickets
+
+POST   /api/tickets                 # Crear ticket
+
+GET    /api/tickets/:id             # Detalle de ticket
+
+PUT    /api/tickets/:id             # Actualizar ticket### Autenticación y Autorización### Stack Completo|------|-----------|---------|---------|
+
+POST   /api/tickets/:id/assign      # Asignar técnico
+
+POST   /api/tickets/:id/comments    # Agregar comentario- Login seguro con JWT (JSON Web Tokens)
+
+```
+
+- Hash de contraseñas con bcrypt (12 rounds)| **Frontend** | React + Vite + Material-UI | 18.2 / 4.4 / 5.14 | Vercel |
+
+**Administración** (Solo Admin)
+
+```- Gestión de roles: **Empleado**, **Técnico**, **Administrador**
+
+GET    /api/users                   # Listar usuarios
+
+POST   /api/users                   # Crear usuario- Protección de rutas basada en roles| Capa | Tecnología | Versión | Hosting || **Backend** | Node.js + Express | 18.x / 4.18 | Render |
+
+PUT    /api/users/:id               # Actualizar usuario
+
+DELETE /api/users/:id               # Eliminar usuario- Sesiones persistentes con refresh tokens
+
+```
+
+|------|-----------|---------|---------|| **Database** | PostgreSQL | 14.x | Render |
+
+---
+
+### Gestión de Tickets
+
+## Roles y Permisos
+
+- Creación y asignación automática de números de ticket| **Frontend** | React + Vite + Material-UI | 18.2 / 4.4 / 5.14 | Vercel || **Auth** | JWT + bcrypt | - | - |
+
+### Empleado
+
+- Sistema de categorías configurables
+
+**Capacidades:**
+
+- Crear nuevos tickets de soporte- Niveles de prioridad (Baja, Media, Alta, Crítica)| **Backend** | Node.js + Express | 18.x / 4.18 | Render || **Email** | NodeMailer | 6.9 | - |
+
+- Ver y gestionar sus propios tickets
+
+- Agregar comentarios a sus tickets- Estados personalizables del ciclo de vida
+
+- Recibir notificaciones de actualizaciones
+
+- Asignación inteligente a técnicos| **Database** | PostgreSQL | 14.x | Render |
+
+**Limitaciones:**
+
+- No puede ver tickets de otros empleados- Sistema de comentarios públicos e internos
+
+- No puede cambiar estados de tickets
+
+- Sin acceso a panel de administración- Historial completo de cambios con auditoría| **Auth** | JWT + bcrypt | - | - |### Arquitectura de 3 Capas
+
+
+
+### Técnico
+
+
+
+**Capacidades:**### Gestión de Usuarios| **Email** | NodeMailer | 6.9 | - |
+
+- Ver todos los tickets del sistema
+
+- Recibir asignaciones automáticas- CRUD completo de usuarios (Solo administradores)
+
+- Cambiar estados de tickets asignados
+
+- Agregar comentarios públicos e internos- Gestión avanzada de roles y permisos```
+
+- Registrar tiempo y soluciones
+
+- Activación y desactivación de cuentas
+
+**Limitaciones:**
+
+- No puede gestionar usuarios- Perfiles personalizables### Arquitectura de 3 Capas┌─────────────────────────────────────────────────────────────┐
+
+- No puede eliminar tickets
+
+- Sin acceso a configuración global- Cambio de contraseña con validación
+
+
+
+### Administrador│                    PRESENTATION LAYER                        │
+
+
+
+**Capacidades:**### Sistema de Notificaciones
+
+- Acceso completo al sistema
+
+- Gestión de usuarios y roles- Notificaciones automáticas por email```│  React 18 + Material-UI + Vite                              │
+
+- Asignación manual de tickets
+
+- Configuración de categorías y prioridades- Notificaciones en tiempo real en la aplicación
+
+- Acceso a reportes y estadísticas
+
+- Configuración del sistema- Plantillas de email HTML profesionales┌─────────────────────────────────────────────────────────────┐│  https://sgts-farmashaio.vercel.app                         │
+
+
+
+**Sin restricciones**- Configuración de preferencias de notificación
+
+
+
+---- Historial de notificaciones enviadas│                    PRESENTATION LAYER                        │└──────────────────────┬──────────────────────────────────────┘
+
+
+
+## Componentes del Frontend
+
+
+
+### Páginas Principales---│  React 18 + Material-UI + Vite                              │                       │ REST API (HTTPS)
+
+
+
+- **Dashboard** - Vista general con estadísticas
+
+- **Tickets** - Lista y filtrado de tickets
+
+- **Detalle de Ticket** - Información completa y comentarios## Tecnologías Utilizadas│  https://sgts-farmashaio.vercel.app                         │┌──────────────────────▼──────────────────────────────────────┐
+
+- **Crear Ticket** - Formulario de nueva solicitud
+
+- **Usuarios** - Gestión de usuarios (Admin)
+
+- **Notificaciones** - Centro de notificaciones
+
+- **Perfil** - Configuración del usuario### Frontend└──────────────────────┬──────────────────────────────────────┘│                    APPLICATION LAYER                         │
+
+
+
+### Tecnologías Frontend- **React 18.2** - Librería UI con hooks
+
+
+
+- **React 18.2** - Hooks y Context API- **Vite 4.4** - Build tool de última generación                       │ REST API (HTTPS)│  Node.js + Express.js                                       │
+
+- **Material-UI 5.14** - Design system
+
+- **React Router 6** - Navegación SPA- **Material-UI 5.14** - Componentes UI
+
+- **Axios** - Cliente HTTP
+
+- **Vite** - Build tool optimizado- **React Router 6** - Navegación SPA┌──────────────────────▼──────────────────────────────────────┐│  https://sgts-farmashaio-api.onrender.com                  │
+
+
+
+---- **Axios** - Cliente HTTP
+
+
+
+## Información Técnica- **Context API** - State management│                    APPLICATION LAYER                         │└──────────────────────┬──────────────────────────────────────┘
+
+
+
+### Performance
+
+
+
+- **Frontend:** Edge deployment en Vercel### Backend│  Node.js + Express.js                                       │                       │ SQL Queries
+
+- **Backend:** Auto-scaling en Render
+
+- **Database:** Connection pooling optimizado- **Node.js 18.x** - Runtime JavaScript
+
+- **Cache:** Estrategias de cache en múltiples capas
+
+- **Express 4.18** - Framework web│  https://sgts-farmashaio-api.onrender.com                  │┌──────────────────────▼──────────────────────────────────────┐
+
+### Monitoreo
+
+- **PostgreSQL 14.x** - Base de datos relacional
+
+- Logs centralizados en Render
+
+- Error tracking en tiempo real- **JWT** - Autenticación stateless└──────────────────────┬──────────────────────────────────────┘│                    DATA LAYER                                │
+
+- Métricas de performance
+
+- Uptime monitoring- **bcrypt** - Hash de contraseñas
+
+
+
+### Mantenimiento- **NodeMailer** - Envío de emails                       │ SQL Queries│  PostgreSQL 14.x                                            │
+
+
+
+- Auto-deploy desde GitHub- **Winston** - Logging system
+
+- Backups diarios automáticos
+
+- Migraciones de base de datos versionadas┌──────────────────────▼──────────────────────────────────────┐│  Render Managed Database                                    │
+
+- Pruebas automatizadas
+
+### DevOps & Deployment
+
+---
+
+- **Git & GitHub** - Control de versiones│                    DATA LAYER                                │└─────────────────────────────────────────────────────────────┘
+
+## Soporte y Contacto
+
+- **Vercel** - Hosting frontend
+
+**Departamento de TI - FARMASHAIO**
+
+- **Render** - Hosting backend y database│  PostgreSQL 14.x                                            │```
+
+Para soporte técnico o consultas sobre el sistema, contactar al departamento de TI interno.
+
+- **ESLint** - Linter JavaScript
+
+**Repositorio:** [https://github.com/Julian-Enable/sgts-farmashaio](https://github.com/Julian-Enable/sgts-farmashaio)
+
+- **Prettier** - Code formatter│  Render Managed Database                                    │
 
 ---
 
 
 
-## Arquitectura del Sistema## Tabla de Contenidos## Tabla de Contenidos
-
-
-
-### Stack Completo
-
-
-
-| Capa | Tecnología | Versión | Hosting |- [Arquitectura del Sistema](#arquitectura-del-sistema)- [Arquitectura del Sistema](#arquitectura-del-sistema)
-
-|------|-----------|---------|---------|
-
-| **Frontend** | React + Vite + Material-UI | 18.2 / 4.4 / 5.14 | Vercel |- [Características Principales](#características-principales)- [Características Principales](#características-principales)
-
-| **Backend** | Node.js + Express | 18.x / 4.18 | Render |
-
-| **Database** | PostgreSQL | 14.x | Render |- [Tecnologías Utilizadas](#tecnologías-utilizadas)- [Tecnologías Utilizadas](#tecnologías-utilizadas)
-
-| **Auth** | JWT + bcrypt | - | - |
-
-| **Email** | NodeMailer | 6.9 | - |- [Instalación Local](#instalación-local)- [Instalación Local](#instalación-local)
-
-
-
-### Arquitectura de 3 Capas- [Deployment en Producción](#deployment-en-producción)- [Deployment en Producción](#deployment-en-producción)
-
-
-
-```- [API Reference](#api-reference)- [API Reference](#api-reference)
-
-┌─────────────────────────────────────────────────────────────┐
-
-│                    PRESENTATION LAYER                        │- [Estructura del Proyecto](#estructura-del-proyecto)- [Estructura del Proyecto](#estructura-del-proyecto)
-
-│  React 18 + Material-UI + Vite                              │
-
-│  https://sgts-farmashaio.vercel.app                         │- [Base de Datos](#base-de-datos)- [Seguridad](#seguridad)
-
-└──────────────────────┬──────────────────────────────────────┘
-
-                       │ REST API (HTTPS)- [Seguridad](#seguridad)- [Licencia](#licencia)
-
-┌──────────────────────▼──────────────────────────────────────┐
-
-│                    APPLICATION LAYER                         │- [Troubleshooting](#troubleshooting)
-
-│  Node.js + Express.js                                       │
-
-│  https://sgts-farmashaio-api.onrender.com                  │- [Roadmap](#roadmap)---
-
-└──────────────────────┬──────────────────────────────────────┘
-
-                       │ SQL Queries- [Licencia](#licencia)
-
-┌──────────────────────▼──────────────────────────────────────┐
-
-│                    DATA LAYER                                │## Arquitectura del Sistema
-
-│  PostgreSQL 14.x                                            │
-
-│  Render Managed Database                                    │---
-
-└─────────────────────────────────────────────────────────────┘
-
-```### Stack Completo
-
-
-
----## Arquitectura del Sistema
-
-
-
-## Características Principales| Capa | Tecnología | Versión | Hosting |
-
-
-
-### Autenticación y Autorización### Stack Completo|------|-----------|---------|---------|
-
-- Login seguro con JWT (JSON Web Tokens)
-
-- Hash de contraseñas con bcrypt (12 rounds)| **Frontend** | React + Vite + Material-UI | 18.2 / 4.4 / 5.14 | Vercel |
-
-- Gestión de roles: **Empleado**, **Técnico**, **Administrador**
-
-- Protección de rutas basada en roles| Capa | Tecnología | Versión | Hosting || **Backend** | Node.js + Express | 18.x / 4.18 | Render |
-
-- Sesiones persistentes con refresh tokens
-
-|------|-----------|---------|---------|| **Database** | PostgreSQL | 14.x | Render |
-
-### Gestión de Tickets
-
-- Creación y asignación automática de números de ticket| **Frontend** | React + Vite + Material-UI | 18.2 / 4.4 / 5.14 | Vercel || **Auth** | JWT + bcrypt | - | - |
-
-- Sistema de categorías configurables
-
-- Niveles de prioridad (Baja, Media, Alta, Crítica)| **Backend** | Node.js + Express | 18.x / 4.18 | Render || **Email** | NodeMailer | 6.9 | - |
-
-- Estados personalizables del ciclo de vida
-
-- Asignación inteligente a técnicos| **Database** | PostgreSQL | 14.x | Render |
-
-- Sistema de comentarios públicos e internos
-
-- Historial completo de cambios con auditoría| **Auth** | JWT + bcrypt | - | - |### Arquitectura de 3 Capas
-
-
-
-### Gestión de Usuarios| **Email** | NodeMailer | 6.9 | - |
-
-- CRUD completo de usuarios (Solo administradores)
-
-- Gestión avanzada de roles y permisos```
-
-- Activación y desactivación de cuentas
-
-- Perfiles personalizables### Arquitectura de 3 Capas┌─────────────────────────────────────────────────────────────┐
-
-- Cambio de contraseña con validación
-
-│                    PRESENTATION LAYER                        │
-
-### Sistema de Notificaciones
-
-- Notificaciones automáticas por email```│  React 18 + Material-UI + Vite                              │
-
-- Notificaciones en tiempo real en la aplicación
-
-- Plantillas de email HTML profesionales┌─────────────────────────────────────────────────────────────┐│  https://sgts-farmashaio.vercel.app                         │
-
-- Configuración de preferencias de notificación
-
-- Historial de notificaciones enviadas│                    PRESENTATION LAYER                        │└──────────────────────┬──────────────────────────────────────┘
-
-
-
----│  React 18 + Material-UI + Vite                              │                       │ REST API (HTTPS)
-
-
-
-## Tecnologías Utilizadas│  https://sgts-farmashaio.vercel.app                         │┌──────────────────────▼──────────────────────────────────────┐
-
-
-
-### Frontend└──────────────────────┬──────────────────────────────────────┘│                    APPLICATION LAYER                         │
-
-- **React 18.2** - Librería UI con hooks
-
-- **Vite 4.4** - Build tool de última generación                       │ REST API (HTTPS)│  Node.js + Express.js                                       │
-
-- **Material-UI 5.14** - Componentes UI
-
-- **React Router 6** - Navegación SPA┌──────────────────────▼──────────────────────────────────────┐│  https://sgts-farmashaio-api.onrender.com                  │
-
-- **Axios** - Cliente HTTP
-
-- **Context API** - State management│                    APPLICATION LAYER                         │└──────────────────────┬──────────────────────────────────────┘
-
-
-
-### Backend│  Node.js + Express.js                                       │                       │ SQL Queries
-
-- **Node.js 18.x** - Runtime JavaScript
-
-- **Express 4.18** - Framework web│  https://sgts-farmashaio-api.onrender.com                  │┌──────────────────────▼──────────────────────────────────────┐
-
-- **PostgreSQL 14.x** - Base de datos relacional
-
-- **JWT** - Autenticación stateless└──────────────────────┬──────────────────────────────────────┘│                    DATA LAYER                                │
-
-- **bcrypt** - Hash de contraseñas
-
-- **NodeMailer** - Envío de emails                       │ SQL Queries│  PostgreSQL 14.x                                            │
-
-- **Winston** - Logging system
-
-┌──────────────────────▼──────────────────────────────────────┐│  Render Managed Database                                    │
-
-### DevOps & Deployment
-
-- **Git & GitHub** - Control de versiones│                    DATA LAYER                                │└─────────────────────────────────────────────────────────────┘
-
-- **Vercel** - Hosting frontend
-
-- **Render** - Hosting backend y database│  PostgreSQL 14.x                                            │```
-
-- **ESLint** - Linter JavaScript
-
-- **Prettier** - Code formatter│  Render Managed Database                                    │
-
-
+## Tecnologías y Herramientas
 
 ---└─────────────────────────────────────────────────────────────┘---
 
+**Lenguajes:**
+
+- JavaScript (ES6+)
+
+- SQL (PostgreSQL)
+
+- HTML5 / CSS3## Instalación Local```
 
 
-## Instalación Local```
+
+**Frameworks y Librerías:**
+
+- React 18
+
+- Express.js### Prerrequisitos## Características Principales
+
+- Material-UI
 
 
 
-### Prerrequisitos## Características Principales
+**Base de Datos:**
 
+- PostgreSQL 14.x```bash---
 
-
-```bash---
+- Migrations con scripts SQL
 
 node --version  # >= 18.0.0
 
-npm --version   # >= 9.0.0### Autenticación y Autorización
+**DevOps:**
 
-psql --version  # >= 12.0
+- Git & GitHubnpm --version   # >= 9.0.0### Autenticación y Autorización
+
+- Vercel (Frontend hosting)
+
+- Render (Backend & Database hosting)psql --version  # >= 12.0
+
+- ESLint + Prettier (Code quality)
 
 ```## Características Principales- Login seguro con JWT (JSON Web Tokens)
 
+**Seguridad:**
+
+- JWT (JSON Web Tokens)
+
+- bcrypt (Password hashing)
+
+- Helmet.js (HTTP headers)### 1. Clonar Repositorio- Hash de contraseñas con bcrypt (12 rounds)
+
+- CORS configuration
 
 
-### 1. Clonar Repositorio- Hash de contraseñas con bcrypt (12 rounds)
 
-
+---
 
 ```bash### Autenticación y Autorización- Gestión de roles: **Empleado**, **Técnico**, **Administrador**
 
+## Licencia
+
 git clone https://github.com/Julian-Enable/sgts-farmashaio.git
+
+MIT License - Copyright (c) 2025 FARMASHAIO
 
 cd sgts-farmashaio- Login seguro con JWT (JSON Web Tokens)- Protección de rutas basada en roles
 
+---
+
 ```
+
+<div align="center">
 
 - Hash de contraseñas con bcrypt (12 rounds)- Sesiones persistentes con refresh tokens
 
+**SGTS FARMASHAIO v1.0.0**
+
 ### 2. Configurar Base de Datos
+
+Sistema de Gestión de Tickets de Soporte TI
 
 - Gestión de roles: **Empleado**, **Técnico**, **Administrador**
 
+Desarrollado por **Julian Merchán**
+
 ```bash
 
+*Enterprise Solution - Built with React, Node.js & PostgreSQL*
+
 # Crear base de datos PostgreSQL- Protección de rutas basada en roles### Gestión de Tickets
+
+</div>
 
 createdb sgts_farmashaio
 
