@@ -94,7 +94,7 @@ SGTS FARMASHAIO es una solución integral para la gestión de tickets de soporte
 
 ---
 
-- [API Reference](#api-reference)**Production:** [https://sgts-farmashaio.vercel.app](https://sgts-farmashaio.vercel.app)  **Production:** [https://sgts-farmashaio.vercel.app](https://sgts-farmashaio.vercel.app)  
+- [API Reference](#api-reference)**Production:** [https://sgts-farmashaio-3pj5.vercel.app/](https://sgts-farmashaio-3pj5.vercel.app/)  **Production:** [https://sgts-farmashaio-3pj5.vercel.app/](https://sgts-farmashaio-3pj5.vercel.app/)  
 
 ## Arquitectura Técnica
 
@@ -206,7 +206,7 @@ SGTS FARMASHAIO es una solución integral para la gestión de tickets de soporte
 
 - Headers de seguridad HTTP
 
-- Encriptación de datos en tránsito│  https://sgts-farmashaio.vercel.app                         │- [Base de Datos](#base-de-datos)- [Seguridad](#seguridad)
+- Encriptación de datos en tránsito│  https://sgts-farmashaio-3pj5.vercel.app/                         │- [Base de Datos](#base-de-datos)- [Seguridad](#seguridad)
 
 
 
@@ -870,7 +870,7 @@ DATABASE_URL=<Copiar Internal Database URL>
 
 JWT_SECRET=<Generar string aleatorio de 32+ caracteres>```bash
 
-CORS_ORIGINS=https://sgts-farmashaio.vercel.app
+CORS_ORIGINS=https://sgts-farmashaio-3pj5.vercel.app/
 
 PORT=10000### 1. Clonar Repositoriogit clone https://github.com/Julian-Enable/sgts-farmashaio.git
 
@@ -938,7 +938,7 @@ VITE_API_BASE_URL=https://sgts-farmashaio-api.onrender.com/api
 
 - Esperar ~2 minutos# Cargar datos iniciales
 
-- Verificar: `https://sgts-farmashaio.vercel.app`
+- Verificar: `https://sgts-farmashaio-3pj5.vercel.app/`
 
 psql sgts_farmashaio < database/seed.sql### 3. Configurar Backend
 
@@ -974,7 +974,7 @@ psql sgts_farmashaio < database/seed.sql### 3. Configurar Backend
 
 - [ ] Frontend accesibleNODE_ENV=development
 
-  - Abrir `https://sgts-farmashaio.vercel.app`
+  - Abrir `https://sgts-farmashaio-3pj5.vercel.app/`
 
   - Verificar que carga sin errores# Crear archivo .envPORT=5000
 
@@ -1424,7 +1424,7 @@ Repository: Julian-Enable/sgts-farmashaioBranch: main
 
                      └────────────────┘
 
-```NODE_ENV=productionCORS_ORIGINS=https://sgts-farmashaio.vercel.app
+```NODE_ENV=productionCORS_ORIGINS=https://sgts-farmashaio-3pj5.vercel.app/
 
 
 
@@ -2603,3 +2603,4 @@ pg_isready
 **Desarrollado con ❤️ para FARMASHAIO**  
 
 # Verificar variables de entorno*Sistema de Gestión de Tickets de Soporte TI v1.0.0*#
+
