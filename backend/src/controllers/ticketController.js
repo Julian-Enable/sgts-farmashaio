@@ -107,35 +107,59 @@ export const getTickets = catchAsync(async (req, res) => {
   
   // Convertir nombres de filtros a IDs para el modelo
   if (status) {
+    // Normalizar el valor: reemplazar guiones por espacios y capitalizar
+    const normalizedStatus = status
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+    
     // Obtener el ID del estado por nombre
     const statusResult = await query(
       'SELECT id FROM ticket_statuses WHERE LOWER(name) = LOWER($1) OR id::text = $1',
-      [status]
+      [normalizedStatus]
     );
     if (statusResult.rows[0]) {
       filters.statusId = statusResult.rows[0].id;
+      console.log(`✅ Estado encontrado: ${normalizedStatus} -> ID: ${filters.statusId}`);
+    } else {
+      console.log(`⚠️ Estado no encontrado: ${normalizedStatus}`);
     }
   }
   
   if (category) {
+    // Capitalizar primera letra
+    const normalizedCategory = category.charAt(0).toUpperCase() + category.slice(1);
+    
     // Obtener el ID de la categoría por nombre
     const categoryResult = await query(
       'SELECT id FROM categories WHERE LOWER(name) = LOWER($1) OR id::text = $1',
-      [category]
+      [normalizedCategory]
     );
     if (categoryResult.rows[0]) {
       filters.categoryId = categoryResult.rows[0].id;
+      console.log(`✅ Categoría encontrada: ${normalizedCategory} -> ID: ${filters.categoryId}`);
+    } else {
+      console.log(`⚠️ Categoría no encontrada: ${normalizedCategory}`);
     }
   }
   
   if (priority) {
+    // Normalizar: reemplazar guiones por espacios y capitalizar cada palabra
+    const normalizedPriority = priority
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+    
     // Obtener el ID de la prioridad por nombre
     const priorityResult = await query(
       'SELECT id FROM priorities WHERE LOWER(name) = LOWER($1) OR id::text = $1',
-      [priority]
+      [normalizedPriority]
     );
     if (priorityResult.rows[0]) {
       filters.priorityId = priorityResult.rows[0].id;
+      console.log(`✅ Prioridad encontrada: ${normalizedPriority} -> ID: ${filters.priorityId}`);
+    } else {
+      console.log(`⚠️ Prioridad no encontrada: ${normalizedPriority}`);
     }
   }
   
