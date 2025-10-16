@@ -1,11 +1,50 @@
 import { useEffect, useState, useCallback } from 'react';
 import { socketService } from '../services/socketService';
+import { notificationService } from '../services/notificationService';
 import { useAuth } from '../context/AuthContext';
 
 export const useNotifications = () => {
   const { user } = useAuth();
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  // Cargar notificaciones existentes de la API
+  useEffect(() => {
+    const loadNotifications = async () => {
+      if (!user?.id) return;
+      
+      try {
+        setLoading(true);
+        const response = await notificationService.getNotifications({ 
+          page: 1, 
+          limit: 50 
+        });
+        
+        const apiNotifications = (response.notifications || []).map(notif => ({
+          id: notif.id,
+          type: notif.type,
+          message: notif.message,
+          data: {
+            id: notif.ticket_id,
+            ticketNumber: notif.ticket_number,
+            title: notif.ticket_title,
+          },
+          timestamp: notif.created_at,
+          read: notif.is_read,
+        }));
+        
+        setNotifications(apiNotifications);
+        setUnreadCount(apiNotifications.filter(n => !n.read).length);
+      } catch (error) {
+        console.error('Error cargando notificaciones:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadNotifications();
+  }, [user?.id]);
 
   // Conectar al WebSocket cuando el usuario esté autenticado
   useEffect(() => {
@@ -122,6 +161,7 @@ export const useNotifications = () => {
   return {
     notifications,
     unreadCount,
+    loading,
     markAsRead,
     markAllAsRead,
     clearNotifications,
