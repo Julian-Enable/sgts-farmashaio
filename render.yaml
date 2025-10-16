@@ -19,13 +19,18 @@ services:
         value: https://sgts-farmashaio.vercel.app
       - key: PORT
         value: 10000
-      # Email Configuration - Para notificaciones automáticas
+      # Email Configuration - Para notificaciones automáticas (Brevo/Sendinblue)
+      # Brevo es más compatible con Render que Gmail (sin restricciones de firewall)
       - key: EMAIL_SERVICE
-        value: gmail
+        value: Brevo
+      - key: EMAIL_HOST
+        value: smtp-relay.brevo.com
+      - key: EMAIL_PORT
+        value: 587
       - key: EMAIL_USER
         value: soporte.invfs@gmail.com
       - key: EMAIL_PASS
-        value: ljgr cxdv wgkx pvfn
+        sync: false  # Agregar manualmente en Render Dashboard
       - key: EMAIL_FROM
         value: "SGTS FARMASHAIO" <soporte.invfs@gmail.com>
 

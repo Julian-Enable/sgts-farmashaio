@@ -67,6 +67,7 @@ El sistema ya tiene **notificaciones automáticas por email** completamente impl
    - Ir a: https://myaccount.google.com/apppasswords
    - Nombre: "SGTS FARMASHAIO"
    - Copiar la contraseña de 16 caracteres
+   ljgr cxdv wgkx pvfn
 
 4. **Configurar variables de entorno en Render**:
    ```bash

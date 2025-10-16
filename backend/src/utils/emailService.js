@@ -3,13 +3,27 @@ import { query } from '../utils/database.js';
 
 class EmailService {
   constructor() {
-    this.transporter = nodemailer.createTransport({
-      service: process.env.EMAIL_SERVICE || 'gmail',
+    // Configuración para diferentes servicios de email
+    const emailConfig = {
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
       }
-    });
+    };
+
+    // Si es Brevo/Sendinblue o custom SMTP, usar configuración de host/port
+    if (process.env.EMAIL_HOST && process.env.EMAIL_PORT) {
+      emailConfig.host = process.env.EMAIL_HOST;
+      emailConfig.port = parseInt(process.env.EMAIL_PORT);
+      emailConfig.secure = false; // true para 465, false para otros puertos
+      console.log(`📧 Configurando email con SMTP: ${process.env.EMAIL_HOST}:${process.env.EMAIL_PORT}`);
+    } else {
+      // Usar servicio predefinido (Gmail, Outlook, etc.)
+      emailConfig.service = process.env.EMAIL_SERVICE || 'gmail';
+      console.log(`📧 Configurando email con servicio: ${emailConfig.service}`);
+    }
+
+    this.transporter = nodemailer.createTransport(emailConfig);
   }
 
   // Verificar configuración de email
