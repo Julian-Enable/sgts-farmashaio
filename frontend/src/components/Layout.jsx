@@ -54,16 +54,12 @@ const Layout = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
 
-  // Cerrar drawer y menú automáticamente cuando cambia la ruta
+  // Cerrar drawer automáticamente en móvil cuando cambia la ruta
   useEffect(() => {
     if (isMobile && mobileOpen) {
       setMobileOpen(false);
     }
-    // Cerrar el menú del usuario cuando cambia la ruta
-    if (anchorEl) {
-      setAnchorEl(null);
-    }
-  }, [location.pathname]); // Solo dependemos de location.pathname para evitar loops
+  }, [location.pathname, isMobile, mobileOpen]);
 
   // Navegación principal
   const navigationItems = [
@@ -119,13 +115,13 @@ const Layout = () => {
   };
 
   const handleLogout = async () => {
-    handleMenuClose();
+    setAnchorEl(null); // Cerrar menú inmediatamente
     await logout();
     navigate('/login');
   };
 
   const handleProfile = () => {
-    handleMenuClose();
+    setAnchorEl(null); // Cerrar menú inmediatamente
     navigate('/profile');
   };
 
@@ -438,25 +434,28 @@ const Layout = () => {
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
-        PaperProps={{
-          elevation: 3,
-          sx: {
-            mt: 1.5,
-            minWidth: 220,
-            borderRadius: 2,
-            overflow: 'visible',
-            boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
-            '&:before': {
-              content: '""',
-              display: 'block',
-              position: 'absolute',
-              top: 0,
-              right: 20,
-              width: 10,
-              height: 10,
-              bgcolor: 'background.paper',
-              transform: 'translateY(-50%) rotate(45deg)',
-              zIndex: 0,
+        disableScrollLock
+        slotProps={{
+          paper: {
+            elevation: 3,
+            sx: {
+              mt: 1.5,
+              minWidth: 220,
+              borderRadius: 2,
+              overflow: 'visible',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
+              '&:before': {
+                content: '""',
+                display: 'block',
+                position: 'absolute',
+                top: 0,
+                right: 20,
+                width: 10,
+                height: 10,
+                bgcolor: 'background.paper',
+                transform: 'translateY(-50%) rotate(45deg)',
+                zIndex: 0,
+              },
             },
           },
         }}
