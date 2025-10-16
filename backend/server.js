@@ -1,4 +1,5 @@
 import express from 'express';
+import { createServer } from 'http';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
@@ -23,6 +24,7 @@ import { notFound } from './src/middleware/notFound.js';
 
 // Utils
 import { connectDB } from './src/utils/database.js';
+import { initializeSocket } from './src/utils/socket.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -31,6 +33,7 @@ const __dirname = dirname(__filename);
 dotenv.config();
 
 const app = express();
+const httpServer = createServer(app);
 const PORT = process.env.PORT || 3001;
 
 // Security middleware
@@ -108,10 +111,14 @@ const startServer = async () => {
     // Connect to database
     await connectDB();
     
-    app.listen(PORT, () => {
+    // Initialize Socket.IO
+    initializeSocket(httpServer);
+    
+    httpServer.listen(PORT, () => {
       console.log(`🚀 SGTS FARMASHAIO API ejecutándose en puerto ${PORT}`);
       console.log(`📊 Health check: http://localhost:${PORT}/health`);
       console.log(`🌍 Entorno: ${process.env.NODE_ENV || 'development'}`);
+      console.log(`🔌 WebSocket activado para notificaciones en tiempo real`);
     });
   } catch (error) {
     console.error('❌ Error al iniciar el servidor:', error);

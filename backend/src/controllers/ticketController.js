@@ -2,6 +2,7 @@ import { Ticket } from '../models/Ticket.js';
 import { query } from '../utils/database.js';
 import { catchAsync, createValidationError, createNotFoundError, createForbiddenError } from '../middleware/errorHandler.js';
 import { validationResult } from 'express-validator';
+import { emitToRole, emitToUser } from '../utils/socket.js';
 import { 
   createTicketNotifications,
   createAssignmentNotifications,
@@ -70,6 +71,24 @@ export const createTicket = catchAsync(async (req, res) => {
       name: `${req.user.firstName} ${req.user.lastName}`
     }
   ).catch(err => console.error('Error creando notificaciones:', err));
+
+  // Emitir evento WebSocket a todos los técnicos y administradores
+  try {
+    emitToRole('tecnico', 'ticket:created', {
+      id: ticket.id,
+      ticketNumber: ticket.ticketNumber,
+      title: ticket.title,
+      createdBy: `${req.user.firstName} ${req.user.lastName}`,
+    });
+    emitToRole('administrador', 'ticket:created', {
+      id: ticket.id,
+      ticketNumber: ticket.ticketNumber,
+      title: ticket.title,
+      createdBy: `${req.user.firstName} ${req.user.lastName}`,
+    });
+  } catch (err) {
+    console.error('Error emitiendo evento WebSocket:', err);
+  }
 
   res.status(201).json({
     success: true,
@@ -218,6 +237,18 @@ export const assignTicket = catchAsync(async (req, res) => {
         name: `${req.user.firstName} ${req.user.lastName}`
       }
     ).catch(err => console.error('Error creando notificaciones de asignación:', err));
+
+    // Emitir evento WebSocket al técnico asignado
+    try {
+      emitToUser(technician.id, 'ticket:assigned', {
+        id: updatedTicket.id,
+        ticketNumber: updatedTicket.ticketNumber,
+        title: updatedTicket.title,
+        assignedBy: `${req.user.firstName} ${req.user.lastName}`,
+      });
+    } catch (err) {
+      console.error('Error emitiendo evento WebSocket de asignación:', err);
+    }
   }
 
   res.json({

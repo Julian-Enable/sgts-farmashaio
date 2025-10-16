@@ -38,6 +38,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../context/AuthContext.jsx';
+import { useNotifications } from '../hooks/useNotifications.js';
 import { APP_CONFIG, USER_ROLES } from '../utils/constants.js';
 import Logo from './Logo.jsx';
 
@@ -50,6 +51,7 @@ const Layout = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   
   const { user, logout, isAdmin, isTechnicianOrAdmin } = useAuth();
+  const { unreadCount } = useNotifications();
   
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -393,7 +395,7 @@ const Layout = () => {
               },
             }}
           >
-            <Badge badgeContent={0} color="error">
+            <Badge badgeContent={unreadCount} color="error">
               <Notifications />
             </Badge>
           </IconButton>
