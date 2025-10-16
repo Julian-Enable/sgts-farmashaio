@@ -54,11 +54,18 @@ app.use(cors({
 // Handle preflight requests explicitly
 app.options('*', cors());
 
-// Rate limiting - Aumentado para permitir más pruebas
+// Rate limiting - Configurado para permitir pruebas extensivas
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 1000, // Límite: 1000 solicitudes por IP cada 15 minutos
-  message: 'Demasiadas solicitudes desde esta IP, intenta de nuevo más tarde.'
+  max: 5000, // 5000 solicitudes por IP cada 15 minutos (muy permisivo para pruebas)
+  message: 'Demasiadas solicitudes desde esta IP, intenta de nuevo más tarde.',
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  // Skip rate limiting for certain conditions if needed
+  skip: (req) => {
+    // Opcionalmente, podrías excluir ciertas IPs o rutas
+    return false;
+  }
 });
 app.use('/api/', limiter);
 
