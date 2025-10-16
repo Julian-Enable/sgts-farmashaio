@@ -434,7 +434,6 @@ const Layout = () => {
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
-        onClick={handleMenuClose}
         PaperProps={{
           elevation: 3,
           sx: {
