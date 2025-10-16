@@ -20,6 +20,10 @@ import {
   CircularProgress,
   IconButton,
   InputAdornment,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
 } from '@mui/material';
 import {
   Edit as EditIcon,
@@ -36,6 +40,25 @@ import {
 import { useAuth } from '../context/AuthContext';
 import { authService } from '../services/authService';
 import { ticketService } from '../services/ticketService';
+
+// Departamentos disponibles en FARMASHAIO
+const DEPARTMENTS = [
+  'TI',
+  'Soporte TI',
+  'Farmacia',
+  'Administración',
+  'Recursos Humanos',
+  'Contabilidad',
+  'Ventas',
+  'Compras',
+  'Logística',
+  'Marketing',
+  'Gerencia',
+  'Atención al Cliente',
+  'Bodega',
+  'Delivery',
+  'Otro',
+];
 
 const ProfilePage = () => {
   const theme = useTheme();
@@ -519,13 +542,22 @@ const ProfilePage = () => {
             margin="normal"
           />
 
-          <TextField
-            fullWidth
-            label="Departamento"
-            value={editForm.department}
-            onChange={(e) => setEditForm({ ...editForm, department: e.target.value })}
-            margin="normal"
-          />
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="department-select-label">Departamento</InputLabel>
+            <Select
+              labelId="department-select-label"
+              id="department-select"
+              value={editForm.department}
+              label="Departamento"
+              onChange={(e) => setEditForm({ ...editForm, department: e.target.value })}
+            >
+              {DEPARTMENTS.map((dept) => (
+                <MenuItem key={dept} value={dept}>
+                  {dept}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleEditClose} disabled={loading}>
