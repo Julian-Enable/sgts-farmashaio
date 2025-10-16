@@ -19,20 +19,17 @@ services:
         value: https://sgts-farmashaio.vercel.app
       - key: PORT
         value: 10000
-      # Email Configuration - Para notificaciones automáticas (Brevo/Sendinblue)
-      # Usar credenciales SMTP exactas de Brevo dashboard
+      # Email Configuration - Brevo API (NO usar SMTP en Render Free tier)
+      # Render Free tier BLOQUEA puertos SMTP (25, 465, 587, 2525)
+      # Usar API de Brevo en su lugar: https://developers.brevo.com/docs
       - key: EMAIL_SERVICE
         value: Brevo
-      - key: EMAIL_HOST
-        value: smtp-relay.brevo.com
-      - key: EMAIL_PORT
-        value: 587
-      - key: EMAIL_USER
-        value: 997851001@smtp-brevo.com
       - key: EMAIL_PASS
-        sync: false  # Agregar manualmente en Render Dashboard
+        sync: false  # API Key de Brevo (NO SMTP password) - Agregar en Dashboard
+        # Obtener en: https://app.brevo.com/settings/keys/api
+        # Debe ser un API Key v3, NO el SMTP key
       - key: EMAIL_FROM
-        value: "SGTS FARMASHAIO" <soporte.invfs@gmail.com>
+        value: "SGTS FARMASHAIO <soporte.invfs@gmail.com>"
 
 databases:
   - name: sgts-farmashaio-db
