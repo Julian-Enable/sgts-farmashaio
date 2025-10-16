@@ -54,10 +54,14 @@ const Layout = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
 
-  // Cerrar drawer automáticamente en móvil cuando cambia la ruta
+  // Cerrar drawer y menú automáticamente cuando cambia la ruta
   useEffect(() => {
     if (isMobile && mobileOpen) {
       setMobileOpen(false);
+    }
+    // Cerrar el menú del usuario cuando cambia la ruta
+    if (anchorEl) {
+      setAnchorEl(null);
     }
   }, [location.pathname]); // Solo dependemos de location.pathname para evitar loops
 
