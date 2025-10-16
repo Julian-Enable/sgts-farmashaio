@@ -8,7 +8,13 @@ class EmailService {
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
-      }
+      },
+      // Configuraciones adicionales para mejorar compatibilidad
+      connectionTimeout: 10000, // 10 segundos
+      greetingTimeout: 10000,
+      socketTimeout: 10000,
+      logger: false, // Cambiar a true para debugging
+      debug: false   // Cambiar a true para ver comunicación SMTP
     };
 
     // Si es Brevo/Sendinblue o custom SMTP, usar configuración de host/port
@@ -16,7 +22,12 @@ class EmailService {
       emailConfig.host = process.env.EMAIL_HOST;
       emailConfig.port = parseInt(process.env.EMAIL_PORT);
       emailConfig.secure = false; // true para 465, false para otros puertos
+      emailConfig.requireTLS = true; // Requerir TLS para seguridad
+      emailConfig.tls = {
+        rejectUnauthorized: false // Para evitar problemas con certificados en cloud
+      };
       console.log(`📧 Configurando email con SMTP: ${process.env.EMAIL_HOST}:${process.env.EMAIL_PORT}`);
+      console.log(`📧 Usuario SMTP: ${process.env.EMAIL_USER}`);
     } else {
       // Usar servicio predefinido (Gmail, Outlook, etc.)
       emailConfig.service = process.env.EMAIL_SERVICE || 'gmail';
@@ -24,16 +35,26 @@ class EmailService {
     }
 
     this.transporter = nodemailer.createTransport(emailConfig);
+    
+    // Verificar conexión al inicializar (sin bloquear)
+    this.verifyConnection();
   }
 
   // Verificar configuración de email
   async verifyConnection() {
     try {
+      console.log('🔍 Verificando conexión SMTP...');
       await this.transporter.verify();
       console.log('✅ Servidor de email configurado correctamente');
       return true;
     } catch (error) {
       console.error('❌ Error en configuración de email:', error.message);
+      console.error('📋 Detalles del error:', {
+        code: error.code,
+        command: error.command,
+        response: error.response,
+        responseCode: error.responseCode
+      });
       return false;
     }
   }
@@ -46,6 +67,9 @@ class EmailService {
         return false;
       }
 
+      console.log(`📤 Intentando enviar email a: ${to}`);
+      console.log(`📝 Asunto: ${subject}`);
+
       const mailOptions = {
         from: process.env.EMAIL_FROM || `"SGTS FARMASHAIO" <${process.env.EMAIL_USER}>`,
         to,
@@ -55,10 +79,17 @@ class EmailService {
       };
 
       const info = await this.transporter.sendMail(mailOptions);
-      console.log('📧 Email enviado:', info.messageId);
+      console.log('✅ Email enviado exitosamente');
+      console.log('📧 Message ID:', info.messageId);
+      console.log('📬 Destinatario:', to);
       return true;
     } catch (error) {
       console.error('❌ Error enviando email:', error.message);
+      console.error('📋 Código de error:', error.code);
+      console.error('📋 Comando fallido:', error.command);
+      if (error.response) {
+        console.error('📋 Respuesta del servidor:', error.response);
+      }
       return false;
     }
   }
