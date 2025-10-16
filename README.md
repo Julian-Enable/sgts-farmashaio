@@ -22,7 +22,7 @@ Sistema empresarial de gestión de tickets de soporte técnico para FARMASHAIO. 
 
 
 
-**Aplicación:** [https://sgts-farmashaio.vercel.app](https://sgts-farmashaio.vercel.app)[![React](https://img.shields.io/badge/React-18.2-61DAFB?style=flat-square&logo=react)](https://reactjs.org/)
+**Aplicación:** [https://sgts-farmashaio-3pj5.vercel.app/](https://sgts-farmashaio-3pj5.vercel.app/)[![React](https://img.shields.io/badge/React-18.2-61DAFB?style=flat-square&logo=react)](https://reactjs.org/)
 
 
 
@@ -2603,4 +2603,5 @@ pg_isready
 **Desarrollado con ❤️ para FARMASHAIO**  
 
 # Verificar variables de entorno*Sistema de Gestión de Tickets de Soporte TI v1.0.0*#
+
 
