@@ -20,15 +20,15 @@ services:
       - key: PORT
         value: 10000
       # Email Configuration - Para notificaciones automáticas (Brevo/Sendinblue)
-      # Puerto 2525 es específico para cloud providers que bloquean 587
+      # Usar credenciales SMTP exactas de Brevo dashboard
       - key: EMAIL_SERVICE
         value: Brevo
       - key: EMAIL_HOST
         value: smtp-relay.brevo.com
       - key: EMAIL_PORT
-        value: 2525
+        value: 587
       - key: EMAIL_USER
-        value: soporte.invfs@gmail.com
+        value: 997851001@smtp-brevo.com
       - key: EMAIL_PASS
         sync: false  # Agregar manualmente en Render Dashboard
       - key: EMAIL_FROM
