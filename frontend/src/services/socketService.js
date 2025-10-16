@@ -1,5 +1,5 @@
 import { io } from 'socket.io-client';
-import { API_CONFIG } from '../utils/constants.js';
+import { API_BASE_URL } from '../utils/constants.js';
 
 class SocketService {
   constructor() {
@@ -14,7 +14,8 @@ class SocketService {
       return;
     }
 
-    const socketUrl = API_CONFIG.BASE_URL.replace('/api', '');
+    // Remover /api del final de la URL si existe
+    const socketUrl = API_BASE_URL.replace(/\/api$/, '');
     
     this.socket = io(socketUrl, {
       transports: ['websocket', 'polling'],
