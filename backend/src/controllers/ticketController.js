@@ -9,6 +9,7 @@ import {
   createStatusChangeNotifications,
   createCommentNotifications 
 } from './notificationController.js';
+import emailService from '../utils/emailServiceBrevoAPI.js';
 
 // Crear nuevo ticket
 export const createTicket = catchAsync(async (req, res) => {
@@ -71,6 +72,23 @@ export const createTicket = catchAsync(async (req, res) => {
       name: `${req.user.firstName} ${req.user.lastName}`
     }
   ).catch(err => console.error('Error creando notificaciones:', err));
+
+  // Enviar email de nuevo ticket (async, no bloqueante)
+  emailService.sendNewTicketEmail(
+    {
+      id: ticket.id,
+      ticketNumber: ticket.ticketNumber,
+      title: ticket.title,
+      description: ticket.description,
+      category: { name: categoryId }, // Simplificado, se podría obtener el nombre real
+      priority: { name: priorityId }
+    },
+    {
+      name: `${req.user.firstName} ${req.user.lastName}`,
+      email: req.user.email,
+      department: req.user.department || 'N/A'
+    }
+  ).catch(err => console.error('Error enviando email:', err));
 
   // Emitir evento WebSocket a todos los técnicos y administradores
   try {
@@ -309,6 +327,34 @@ export const assignTicket = catchAsync(async (req, res) => {
       }
     ).catch(err => console.error('Error creando notificaciones de asignación:', err));
 
+    // Enviar email de asignación (async, no bloqueante)
+    const techEmail = await query('SELECT email FROM users WHERE id = $1', [assignedTo]);
+    const requesterEmail = await query('SELECT email, first_name, last_name FROM users WHERE id = $1', [updatedTicket.requesterId]);
+    
+    if (techEmail.rows.length > 0 && requesterEmail.rows.length > 0) {
+      emailService.sendTicketAssignmentEmail(
+        {
+          id: updatedTicket.id,
+          ticketNumber: updatedTicket.ticketNumber,
+          title: updatedTicket.title,
+          description: updatedTicket.description,
+          category: { name: 'N/A' },
+          priority: { name: 'N/A', color: '#666' },
+          requester: {
+            name: `${requesterEmail.rows[0].first_name} ${requesterEmail.rows[0].last_name}`
+          },
+          dueDate: updatedTicket.dueDate
+        },
+        {
+          email: techEmail.rows[0].email,
+          name: `${technician.first_name} ${technician.last_name}`
+        },
+        {
+          name: `${req.user.firstName} ${req.user.lastName}`
+        }
+      ).catch(err => console.error('Error enviando email de asignación:', err));
+    }
+
     // Emitir evento WebSocket al técnico asignado
     try {
       emitToUser(technician.id, 'ticket:assigned', {
@@ -392,8 +438,9 @@ export const updateTicketStatus = catchAsync(async (req, res) => {
   console.log('✅ Estado actualizado correctamente');
 
   // Obtener nombre del nuevo estado
-  const statusResult = await query('SELECT name FROM ticket_statuses WHERE id = $1', [status]);
+  const statusResult = await query('SELECT name, color FROM ticket_statuses WHERE id = $1', [status]);
   const newStatusName = statusResult.rows[0]?.name || 'Desconocido';
+  const newStatusColor = statusResult.rows[0]?.color || '#666';
 
   // Crear notificaciones (async, no bloqueante)
   createStatusChangeNotifications(
@@ -412,6 +459,34 @@ export const updateTicketStatus = catchAsync(async (req, res) => {
       name: `${req.user.firstName} ${req.user.lastName}`
     }
   ).catch(err => console.error('Error creando notificaciones de cambio de estado:', err));
+
+  // Enviar email de cambio de estado (async, no bloqueante)
+  const requesterData = await query('SELECT email, first_name, last_name FROM users WHERE id = $1', [updatedTicket.requesterId]);
+  if (requesterData.rows.length > 0) {
+    const ticketData = {
+      id: updatedTicket.id,
+      ticketNumber: updatedTicket.ticketNumber,
+      title: updatedTicket.title,
+      requester: {
+        email: requesterData.rows[0].email,
+        name: `${requesterData.rows[0].first_name} ${requesterData.rows[0].last_name}`
+      }
+    };
+
+    // Si hay técnico asignado, obtener su email también
+    if (updatedTicket.assignedTo) {
+      const assignedData = await query('SELECT email FROM users WHERE id = $1', [updatedTicket.assignedTo]);
+      if (assignedData.rows.length > 0) {
+        ticketData.assignedUser = { email: assignedData.rows[0].email };
+      }
+    }
+
+    emailService.sendStatusChangeEmail(
+      ticketData,
+      { name: newStatusName, color: newStatusColor },
+      { name: `${req.user.firstName} ${req.user.lastName}` }
+    ).catch(err => console.error('Error enviando email de cambio de estado:', err));
+  }
 
   // Si hay comentario, agregarlo
   if (comment && comment.trim()) {
@@ -461,6 +536,37 @@ export const addComment = catchAsync(async (req, res) => {
       name: `${req.user.firstName} ${req.user.lastName}`
     }
   ).catch(err => console.error('Error creando notificaciones de comentario:', err));
+
+  // Enviar email de nuevo comentario (async, no bloqueante)
+  const ticketData = {
+    id: ticket.id,
+    ticketNumber: ticket.ticketNumber,
+    title: ticket.title
+  };
+
+  // Obtener email del solicitante
+  const requesterData = await query('SELECT email FROM users WHERE id = $1', [ticket.requesterId]);
+  if (requesterData.rows.length > 0) {
+    ticketData.requester = { email: requesterData.rows[0].email };
+  }
+
+  // Obtener email del técnico asignado
+  if (ticket.assignedTo) {
+    const assignedData = await query('SELECT email FROM users WHERE id = $1', [ticket.assignedTo]);
+    if (assignedData.rows.length > 0) {
+      ticketData.assignedUser = { email: assignedData.rows[0].email };
+    }
+  }
+
+  emailService.sendNewCommentEmail(
+    ticketData,
+    { content: comment },
+    {
+      email: req.user.email,
+      name: `${req.user.firstName} ${req.user.lastName}`,
+      role: req.user.role
+    }
+  ).catch(err => console.error('Error enviando email de comentario:', err));
 
   res.status(201).json({
     success: true,
