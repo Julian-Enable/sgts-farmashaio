@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { ToastContainer } from 'react-toastify';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 
 import App from './App.jsx';
 import { AuthProvider } from './context/AuthContext.jsx';
@@ -17,6 +18,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <CssBaseline />
         <AuthProvider>
           <App />
+          <SpeedInsights />
           <ToastContainer
             position="top-right"
             autoClose={5000}
