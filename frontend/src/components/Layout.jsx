@@ -45,6 +45,11 @@ import Logo from './Logo.jsx';
 const DRAWER_WIDTH = 280;
 
 const Layout = () => {
+  // Forzar cierre de Drawer y menú de perfil en el primer render
+  useEffect(() => {
+    setMobileOpen(false);
+    setAnchorEl(null);
+  }, []);
   // ...otros hooks y variables...
   const theme = useTheme();
   const navigate = useNavigate();
