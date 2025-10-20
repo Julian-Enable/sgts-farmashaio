@@ -138,6 +138,7 @@ const Layout = () => {
 
   // Cerrar menú de perfil automáticamente al navegar (debe ir después de declarar handleMenuClose y anchorEl)
   useEffect(() => {
+    console.log('Ruta actual:', location.pathname);
     setAnchorEl(null);
   }, [location.pathname]);
 
