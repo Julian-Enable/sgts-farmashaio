@@ -42,7 +42,7 @@ export class User {
   // Buscar usuario por ID
   static async findById(id) {
     const result = await query(
-      'SELECT * FROM users WHERE id = $1 AND is_active = true',
+      'SELECT * FROM users WHERE id = $1',
       [id]
     );
 
@@ -52,7 +52,7 @@ export class User {
   // Buscar usuario por username
   static async findByUsername(username) {
     const result = await query(
-      'SELECT * FROM users WHERE username = $1 AND is_active = true',
+      'SELECT * FROM users WHERE username = $1',
       [username]
     );
 
@@ -62,12 +62,10 @@ export class User {
   // Buscar usuario por email
   static async findByEmail(email) {
     console.log(`🔍 User.findByEmail() - Buscando: "${email}"`);
-    
     const result = await query(
-      'SELECT * FROM users WHERE email = $1 AND is_active = true',
+      'SELECT * FROM users WHERE email = $1',
       [email]
     );
-    
     console.log(`📊 Query result - Rows found: ${result.rows?.length || 0}`);
     if (result.rows?.[0]) {
       console.log(`✅ Usuario encontrado en DB:`, {
@@ -80,7 +78,6 @@ export class User {
     } else {
       console.log(`❌ NO se encontró usuario con email: "${email}"`);
     }
-
     return result.rows[0] ? new User(result.rows[0]) : null;
   }
 
