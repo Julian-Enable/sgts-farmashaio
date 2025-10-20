@@ -101,7 +101,9 @@ const Layout = () => {
   ];
 
   const handleDrawerToggle = () => {
+    console.log('Estado mobileOpen antes:', mobileOpen);
     setMobileOpen(!mobileOpen);
+    console.log('Estado mobileOpen después:', !mobileOpen);
   };
 
   const handleMenuOpen = (event) => {
