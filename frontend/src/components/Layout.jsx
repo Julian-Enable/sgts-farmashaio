@@ -45,6 +45,10 @@ import Logo from './Logo.jsx';
 const DRAWER_WIDTH = 280;
 
 const Layout = () => {
+  // Cerrar menú de perfil automáticamente al navegar
+  useEffect(() => {
+    setAnchorEl(null);
+  }, [location.pathname]);
   const theme = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
@@ -116,6 +120,7 @@ const Layout = () => {
     if (isMobile) {
       setMobileOpen(false);
     }
+    setAnchorEl(null); // Cerrar menú de perfil si está abierto
   };
 
   const handleLogout = async () => {
@@ -127,6 +132,9 @@ const Layout = () => {
   const handleProfile = () => {
     setAnchorEl(null); // Cerrar menú inmediatamente
     navigate('/profile');
+    if (isMobile) {
+      setMobileOpen(false);
+    }
   };
 
   // Función para obtener el color del rol
