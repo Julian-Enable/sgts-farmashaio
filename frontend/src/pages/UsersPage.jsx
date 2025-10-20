@@ -68,7 +68,7 @@ const UsersPage = () => {
 
   useEffect(() => {
     loadUsers();
-  }, [roleFilter, departmentFilter]);
+  }, [roleFilter, departmentFilter, statusFilter]);
 
   const loadUsers = async () => {
     try {
