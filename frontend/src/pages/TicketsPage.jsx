@@ -6,104 +6,7 @@ import {
   Button,
   Card,
   CardContent,
-  Grid,
-  TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Chip,
-  IconButton,
-  Tooltip,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Alert,
-  Skeleton,
-  Fab,
-  useTheme,
-  useMediaQuery,
-  Paper,
-  alpha,
-} from '@mui/material';
-import {
-  Add as AddIcon,
-  FilterList as FilterIcon,
-  Clear as ClearIcon,
-  Visibility as ViewIcon,
-  Edit as EditIcon,
-  ConfirmationNumber as TicketIcon,
-  Search as SearchIcon,
-} from '@mui/icons-material';
-
-import { useAuth } from '../context/AuthContext.jsx';
-import { ticketService } from '../services/ticketService.js';
-import { TICKET_STATUS, TICKET_PRIORITY } from '../utils/constants.js';
-import TicketCard from '../components/TicketCard.jsx';
-
-const TicketsPage = () => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const { user } = useAuth();
-
-  // Estado
-  const [tickets, setTickets] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [filterDialogOpen, setFilterDialogOpen] = useState(false);
-
-  // Filtros
-  const [filters, setFilters] = useState({
-    search: searchParams.get('search') || '',
-    status: searchParams.get('status') || '',
-    priority: searchParams.get('priority') || '',
-    assignedTo: searchParams.get('assignedTo') || '',
-    category: searchParams.get('category') || '',
-  });
-
-  // Cargar tickets
-  const loadTickets = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      
-      const tickets = await ticketService.getTickets(filters);
-      setTickets(tickets || []);
-    } catch (err) {
-      setError('Error al cargar los tickets');
-      console.error('Error loading tickets:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Efectos
-  useEffect(() => {
-    loadTickets();
-  }, [filters]);
-
-  // Handlers
-  const handleFilterChange = (key, value) => {
-    const newFilters = { ...filters, [key]: value };
-    setFilters(newFilters);
-
-    // Actualizar URL
-    const params = new URLSearchParams();
-    Object.entries(newFilters).forEach(([k, v]) => {
-      if (v) params.set(k, v);
-    });
-    setSearchParams(params);
-  };
-
-  const clearFilters = () => {
-    setFilters({
-      search: '',
-      status: '',
-      priority: '',
-      assignedTo: '',
+// ...existing code...
       category: '',
     });
     setSearchParams({});
@@ -150,7 +53,7 @@ const TicketsPage = () => {
     });
   };
 
-  if (loading && tickets.length === 0) {
+  if (loading && ticketsData.tickets.length === 0) {
     return (
       <Box>
         <Typography variant="h4" component="h1" gutterBottom>
@@ -201,85 +104,67 @@ const TicketsPage = () => {
             transform: 'translate(30%, -30%)',
           }}
         />
-        
-        <Box 
-          position="relative" 
-          zIndex={1}
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-          flexWrap="wrap"
-          gap={2}
-        >
-          <Box>
-            <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 700, mb: 1 }}>
-              Gestión de Tickets
-            </Typography>
-            <Typography variant="h6" sx={{ opacity: 0.9, mb: 2, fontWeight: 400 }}>
-              {tickets.length} {tickets.length === 1 ? 'ticket encontrado' : 'tickets encontrados'}
-            </Typography>
-            <Box display="flex" alignItems="center" gap={2}>
-              <Chip
-                label={user?.role === 'empleado' ? 'Empleado' : user?.role === 'tecnico' ? 'Técnico' : 'Administrador'}
-                sx={{
-                  bgcolor: 'rgba(255,255,255,0.2)',
-                  color: 'white',
-                  fontWeight: 600,
-                  backdropFilter: 'blur(10px)',
-                }}
-              />
-              <Typography variant="body1" sx={{ opacity: 0.9 }}>
-                {user?.department}
-              </Typography>
-            </Box>
-          </Box>
-          <Box display="flex" gap={2} flexWrap="wrap" alignItems="flex-start">
+        <Box position="relative">
+          <Button
+            variant="outlined"
+            startIcon={<FilterIcon />}
+            onClick={() => setFilterDialogOpen(true)}
+            sx={{
+              borderRadius: 2,
+              borderWidth: 2,
+              borderColor: 'rgba(255, 255, 255, 0.5)',
+              color: 'white',
+              backdropFilter: 'blur(10px)',
+              '&:hover': {
+                borderWidth: 2,
+                borderColor: 'white',
+                background: 'rgba(255, 255, 255, 0.1)',
+              },
+            }}
+          >
+            Filtros
+          </Button>
+          {/* Solo empleados y admins pueden crear tickets */}
+          {(user.role === 'empleado' || user.role === 'administrador') && (
             <Button
-              variant="outlined"
-              startIcon={<FilterIcon />}
-              onClick={() => setFilterDialogOpen(true)}
+              variant="contained"
+              startIcon={<AddIcon />}
+              onClick={handleCreateTicket}
               sx={{
                 borderRadius: 2,
-                borderWidth: 2,
-                borderColor: 'rgba(255, 255, 255, 0.5)',
-                color: 'white',
-                backdropFilter: 'blur(10px)',
+                background: 'white',
+                color: '#2563eb',
+                fontWeight: 600,
+                px: 3,
+                boxShadow: '0 4px 14px rgba(0, 0, 0, 0.25)',
                 '&:hover': {
-                  borderWidth: 2,
-                  borderColor: 'white',
-                  background: 'rgba(255, 255, 255, 0.1)',
+                  background: 'rgba(255, 255, 255, 0.95)',
+                  boxShadow: '0 6px 20px rgba(0, 0, 0, 0.3)',
+                  transform: 'translateY(-2px)',
                 },
+                transition: 'all 0.3s ease',
               }}
             >
-              Filtros
+              Crear Ticket
             </Button>
-            {/* Solo empleados y admins pueden crear tickets */}
-            {(user.role === 'empleado' || user.role === 'administrador') && (
-              <Button
-                variant="contained"
-                startIcon={<AddIcon />}
-                onClick={handleCreateTicket}
-                sx={{
-                  borderRadius: 2,
-                  background: 'white',
-                  color: '#2563eb',
-                  fontWeight: 600,
-                  px: 3,
-                  boxShadow: '0 4px 14px rgba(0, 0, 0, 0.25)',
-                  '&:hover': {
-                    background: 'rgba(255, 255, 255, 0.95)',
-                    boxShadow: '0 6px 20px rgba(0, 0, 0, 0.3)',
-                    transform: 'translateY(-2px)',
-                  },
-                  transition: 'all 0.3s ease',
-                }}
-              >
-                Crear Ticket
-              </Button>
-            )}
-          </Box>
+          )}
         </Box>
       </Paper>
+
+      {/* Barra de búsqueda y filtros rápidos con diseño moderno */}
+      {/* ...existing code... */}
+
+      {/* Mensaje de error */}
+      {error && (
+        <Alert severity="error" sx={{ mb: 3 }}>
+          {error}
+        </Alert>
+      )}
+
+      {/* Lista de tickets con animación */}
+// ...existing code...
+
+      {/* ...resto del código (FAB, Dialog, etc.)... */}
 
       {/* Barra de búsqueda y filtros rápidos con diseño moderno */}
       <Card 
@@ -372,7 +257,7 @@ const TicketsPage = () => {
       )}
 
       {/* Lista de tickets con animación */}
-      {tickets.length === 0 ? (
+  {ticketsData.tickets.length === 0 ? (
         <Card 
           sx={{ 
             borderRadius: 3,
@@ -444,7 +329,7 @@ const TicketsPage = () => {
         </Card>
       ) : (
         <Grid container spacing={3}>
-          {tickets.map((ticket, index) => (
+          {ticketsData.tickets.map((ticket, index) => (
             <Grid 
               item 
               xs={12} 
