@@ -6,7 +6,91 @@ import {
   Button,
   Card,
   CardContent,
-// ...existing code...
+  Grid,
+  Paper,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Alert,
+  Fab,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from '@mui/material';
+import {
+  Add as AddIcon,
+  FilterList as FilterIcon,
+  Search as SearchIcon,
+  Clear as ClearIcon,
+} from '@mui/icons-material';
+import TicketCard from './TicketCard';
+import { TICKET_STATUS, TICKET_PRIORITY } from '../constants';
+import { Ticket as TicketIcon } from '@mui/icons-material';
+
+const TicketsPage = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [filters, setFilters] = useState({
+    search: '',
+    status: '',
+    priority: '',
+    category: '',
+  });
+  const [filterDialogOpen, setFilterDialogOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  // Simulación de datos y carga
+  const [ticketsData, setTicketsData] = useState({
+    tickets: [],
+    total: 0,
+  });
+
+  useEffect(() => {
+    // Simular carga de datos
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setTicketsData({
+        tickets: [
+          {
+            id: 1,
+            title: 'Problema con la impresora',
+            description: 'La impresora no responde',
+            status: 'nuevo',
+            priority: 'alta',
+            createdAt: '2023-10-01T10:00:00Z',
+            updatedAt: '2023-10-02T10:00:00Z',
+          },
+          {
+            id: 2,
+            title: 'Solicitud de acceso a la red',
+            description: 'Necesito acceso a la red Wi-Fi',
+            status: 'asignado',
+            priority: 'media',
+            createdAt: '2023-10-03T10:00:00Z',
+            updatedAt: '2023-10-04T10:00:00Z',
+          },
+        ],
+        total: 2,
+      });
+    }, 1000);
+  }, []);
+
+  const handleFilterChange = (key, value) => {
+    setFilters((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
+
+  const clearFilters = () => {
+    setFilters({
+      status: '',
+      priority: '',
       category: '',
     });
     setSearchParams({});
@@ -79,9 +163,9 @@ import {
   return (
     <Box>
       {/* Header moderno con gradiente - Idéntico al Dashboard */}
-      <Paper 
+      <Paper
         elevation={0}
-        sx={{ 
+        sx={{
           mb: 4,
           p: 4,
           borderRadius: 3,
@@ -162,106 +246,11 @@ import {
       )}
 
       {/* Lista de tickets con animación */}
-// ...existing code...
-
-      {/* ...resto del código (FAB, Dialog, etc.)... */}
-
-      {/* Barra de búsqueda y filtros rápidos con diseño moderno */}
-      <Card 
-        sx={{ 
-          mb: 4,
-          borderRadius: 3,
-          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
-          border: '1px solid',
-          borderColor: 'divider',
-        }}
-      >
-        <CardContent sx={{ p: 3 }}>
-          <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={4}>
-              <TextField
-                fullWidth
-                placeholder="Buscar por título, número o descripción..."
-                value={filters.search}
-                onChange={(e) => handleFilterChange('search', e.target.value)}
-                InputProps={{
-                  startAdornment: <SearchIcon color="action" sx={{ mr: 1 }} />,
-                }}
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    borderRadius: 2,
-                    '&:hover': {
-                      '& .MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'primary.main',
-                      },
-                    },
-                  },
-                }}
-              />
-            </Grid>
-            <Grid item xs={6} md={2}>
-              <FormControl fullWidth>
-                <InputLabel>Estado</InputLabel>
-                <Select
-                  value={filters.status}
-                  label="Estado"
-                  onChange={(e) => handleFilterChange('status', e.target.value)}
-                >
-                  <MenuItem value="">Todos</MenuItem>
-                  {Object.entries(TICKET_STATUS).map(([key, value]) => (
-                    <MenuItem key={key} value={key}>
-                      {value.label}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={6} md={2}>
-              <FormControl fullWidth>
-                <InputLabel>Prioridad</InputLabel>
-                <Select
-                  value={filters.priority}
-                  label="Prioridad"
-                  onChange={(e) => handleFilterChange('priority', e.target.value)}
-                >
-                  <MenuItem value="">Todas</MenuItem>
-                  {Object.entries(TICKET_PRIORITY).map(([key, value]) => (
-                    <MenuItem key={key} value={key}>
-                      {value.label}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Box display="flex" gap={1} justifyContent="flex-end">
-                <Button
-                  variant="outlined"
-                  size="small"
-                  startIcon={<ClearIcon />}
-                  onClick={clearFilters}
-                >
-                  Limpiar
-                </Button>
-              </Box>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-
-      {/* Mensaje de error */}
-      {error && (
-        <Alert severity="error" sx={{ mb: 3 }}>
-          {error}
-        </Alert>
-      )}
-
-      {/* Lista de tickets con animación */}
-  {ticketsData.tickets.length === 0 ? (
-        <Card 
-          sx={{ 
+      {ticketsData.tickets.length === 0 ? (
+        <Card
+          sx={{
             borderRadius: 3,
-            textAlign: 'center', 
+            textAlign: 'center',
             py: 8,
             background: 'linear-gradient(135deg, rgba(25, 118, 210, 0.05) 0%, rgba(21, 101, 192, 0.05) 100%)',
             border: '2px dashed',
@@ -298,7 +287,7 @@ import {
               No hay tickets disponibles
             </Typography>
             <Typography variant="body1" color="text.secondary" mb={4} sx={{ maxWidth: 500, mx: 'auto' }}>
-              {Object.values(filters).some(f => f) 
+              {Object.values(filters).some(f => f)
                 ? 'No se encontraron tickets con los filtros aplicados. Intenta ajustar tus criterios de búsqueda.'
                 : 'Aún no tienes tickets creados. Crea tu primer ticket para comenzar a gestionar solicitudes.'}
             </Typography>
@@ -330,11 +319,11 @@ import {
       ) : (
         <Grid container spacing={3}>
           {ticketsData.tickets.map((ticket, index) => (
-            <Grid 
-              item 
-              xs={12} 
-              sm={6} 
-              lg={4} 
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              lg={4}
               key={ticket.id}
               sx={{
                 animation: 'fadeInUp 0.5s ease-out',
