@@ -262,7 +262,7 @@ const DashboardPage = () => {
   );
 
   return (
-    <Box>
+  <>
       {/* Header moderno con gradiente */}
       <Paper 
         elevation={0}
@@ -312,7 +312,7 @@ const DashboardPage = () => {
             </Typography>
           </Box>
         </Box>
-      </Paper>
+  </Paper>
 
       {/* Error Alert */}
       {error && (
@@ -640,4 +640,22 @@ const DashboardPage = () => {
                       <Legend />
                       <Line 
                         type="monotone" 
-   
+                        dataKey="tickets"
+                        stroke="#1976d2"
+                        strokeWidth={3}
+                        dot={{ r: 4 }}
+                        activeDot={{ r: 6 }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+        </>
+      )}
+    </>
+  );
+};
+
+export default DashboardPage;
