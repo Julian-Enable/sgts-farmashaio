@@ -127,11 +127,15 @@ const Layout = () => {
   };
 
   const handleProfile = () => {
-    setAnchorEl(null); // Cerrar menú inmediatamente
-    navigate('/profile');
-    if (isMobile) {
-      setMobileOpen(false);
+    if (anchorEl) {
+      setAnchorEl(null); // Cerrar menú inmediatamente
     }
+    setTimeout(() => {
+      navigate('/profile');
+      if (isMobile) {
+        setMobileOpen(false);
+      }
+    }, 50); // Pequeño delay para asegurar cierre visual antes de navegar
   };
 
   // Cerrar menú de perfil automáticamente al navegar (debe ir después de declarar handleMenuClose y anchorEl)
