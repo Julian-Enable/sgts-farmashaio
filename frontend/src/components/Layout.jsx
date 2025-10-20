@@ -116,9 +116,7 @@ const Layout = () => {
   };
 
   useEffect(() => {
-    if (anchorEl) {
-      handleMenuClose();
-    }
+    setAnchorEl(null); // Cerrar el menú directamente al cambiar de ruta
   }, [location.pathname]);
 
   const handleNavigation = (path) => {
