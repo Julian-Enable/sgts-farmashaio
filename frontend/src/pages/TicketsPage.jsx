@@ -46,6 +46,9 @@ const TicketsPage = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
 
+  // Detectar si es móvil usando window.matchMedia
+  const isMobile = window.matchMedia('(max-width: 600px)').matches;
+
   // Simulación de datos y carga
   const [ticketsData, setTicketsData] = useState({
     tickets: [],
