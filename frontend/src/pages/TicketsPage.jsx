@@ -27,7 +27,7 @@ import {
   Clear as ClearIcon,
 } from '@mui/icons-material';
 import TicketCard from '../components/TicketCard';
-import { TICKET_STATUS, TICKET_PRIORITY } from '../constants';
+import { TICKET_STATUS, TICKET_PRIORITY } from '../utils/constants';
 import { Ticket as TicketIcon } from '@mui/icons-material';
 
 const TicketsPage = () => {
