@@ -351,7 +351,7 @@ const Layout = () => {
             onClick={handleDrawerToggle}
             sx={{ 
               mr: 2, 
-              display: { md: 'none' },
+              display: { xs: 'block', md: 'none' },
               color: 'primary.main',
             }}
           >
