@@ -7,7 +7,7 @@ class UserService {
     const params = new URLSearchParams();
     
     Object.entries(filters).forEach(([key, value]) => {
-      if (value) {
+      if (value !== undefined && value !== null && value !== '') {
         params.append(key, value);
       }
     });
@@ -16,10 +16,13 @@ class UserService {
     const url = queryString ? `${API_ENDPOINTS.USERS}?${queryString}` : API_ENDPOINTS.USERS;
     
     const response = await apiGet(url);
-    // Backend retorna: { success: true, data: { users: [...], total: ... } }
-    // Axios lo envuelve: response.data = { success: true, data: { users: [...], total: ... } }
-    // Retornamos el objeto 'data' interno que contiene users y total
-    return response.data.data || { users: [], total: 0 };
+    // Backend retorna: { success: true, data: { users: [...], total, page, limit } }
+    return {
+      users: response.data.data?.users || [],
+      total: response.data.data?.total || 0,
+      page: response.data.data?.page || filters.page || 1,
+      limit: response.data.data?.limit || filters.limit || 10
+    };
   }
 
   // Obtener usuario por ID

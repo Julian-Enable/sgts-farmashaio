@@ -2,22 +2,24 @@ import { apiGet, apiPost, apiPut, apiPatch, apiDelete } from './api.js';
 import { API_ENDPOINTS, API_BASE_URL } from '../utils/constants.js';
 
 class TicketService {
-  // Obtener lista de tickets con filtros
+  // Obtener lista de tickets con filtros y paginación
   async getTickets(filters = {}) {
     const params = new URLSearchParams();
-    
     Object.entries(filters).forEach(([key, value]) => {
-      if (value) {
+      if (value !== undefined && value !== null && value !== '') {
         params.append(key, value);
       }
     });
-
     const queryString = params.toString();
     const url = queryString ? `${API_ENDPOINTS.TICKETS}?${queryString}` : API_ENDPOINTS.TICKETS;
-    
     const response = await apiGet(url);
-    // Backend retorna { success: true, tickets: [...] }
-    return response.data.tickets || [];
+    // Backend retorna { success: true, tickets: [...], total, page, limit }
+    return {
+      tickets: response.data.tickets || [],
+      total: response.data.total || 0,
+      page: filters.page || 1,
+      limit: filters.limit || 10
+    };
   }
 
   // Obtener ticket por ID
