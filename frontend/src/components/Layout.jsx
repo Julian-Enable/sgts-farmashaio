@@ -445,40 +445,26 @@ const Layout = () => {
         </Toolbar>
       </AppBar>
 
-      {/* Menu del usuario con diseño moderno */}
+      {/* Menú de usuario limpio y funcional */}
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
-        disableScrollLock
-        slotProps={{
-          paper: {
-            elevation: 3,
-            sx: {
-              mt: 1.5,
-              minWidth: 220,
-              borderRadius: 2,
-              overflow: 'visible',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
-              '&:before': {
-                content: '""',
-                display: 'block',
-                position: 'absolute',
-                top: 0,
-                right: 20,
-                width: 10,
-                height: 10,
-                bgcolor: 'background.paper',
-                transform: 'translateY(-50%) rotate(45deg)',
-                zIndex: 0,
-              },
-            },
+        disablePortal
+        ModalProps={{ keepMounted: false }}
+        PaperProps={{
+          elevation: 3,
+          sx: {
+            mt: 1.5,
+            minWidth: 220,
+            borderRadius: 2,
+            overflow: 'visible',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
           },
         }}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        {/* Header del menú */}
         <Box sx={{ px: 2, py: 1.5, borderBottom: '1px solid', borderColor: 'divider' }}>
           <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
             {user?.firstName} {user?.lastName}
@@ -487,34 +473,14 @@ const Layout = () => {
             {user?.email}
           </Typography>
         </Box>
-        
-        <MenuItem 
-          onClick={handleProfile}
-          sx={{
-            py: 1.5,
-            px: 2,
-            '&:hover': {
-              bgcolor: alpha(theme.palette.primary.main, 0.08),
-            },
-          }}
-        >
+        <MenuItem onClick={handleProfile} sx={{ py: 1.5, px: 2 }}>
           <ListItemIcon>
             <Person fontSize="small" color="primary" />
           </ListItemIcon>
           <Typography variant="body2" sx={{ fontWeight: 600 }}>Mi Perfil</Typography>
         </MenuItem>
         <Divider sx={{ my: 0.5 }} />
-        <MenuItem 
-          onClick={handleLogout}
-          sx={{
-            py: 1.5,
-            px: 2,
-            color: 'error.main',
-            '&:hover': {
-              bgcolor: alpha(theme.palette.error.main, 0.08),
-            },
-          }}
-        >
+        <MenuItem onClick={handleLogout} sx={{ py: 1.5, px: 2, color: 'error.main' }}>
           <ListItemIcon>
             <Logout fontSize="small" color="error" />
           </ListItemIcon>
