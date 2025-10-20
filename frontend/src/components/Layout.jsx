@@ -327,105 +327,110 @@ const Layout = () => {
     </Box>
   );
 
+  // Detectar si estamos en la ruta de perfil
+  const isProfilePage = location.pathname === '/profile';
+
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#f8fafc' }}>
-      {/* App Bar moderno con glassmorphism */}
-      <AppBar
-        position="fixed"
-        elevation={0}
-        sx={{
-          zIndex: theme.zIndex.drawer + 1,
-          ml: { md: `${DRAWER_WIDTH}px` },
-          width: { md: `calc(100% - ${DRAWER_WIDTH}px)` },
-          bgcolor: 'rgba(255, 255, 255, 0.95)',
-          backdropFilter: 'blur(20px)',
-          borderBottom: '1px solid',
-          borderColor: 'divider',
-          color: 'text.primary',
-          boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
-        }}
-      >
-        <Toolbar sx={{ py: 1 }}>
-          {/* Botón de menú para móviles */}
-          <IconButton
-            color="inherit"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ 
-              mr: 2, 
-              display: { xs: 'block', md: 'none' },
-              color: 'primary.main',
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
-
-          {/* Título de la página con icono */}
-          <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', gap: 1.5 }}>
-            <Box
-              sx={{
-                display: { xs: 'none', sm: 'flex' },
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: 40,
-                height: 40,
-                borderRadius: 2,
-                background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)',
-                color: 'white',
+      {/* App Bar moderno con glassmorphism, solo si no es perfil */}
+      {!isProfilePage && (
+        <AppBar
+          position="fixed"
+          elevation={0}
+          sx={{
+            zIndex: theme.zIndex.drawer + 1,
+            ml: { md: `${DRAWER_WIDTH}px` },
+            width: { md: `calc(100% - ${DRAWER_WIDTH}px)` },
+            bgcolor: 'rgba(255, 255, 255, 0.95)',
+            backdropFilter: 'blur(20px)',
+            borderBottom: '1px solid',
+            borderColor: 'divider',
+            color: 'text.primary',
+            boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+          }}
+        >
+          <Toolbar sx={{ py: 1 }}>
+            {/* Botón de menú para móviles */}
+            <IconButton
+              color="inherit"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ 
+                mr: 2, 
+                display: { xs: 'block', md: 'none' },
+                color: 'primary.main',
               }}
             >
-              {location.pathname === '/' && <Dashboard />}
-              {location.pathname === '/tickets' && <ConfirmationNumber />}
-              {location.pathname === '/tickets/new' && <Add />}
-              {location.pathname === '/users' && <People />}
-              {location.pathname === '/notifications' && <Notifications />}
-              {location.pathname === '/profile' && <Person />}
-              {location.pathname.startsWith('/tickets/') && location.pathname !== '/tickets/new' && <ConfirmationNumber />}
-            </Box>
-            <Box>
-              <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 700, color: 'text.primary', fontSize: '1.15rem' }}>
-                {location.pathname === '/' && 'Dashboard'}
-                {location.pathname === '/tickets' && 'Tickets'}
-                {location.pathname === '/tickets/new' && 'Crear Ticket'}
-                {location.pathname === '/users' && 'Usuarios'}
-                {location.pathname === '/notifications' && 'Notificaciones'}
-                {location.pathname === '/profile' && 'Mi Perfil'}
-                {location.pathname.startsWith('/tickets/') && location.pathname !== '/tickets/new' && 'Detalle del Ticket'}
-              </Typography>
-              <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.75rem', display: { xs: 'none', sm: 'block' } }}>
-                Sistema de Gestión de Tickets
-              </Typography>
-            </Box>
-          </Box>
+              <MenuIcon />
+            </IconButton>
 
-          {/* Notificaciones con diseño moderno */}
-          <IconButton 
-            onClick={() => navigate('/notifications')}
-            sx={{
-              color: 'text.primary',
-              mx: 0.5,
-              '&:hover': {
-                bgcolor: alpha(theme.palette.primary.main, 0.1),
-              },
-            }}
-          >
-            <Badge badgeContent={unreadCount} color="error">
-              <Notifications />
-            </Badge>
-          </IconButton>
+            {/* Título de la página con icono */}
+            <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <Box
+                sx={{
+                  display: { xs: 'none', sm: 'flex' },
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 40,
+                  height: 40,
+                  borderRadius: 2,
+                  background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)',
+                  color: 'white',
+                }}
+              >
+                {location.pathname === '/' && <Dashboard />}
+                {location.pathname === '/tickets' && <ConfirmationNumber />}
+                {location.pathname === '/tickets/new' && <Add />}
+                {location.pathname === '/users' && <People />}
+                {location.pathname === '/notifications' && <Notifications />}
+                {location.pathname === '/profile' && <Person />}
+                {location.pathname.startsWith('/tickets/') && location.pathname !== '/tickets/new' && <ConfirmationNumber />}
+              </Box>
+              <Box>
+                <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 700, color: 'text.primary', fontSize: '1.15rem' }}>
+                  {location.pathname === '/' && 'Dashboard'}
+                  {location.pathname === '/tickets' && 'Tickets'}
+                  {location.pathname === '/tickets/new' && 'Crear Ticket'}
+                  {location.pathname === '/users' && 'Usuarios'}
+                  {location.pathname === '/notifications' && 'Notificaciones'}
+                  {location.pathname === '/profile' && 'Mi Perfil'}
+                  {location.pathname.startsWith('/tickets/') && location.pathname !== '/tickets/new' && 'Detalle del Ticket'}
+                </Typography>
+                <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.75rem', display: { xs: 'none', sm: 'block' } }}>
+                  Sistema de Gestión de Tickets
+                </Typography>
+              </Box>
+            </Box>
 
-          {/* Menú del usuario con dropdown indicator */}
-          <IconButton
-            onClick={handleMenuOpen}
-            sx={{ ml: 1, display: 'flex', gap: 1, px: 1.5, borderRadius: 2, '&:hover': { bgcolor: alpha(theme.palette.primary.main, 0.1) } }}
-          >
-            <Avatar sx={{ bgcolor: 'primary.main', width: 36, height: 36, fontSize: '0.95rem', fontWeight: 700, boxShadow: '0 2px 8px rgba(30, 58, 138, 0.3)' }}>
-              {user?.firstName?.charAt(0)}{user?.lastName?.charAt(0)}
-            </Avatar>
-            <KeyboardArrowDown sx={{ display: { xs: 'none', sm: 'block' }, color: 'text.secondary' }} />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
+            {/* Notificaciones con diseño moderno */}
+            <IconButton 
+              onClick={() => navigate('/notifications')}
+              sx={{
+                color: 'text.primary',
+                mx: 0.5,
+                '&:hover': {
+                  bgcolor: alpha(theme.palette.primary.main, 0.1),
+                },
+              }}
+            >
+              <Badge badgeContent={unreadCount} color="error">
+                <Notifications />
+              </Badge>
+            </IconButton>
+
+            {/* Menú del usuario con dropdown indicator */}
+            <IconButton
+              onClick={handleMenuOpen}
+              sx={{ ml: 1, display: 'flex', gap: 1, px: 1.5, borderRadius: 2, '&:hover': { bgcolor: alpha(theme.palette.primary.main, 0.1) } }}
+            >
+              <Avatar sx={{ bgcolor: 'primary.main', width: 36, height: 36, fontSize: '0.95rem', fontWeight: 700, boxShadow: '0 2px 8px rgba(30, 58, 138, 0.3)' }}>
+                {user?.firstName?.charAt(0)}{user?.lastName?.charAt(0)}
+              </Avatar>
+              <KeyboardArrowDown sx={{ display: { xs: 'none', sm: 'block' }, color: 'text.secondary' }} />
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+      )}
 
       {/* Menú de usuario completamente recreado */}
       <Menu
