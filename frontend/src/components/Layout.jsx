@@ -417,27 +417,9 @@ const Layout = () => {
           {/* Menú del usuario con dropdown indicator */}
           <IconButton
             onClick={handleMenuOpen}
-            sx={{
-              ml: 1,
-              display: 'flex',
-              gap: 1,
-              px: 1.5,
-              borderRadius: 2,
-              '&:hover': {
-                bgcolor: alpha(theme.palette.primary.main, 0.1),
-              },
-            }}
+            sx={{ ml: 1, display: 'flex', gap: 1, px: 1.5, borderRadius: 2, '&:hover': { bgcolor: alpha(theme.palette.primary.main, 0.1) } }}
           >
-            <Avatar 
-              sx={{ 
-                bgcolor: 'primary.main',
-                width: 36,
-                height: 36,
-                fontSize: '0.95rem',
-                fontWeight: 700,
-                boxShadow: '0 2px 8px rgba(30, 58, 138, 0.3)',
-              }}
-            >
+            <Avatar sx={{ bgcolor: 'primary.main', width: 36, height: 36, fontSize: '0.95rem', fontWeight: 700, boxShadow: '0 2px 8px rgba(30, 58, 138, 0.3)' }}>
               {user?.firstName?.charAt(0)}{user?.lastName?.charAt(0)}
             </Avatar>
             <KeyboardArrowDown sx={{ display: { xs: 'none', sm: 'block' }, color: 'text.secondary' }} />
@@ -445,7 +427,7 @@ const Layout = () => {
         </Toolbar>
       </AppBar>
 
-      {/* Menú de usuario limpio y funcional */}
+      {/* Menú de usuario completamente recreado */}
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
