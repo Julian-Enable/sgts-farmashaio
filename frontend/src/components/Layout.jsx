@@ -61,7 +61,9 @@ const Layout = () => {
     if (isMobile) {
       setMobileOpen(false);
     }
-  }, [location.pathname, isMobile]);
+    // Solo cerrar cuando cambia la ruta, no cuando cambia isMobile
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname]);
 
   // Navegación principal
   const navigationItems = [
