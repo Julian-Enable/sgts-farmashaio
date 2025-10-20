@@ -521,7 +521,7 @@ const Layout = () => {
         {/* Drawer para móviles */}
         <Drawer
           variant="temporary"
-          open={mobileOpen}
+          open={isMobile && mobileOpen}
           onClose={handleDrawerToggle}
           ModalProps={{
             keepMounted: true,
@@ -548,7 +548,7 @@ const Layout = () => {
               width: DRAWER_WIDTH,
             },
           }}
-          open
+          open={Boolean(!isMobile)}
         >
           {drawerContent}
         </Drawer>
