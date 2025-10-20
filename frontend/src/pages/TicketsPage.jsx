@@ -28,7 +28,7 @@ import {
 } from '@mui/icons-material';
 import TicketCard from '../components/TicketCard';
 import { TICKET_STATUS, TICKET_PRIORITY } from '../utils/constants';
-import { Ticket as TicketIcon } from '@mui/icons-material';
+import { ConfirmationNumber as TicketIcon } from '@mui/icons-material';
 
 const TicketsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
