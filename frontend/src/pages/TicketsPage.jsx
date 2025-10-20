@@ -31,6 +31,7 @@ import TicketCard from '../components/TicketCard';
 import { TICKET_STATUS, TICKET_PRIORITY } from '../utils/constants';
 import { ConfirmationNumber as TicketIcon } from '@mui/icons-material';
 import { useAuth } from '../context/AuthContext';
+import ticketService from '../services/ticketService';
 
 const TicketsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -56,34 +57,19 @@ const TicketsPage = () => {
   });
 
   useEffect(() => {
-    // Simular carga de datos
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setTicketsData({
-        tickets: [
-          {
-            id: 1,
-            title: 'Problema con la impresora',
-            description: 'La impresora no responde',
-            status: 'nuevo',
-            priority: 'alta',
-            createdAt: '2023-10-01T10:00:00Z',
-            updatedAt: '2023-10-02T10:00:00Z',
-          },
-          {
-            id: 2,
-            title: 'Solicitud de acceso a la red',
-            description: 'Necesito acceso a la red Wi-Fi',
-            status: 'asignado',
-            priority: 'media',
-            createdAt: '2023-10-03T10:00:00Z',
-            updatedAt: '2023-10-04T10:00:00Z',
-          },
-        ],
-        total: 2,
+    ticketService.getTickets()
+      .then((data) => {
+        setTicketsData({
+          tickets: data.tickets,
+          total: data.total,
+        });
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError('Error al cargar los tickets');
+        setLoading(false);
       });
-    }, 1000);
   }, []);
 
   const handleFilterChange = (key, value) => {
