@@ -112,7 +112,14 @@ const Layout = () => {
 
   const handleMenuClose = () => {
     setAnchorEl(null);
+    console.log('Menú cerrado');
   };
+
+  useEffect(() => {
+    if (anchorEl) {
+      handleMenuClose();
+    }
+  }, [location.pathname]);
 
   const handleNavigation = (path) => {
     navigate(path);
@@ -135,12 +142,6 @@ const Layout = () => {
       setMobileOpen(false);
     }
   };
-
-  // Cerrar menú de perfil automáticamente al navegar (debe ir después de declarar handleMenuClose y anchorEl)
-  useEffect(() => {
-    console.log('Ruta actual:', location.pathname);
-    setAnchorEl(null);
-  }, [location.pathname]);
 
   // Función para obtener el color del rol
   const getRoleColor = (role) => {
