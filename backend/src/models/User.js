@@ -86,19 +86,26 @@ export class User {
 
   // Obtener todos los usuarios
   static async findAll(filters = {}) {
-    let queryText = 'SELECT * FROM users WHERE is_active = true';
+    let queryText = 'SELECT * FROM users';
     const params = [];
-    
+    const whereClauses = [];
+
+    if (filters.isActive !== undefined) {
+      params.push(filters.isActive);
+      whereClauses.push(`is_active = $${params.length}`);
+    }
     if (filters.role) {
       params.push(filters.role);
-      queryText += ` AND role = $${params.length}`;
+      whereClauses.push(`role = $${params.length}`);
     }
-    
     if (filters.department) {
       params.push(filters.department);
-      queryText += ` AND department = $${params.length}`;
+      whereClauses.push(`department = $${params.length}`);
     }
-    
+
+    if (whereClauses.length > 0) {
+      queryText += ' WHERE ' + whereClauses.join(' AND ');
+    }
     queryText += ' ORDER BY created_at DESC';
 
     const result = await query(queryText, params);
