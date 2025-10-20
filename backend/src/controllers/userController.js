@@ -5,18 +5,29 @@ import { validationResult } from 'express-validator';
 // Obtener todos los usuarios (solo administradores)
 export const getUsers = catchAsync(async (req, res) => {
   const { role, department, page = 1, limit = 10 } = req.query;
-  
+
   const filters = {};
   if (role) filters.role = role;
   if (department) filters.department = department;
 
+  // Paginación
+  const pageInt = parseInt(page) || 1;
+  const limitInt = parseInt(limit) || 10;
+  filters.limit = limitInt;
+  filters.offset = (pageInt - 1) * limitInt;
+
   const users = await User.findAll(filters);
+
+  // Obtener el total de usuarios para paginación
+  const totalResult = await User.findAll({ role, department });
 
   res.status(200).json({
     success: true,
     data: {
       users: users.map(user => user.toJSON()),
-      total: users.length
+      total: totalResult.length,
+      page: pageInt,
+      limit: limitInt
     }
   });
 });

@@ -105,6 +105,16 @@ export class User {
     }
     queryText += ' ORDER BY created_at DESC';
 
+    // Paginación
+    if (filters.limit) {
+      params.push(filters.limit);
+      queryText += ` LIMIT $${params.length}`;
+      if (filters.offset) {
+        params.push(filters.offset);
+        queryText += ` OFFSET $${params.length}`;
+      }
+    }
+
     const result = await query(queryText, params);
     return result.rows.map(row => new User(row));
   }
