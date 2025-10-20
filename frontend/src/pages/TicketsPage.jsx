@@ -30,7 +30,7 @@ import {
 import TicketCard from '../components/TicketCard';
 import { TICKET_STATUS, TICKET_PRIORITY } from '../utils/constants';
 import { ConfirmationNumber as TicketIcon } from '@mui/icons-material';
-import { AuthContext } from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 
 const TicketsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -44,7 +44,7 @@ const TicketsPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
 
   // Simulación de datos y carga
   const [ticketsData, setTicketsData] = useState({
