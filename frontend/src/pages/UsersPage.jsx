@@ -77,7 +77,8 @@ const UsersPage = () => {
   const filters = {};
   if (roleFilter) filters.role = roleFilter;
   if (departmentFilter) filters.department = departmentFilter;
-  if (statusFilter) filters.isActive = statusFilter === 'active' ? true : false;
+  if (statusFilter === 'active') filters.isActive = true;
+  else if (statusFilter === 'inactive') filters.isActive = false;
   const response = await userService.getUsers(filters);
       console.log('Usuarios recibidos:', response);
       // Backend retorna: { success: true, data: { users: [...], total: ... } }
