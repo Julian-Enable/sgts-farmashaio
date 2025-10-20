@@ -330,14 +330,26 @@ const UsersPage = () => {
                           <EditIcon />
                         </IconButton>
                       </Tooltip>
-                      <Tooltip title={user.isActive ? 'Desactivar' : 'Activar'}>
-                        <IconButton
-                          size="small"
-                          onClick={() => handleToggleStatus(user.id, user.isActive)}
-                        >
-                          {user.isActive ? <BlockIcon /> : <CheckCircleIcon />}
-                        </IconButton>
-                      </Tooltip>
+                      {user.isActive ? (
+                        <Tooltip title="Desactivar">
+                          <IconButton
+                            size="small"
+                            onClick={() => handleToggleStatus(user.id, user.isActive)}
+                          >
+                            <BlockIcon />
+                          </IconButton>
+                        </Tooltip>
+                      ) : (
+                        <Tooltip title="Activar">
+                          <IconButton
+                            size="small"
+                            color="success"
+                            onClick={() => handleToggleStatus(user.id, user.isActive)}
+                          >
+                            <CheckCircleIcon />
+                          </IconButton>
+                        </Tooltip>
+                      )}
                       <Tooltip title="Eliminar">
                         <IconButton
                           size="small"
