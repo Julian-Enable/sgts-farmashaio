@@ -194,7 +194,7 @@ const TicketsPage = () => {
             transform: 'translate(30%, -30%)',
           }}
         />
-        <Box position="relative">
+        <Box position="relative" sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
           <Button
             variant="outlined"
             startIcon={<FilterIcon />}
@@ -204,11 +204,14 @@ const TicketsPage = () => {
               borderWidth: 2,
               borderColor: 'rgba(255, 255, 255, 0.5)',
               color: 'white',
-              backdropFilter: 'blur(10px)',
+              background: 'rgba(30,64,175,0.7)',
+              fontWeight: 700,
+              px: 3,
+              boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
               '&:hover': {
                 borderWidth: 2,
                 borderColor: 'white',
-                background: 'rgba(255, 255, 255, 0.1)',
+                background: 'rgba(30,64,175,1)',
               },
             }}
           >
