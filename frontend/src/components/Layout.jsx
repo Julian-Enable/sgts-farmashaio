@@ -536,31 +536,35 @@ const Layout = () => {
           ModalProps={{
             keepMounted: true,
             hideBackdrop: true,
+            disableEnforceFocus: true,
           }}
-          sx={{
-            display: { xs: 'block', md: 'none' },
-            '& .MuiDrawer-paper': {
-              boxSizing: 'border-box',
-              width: DRAWER_WIDTH,
+          slotProps={{
+            paper: {
+              elevation: 3,
+              sx: {
+                mt: 1.5,
+                minWidth: 220,
+                borderRadius: 2,
+                overflow: 'visible',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
+                '&:before': {
+                  content: '""',
+                  display: 'block',
+                  position: 'absolute',
+                  top: 0,
+                  right: 20,
+                  width: 10,
+                  height: 10,
+                  bgcolor: 'background.paper',
+                  transform: 'translateY(-50%) rotate(45deg)',
+                  zIndex: 0,
+                },
+              },
+            },
+            list: {
+              disableAutoFocusItem: true,
             },
           }}
-        >
-          {drawerContent}
-        </Drawer>
-
-        {/* Drawer para desktop */}
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: 'none', md: 'block' },
-            '& .MuiDrawer-paper': {
-              boxSizing: 'border-box',
-              width: DRAWER_WIDTH,
-            },
-          }}
-          open={Boolean(!isMobile)}
-        >
-          {drawerContent}
         </Drawer>
       </Box>
 
