@@ -567,6 +567,21 @@ const Layout = () => {
           }}
         >
         </Drawer>
+
+        {/* Drawer permanente para pantallas grandes */}
+        <Drawer
+          variant="permanent"
+          open={!isMobile}
+          sx={{
+            display: { xs: 'none', md: 'block' },
+            '& .MuiDrawer-paper': {
+              width: DRAWER_WIDTH,
+              boxSizing: 'border-box',
+            },
+          }}
+        >
+          {drawerContent}
+        </Drawer>
       </Box>
 
       {/* Contenido principal con diseño moderno */}
