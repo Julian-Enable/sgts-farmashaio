@@ -18,7 +18,7 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions,
+  DialogActions,  
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -26,7 +26,7 @@ import {
   Search as SearchIcon,
   Clear as ClearIcon,
 } from '@mui/icons-material';
-import TicketCard from './TicketCard';
+import TicketCard from '../components/TicketCard';
 import { TICKET_STATUS, TICKET_PRIORITY } from '../constants';
 import { Ticket as TicketIcon } from '@mui/icons-material';
 
