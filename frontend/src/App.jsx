@@ -62,9 +62,6 @@ function App() {
           }
         />
 
-        {/* Ruta de perfil fuera del Layout */}
-        <Route path="/profile" element={<ProfilePage />} />
-
         {/* Rutas protegidas */}
         <Route
           path="/"
@@ -91,6 +88,9 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          {/* Ruta de perfil dentro del Layout */}
+          <Route path="profile" element={<ProfilePage />} />
 
           {/* Ruta de notificaciones */}
           <Route path="notifications" element={<NotificationsPage />} />
