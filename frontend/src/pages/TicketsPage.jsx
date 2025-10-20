@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Box,
@@ -30,6 +30,7 @@ import {
 import TicketCard from '../components/TicketCard';
 import { TICKET_STATUS, TICKET_PRIORITY } from '../utils/constants';
 import { ConfirmationNumber as TicketIcon } from '@mui/icons-material';
+import { AuthContext } from '../context/AuthContext';
 
 const TicketsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -43,6 +44,7 @@ const TicketsPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
 
   // Simulación de datos y carga
   const [ticketsData, setTicketsData] = useState({
