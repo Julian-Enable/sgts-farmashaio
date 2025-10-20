@@ -134,7 +134,7 @@ const Layout = () => {
   };
 
   const handleProfile = () => {
-    setAnchorEl(null); // Cerrar menú inmediatamente
+    handleMenuClose(); // Cierra el menú primero
     navigate('/profile');
     if (isMobile) {
       setMobileOpen(false);
