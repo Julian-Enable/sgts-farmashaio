@@ -46,6 +46,7 @@ const UsersPage = () => {
   // Filtros
   const [roleFilter, setRoleFilter] = useState('');
   const [departmentFilter, setDepartmentFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState(''); // 'active', 'inactive', ''
   const [searchTerm, setSearchTerm] = useState('');
   
   // Dialog states
@@ -73,11 +74,11 @@ const UsersPage = () => {
     try {
       setLoading(true);
       setError(null);
-      const filters = {};
-      if (roleFilter) filters.role = roleFilter;
-      if (departmentFilter) filters.department = departmentFilter;
-      
-      const response = await userService.getUsers(filters);
+  const filters = {};
+  if (roleFilter) filters.role = roleFilter;
+  if (departmentFilter) filters.department = departmentFilter;
+  if (statusFilter) filters.isActive = statusFilter === 'active' ? true : false;
+  const response = await userService.getUsers(filters);
       console.log('Usuarios recibidos:', response);
       // Backend retorna: { success: true, data: { users: [...], total: ... } }
       // userService.getUsers retorna response.data, entonces aquí tenemos { users: [...], total: ... }
@@ -219,7 +220,7 @@ const UsersPage = () => {
 
       {/* Filtros */}
       <Card sx={{ mb: 3, p: 2 }}>
-        <Box display="flex" gap={2} flexWrap="wrap">
+  <Box display="flex" gap={2} flexWrap="wrap">
           <TextField
             placeholder="Buscar usuarios..."
             value={searchTerm}
@@ -229,6 +230,18 @@ const UsersPage = () => {
             }}
             sx={{ flexGrow: 1, minWidth: '200px' }}
           />
+          <FormControl sx={{ minWidth: 150 }}>
+            <InputLabel>Estado</InputLabel>
+            <Select
+              value={statusFilter}
+              label="Estado"
+              onChange={(e) => setStatusFilter(e.target.value)}
+            >
+              <MenuItem value="">Todos</MenuItem>
+              <MenuItem value="active">Activos</MenuItem>
+              <MenuItem value="inactive">Inactivos</MenuItem>
+            </Select>
+          </FormControl>
           <FormControl sx={{ minWidth: 150 }}>
             <InputLabel>Rol</InputLabel>
             <Select

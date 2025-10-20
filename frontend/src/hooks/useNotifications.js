@@ -134,29 +134,45 @@ export const useNotifications = () => {
     return Notification.permission === 'granted';
   }, []);
 
-  // Marcar como leída
-  const markAsRead = useCallback((notificationId) => {
-    setNotifications(prev =>
-      prev.map(notif =>
-        notif.id === notificationId ? { ...notif, read: true } : notif
-      )
-    );
-    setUnreadCount(prev => Math.max(0, prev - 1));
+  // Marcar como leída (sincroniza con backend)
+  const markAsRead = useCallback(async (notificationId) => {
+    try {
+      await notificationService.markAsRead(notificationId);
+      setNotifications(prev =>
+        prev.map(notif =>
+          notif.id === notificationId ? { ...notif, read: true } : notif
+        )
+      );
+      setUnreadCount(prev => Math.max(0, prev - 1));
+    } catch (error) {
+      console.error('Error marcando como leída:', error);
+    }
   }, []);
 
-  // Marcar todas como leídas
-  const markAllAsRead = useCallback(() => {
-    setNotifications(prev =>
-      prev.map(notif => ({ ...notif, read: true }))
-    );
-    setUnreadCount(0);
+  // Marcar todas como leídas (sincroniza con backend)
+  const markAllAsRead = useCallback(async () => {
+    try {
+      await notificationService.markAllAsRead();
+      setNotifications(prev =>
+        prev.map(notif => ({ ...notif, read: true }))
+      );
+      setUnreadCount(0);
+    } catch (error) {
+      console.error('Error marcando todas como leídas:', error);
+    }
   }, []);
 
-  // Limpiar notificaciones
-  const clearNotifications = useCallback(() => {
-    setNotifications([]);
-    setUnreadCount(0);
-  }, []);
+  // Limpiar notificaciones (sincroniza con backend)
+  const clearNotifications = useCallback(async () => {
+    try {
+      // Eliminar cada notificación en el backend
+      await Promise.all(notifications.map(n => notificationService.deleteNotification(n.id)));
+      setNotifications([]);
+      setUnreadCount(0);
+    } catch (error) {
+      console.error('Error limpiando notificaciones:', error);
+    }
+  }, [notifications]);
 
   return {
     notifications,
