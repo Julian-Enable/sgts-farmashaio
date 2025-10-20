@@ -67,11 +67,10 @@ const DashboardPage = () => {
     const loadDashboardData = async () => {
       try {
         setLoading(true);
-        const [statsData, ticketsData] = await Promise.all([
+        const [statsData, ticketsResult] = await Promise.all([
           ticketService.getTicketStats(),
           ticketService.getTickets(),
         ]);
-        
         setStats(statsData || {
           total: 0,
           nuevos: 0,
@@ -79,7 +78,7 @@ const DashboardPage = () => {
           resueltos: 0,
           misTickets: 0,
         });
-        setTickets(ticketsData || []);
+        setTickets(ticketsResult.tickets || []);
       } catch (err) {
         console.error('Error loading dashboard data:', err);
         setError('Error al cargar datos del dashboard');
@@ -641,65 +640,4 @@ const DashboardPage = () => {
                       <Legend />
                       <Line 
                         type="monotone" 
-                        dataKey="nuevos" 
-                        stroke="#2563eb" 
-                        strokeWidth={2}
-                        name="Nuevos"
-                      />
-                      <Line 
-                        type="monotone" 
-                        dataKey="resueltos" 
-                        stroke="#10b981" 
-                        strokeWidth={2}
-                        name="Resueltos"
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
-            </Grid>
-
-            {/* Gráfico de Tickets por Categoría (Barras) */}
-            <Grid item xs={12} md={6}>
-              <Card sx={{ height: '100%', border: '1px solid', borderColor: 'divider' }}>
-                <CardContent sx={{ p: 3 }}>
-                  <Box display="flex" alignItems="center" gap={2} mb={3}>
-                    <Box
-                      sx={{
-                        width: 40,
-                        height: 40,
-                        borderRadius: 2,
-                        bgcolor: alpha(theme.palette.info.main, 0.1),
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: 'info.main',
-                      }}
-                    >
-                      <BarChartIcon />
-                    </Box>
-                    <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                      Tickets por Categoría
-                    </Typography>
-                  </Box>
-                  
-                  <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={getCategoryChartData()}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                      <XAxis dataKey="name" angle={-45} textAnchor="end" height={80} />
-                      <YAxis />
-                      <Tooltip />
-                      <Bar dataKey="value" fill="#0ea5e9" radius={[8, 8, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
-            </Grid>
-          </Grid>
-        </>
-      )}
-    </Box>
-  );
-};
-
-export default DashboardPage;
+   
