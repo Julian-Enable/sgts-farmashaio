@@ -45,10 +45,7 @@ import Logo from './Logo.jsx';
 const DRAWER_WIDTH = 280;
 
 const Layout = () => {
-  // Cerrar menú de perfil automáticamente al navegar
-  useEffect(() => {
-    setAnchorEl(null);
-  }, [location.pathname]);
+  // ...otros hooks y variables...
   const theme = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
@@ -136,6 +133,11 @@ const Layout = () => {
       setMobileOpen(false);
     }
   };
+
+  // Cerrar menú de perfil automáticamente al navegar (debe ir después de declarar handleMenuClose y anchorEl)
+  useEffect(() => {
+    setAnchorEl(null);
+  }, [location.pathname]);
 
   // Función para obtener el color del rol
   const getRoleColor = (role) => {
