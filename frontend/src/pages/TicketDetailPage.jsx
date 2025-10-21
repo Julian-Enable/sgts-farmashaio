@@ -173,27 +173,28 @@ const TicketDetailPage = () => {
   };
 
   // Funciones auxiliares
+  // UX/UI: Colores creativos para estados y prioridad
   const getStatusColor = (status) => {
     const colors = {
-      nuevo: 'primary',
-      asignado: 'warning',
-      'en-progreso': 'info',
-      'esperando-usuario': 'secondary',
-      resuelto: 'success',
-      cerrado: 'default',
+      nuevo: { color: 'primary', bg: '#e3f2fd', text: '#1976d2' },
+      asignado: { color: 'info', bg: '#e0f7fa', text: '#0288d1' },
+      'en-progreso': { color: 'warning', bg: '#fffde7', text: '#fbc02d' },
+      'esperando-usuario': { color: 'secondary', bg: '#f3e5f5', text: '#7b1fa2' },
+      resuelto: { color: 'success', bg: '#e8f5e9', text: '#388e3c' },
+      cerrado: { color: 'default', bg: '#ececec', text: '#616161' },
     };
-    return colors[status] || 'default';
+    return colors[status?.toLowerCase()] || { color: 'default', bg: '#ececec', text: '#616161' };
   };
 
   const getPriorityColor = (priority) => {
     const colors = {
-      'muy-baja': 'success',
-      baja: 'info',
-      media: 'warning',
-      alta: 'error',
-      critica: 'error',
+      'muy-baja': { color: 'success', bg: '#e8f5e9', text: '#388e3c' },
+      baja: { color: 'info', bg: '#e3f2fd', text: '#1976d2' },
+      media: { color: 'warning', bg: '#fffde7', text: '#fbc02d' },
+      alta: { color: 'error', bg: '#ffebee', text: '#d32f2f' },
+      critica: { color: 'error', bg: '#ffebee', text: '#b71c1c' },
     };
-    return colors[priority] || 'default';
+    return colors[priority?.toLowerCase()] || { color: 'default', bg: '#ececec', text: '#616161' };
   };
 
   const formatDate = (dateString) => {
@@ -276,39 +277,57 @@ const TicketDetailPage = () => {
         {/* Contenido Principal */}
         <Grid item xs={12} md={8}>
           {/* Información del Ticket mejorada */}
-          <Card sx={{ mb: 3, boxShadow: 3 }}>
+          <Card sx={{ mb: 3, boxShadow: 4, borderRadius: 3, background: '#fafcff' }}>
             <CardContent>
               <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
                 <Box>
-                  <Typography variant="h6" sx={{ fontWeight: 700 }}>
-                    Ticket #{ticket.id} - {ticket.title}
+                  <Typography variant="h6" sx={{ fontWeight: 800, color: '#222', mb: 0.5 }}>
+                    <span style={{ color: '#1976d2' }}>Ticket #{ticket.id}</span> - {ticket.title}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
                     Creado el {formatDate(ticket.createdAt)}
                   </Typography>
                 </Box>
                 <Box display="flex" gap={1}>
                   <Chip
                     label={ticket.status?.name || 'Sin estado'}
-                    color={getStatusColor(ticket.status?.key || ticket.status?.name)}
-                    sx={{ fontWeight: 700, fontSize: '0.95rem', height: 28 }}
+                    sx={{
+                      bgcolor: getStatusColor(ticket.status?.key || ticket.status?.name).bg,
+                      color: getStatusColor(ticket.status?.key || ticket.status?.name).text,
+                      fontWeight: 700,
+                      fontSize: '0.95rem',
+                      height: 28,
+                      px: 2,
+                      borderRadius: 2,
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+                    }}
+                    icon={<CheckIcon sx={{ color: getStatusColor(ticket.status?.key || ticket.status?.name).text, fontSize: 20 }} />}
                   />
                   <Chip
                     label={ticket.priority?.name || 'Sin prioridad'}
-                    color={getPriorityColor(ticket.priority?.key || ticket.priority?.name)}
-                    sx={{ fontWeight: 700, fontSize: '0.95rem', height: 28 }}
+                    sx={{
+                      bgcolor: getPriorityColor(ticket.priority?.key || ticket.priority?.name).bg,
+                      color: getPriorityColor(ticket.priority?.key || ticket.priority?.name).text,
+                      fontWeight: 700,
+                      fontSize: '0.95rem',
+                      height: 28,
+                      px: 2,
+                      borderRadius: 2,
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+                    }}
+                    icon={<WarningIcon sx={{ color: getPriorityColor(ticket.priority?.key || ticket.priority?.name).text, fontSize: 20 }} />}
                   />
                 </Box>
               </Box>
               <Divider sx={{ mb: 2 }} />
-              <Typography variant="body1" paragraph sx={{ mb: 2 }}>
+              <Typography variant="body1" paragraph sx={{ mb: 2, color: '#444', fontSize: '1.08rem' }}>
                 {ticket.description}
               </Typography>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
                   <Box display="flex" alignItems="center" gap={1}>
-                    <PersonIcon color="action" />
-                    <Typography variant="body2">
+                    <PersonIcon color="primary" />
+                    <Typography variant="body2" sx={{ color: '#1976d2', fontWeight: 600 }}>
                       Creado por: {ticket.requester?.name || 'Desconocido'}
                     </Typography>
                   </Box>
@@ -316,8 +335,8 @@ const TicketDetailPage = () => {
                 {ticket.assignedUser && (
                   <Grid item xs={12} sm={6}>
                     <Box display="flex" alignItems="center" gap={1}>
-                      <AssignIcon color="action" />
-                      <Typography variant="body2">
+                      <AssignIcon color="info" />
+                      <Typography variant="body2" sx={{ color: '#0288d1', fontWeight: 600 }}>
                         Asignado a: {ticket.assignedUser?.name || 'Sin asignar'}
                       </Typography>
                     </Box>
@@ -326,7 +345,7 @@ const TicketDetailPage = () => {
                 <Grid item xs={12} sm={6}>
                   <Box display="flex" alignItems="center" gap={1}>
                     <TimeIcon color="action" />
-                    <Typography variant="body2">
+                    <Typography variant="body2" sx={{ color: '#616161', fontWeight: 500 }}>
                       Última actualización: {formatDate(ticket.updatedAt)}
                     </Typography>
                   </Box>
