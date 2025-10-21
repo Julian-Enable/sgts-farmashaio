@@ -18,6 +18,31 @@ import { useNavigate } from 'react-router-dom';
 import { TICKET_STATUS, TICKET_PRIORITY } from '../utils/constants.js';
 import { formatDate } from '../utils/formatters.js';
 
+// Función para calcular tiempo transcurrido y color
+function getElapsedTimeColor(createdAt) {
+  const now = new Date();
+  const created = new Date(createdAt);
+  const diffMs = now - created;
+  const diffHours = diffMs / (1000 * 60 * 60);
+  if (diffHours < 2) return { color: 'success', label: 'verde' };
+  if (diffHours < 8) return { color: 'warning', label: 'amarillo' };
+  return { color: 'error', label: 'rojo' };
+}
+
+function getElapsedTimeLabel(createdAt) {
+  const now = new Date();
+  const created = new Date(createdAt);
+  const diffMs = now - created;
+  const diffSec = Math.floor(diffMs / 1000);
+  if (diffSec < 60) return `Hace ${diffSec} seg`;
+  const diffMin = Math.floor(diffSec / 60);
+  if (diffMin < 60) return `Hace ${diffMin} min`;
+  const diffHours = Math.floor(diffMin / 60);
+  if (diffHours < 24) return `Hace ${diffHours} horas`;
+  const diffDays = Math.floor(diffHours / 24);
+  return `Hace ${diffDays} días`;
+}
+
 const TicketCard = ({ ticket }) => {
   const theme = useTheme();
   const navigate = useNavigate();
@@ -45,6 +70,10 @@ const TicketCard = ({ ticket }) => {
     };
     return gradients[color] || gradients.default;
   };
+
+  // Calcular color y label de tiempo transcurrido
+  const elapsed = getElapsedTimeColor(ticket.createdAt);
+  const elapsedLabel = getElapsedTimeLabel(ticket.createdAt);
 
   return (
     <Card
@@ -81,29 +110,45 @@ const TicketCard = ({ ticket }) => {
       />
 
       <CardContent sx={{ position: 'relative', p: 3, flexGrow: 1 }}>
-        {/* Número de ticket y prioridad */}
-        <Box display="flex" alignItems="flex-start" justifyContent="space-between" mb={2}>
-          <Typography
-            variant="caption"
-            sx={{
-              fontWeight: 700,
-              color: 'text.secondary',
-              textTransform: 'uppercase',
-              letterSpacing: '0.5px',
-              fontSize: '0.75rem',
-            }}
-          >
-            #{ticket.ticketNumber}
-          </Typography>
+        {/* Número de ticket, prioridad y tiempo transcurrido */}
+        <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
+          <Box display="flex" alignItems="center" gap={1}>
+            <Typography
+              variant="caption"
+              sx={{
+                fontWeight: 700,
+                color: 'text.secondary',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px',
+                fontSize: '0.75rem',
+              }}
+            >
+              #{ticket.ticketNumber}
+            </Typography>
+            <Chip
+              label={priorityConfig.label || priorityKey || 'Sin prioridad'}
+              size="small"
+              sx={{
+                height: 24,
+                bgcolor: priorityConfig.color ? alpha(theme.palette[priorityConfig.color]?.main || '#9e9e9e', 0.1) : alpha('#9e9e9e', 0.1),
+                color: priorityConfig.color ? `${priorityConfig.color}.main` : 'grey.500',
+                fontWeight: 600,
+                fontSize: '0.75rem',
+              }}
+            />
+          </Box>
+          {/* Tiempo transcurrido visual */}
           <Chip
-            label={priorityConfig.label || priorityKey || 'Sin prioridad'}
+            label={elapsedLabel}
             size="small"
             sx={{
               height: 24,
-              bgcolor: priorityConfig.color ? alpha(theme.palette[priorityConfig.color]?.main || '#9e9e9e', 0.1) : alpha('#9e9e9e', 0.1),
-              color: priorityConfig.color ? `${priorityConfig.color}.main` : 'grey.500',
-              fontWeight: 600,
-              fontSize: '0.75rem',
+              bgcolor: alpha(theme.palette[elapsed.color].main, 0.15),
+              color: theme.palette[elapsed.color].main,
+              fontWeight: 700,
+              fontSize: '0.8rem',
+              border: `1px solid ${theme.palette[elapsed.color].main}`,
+              boxShadow: `0 0 4px ${alpha(theme.palette[elapsed.color].main, 0.15)}`,
             }}
           />
         </Box>
