@@ -259,7 +259,7 @@ const TicketsPage = () => {
   };
 
   const handleCreateTicket = () => {
-    navigate('/tickets/create');
+    navigate('/tickets/new');
   };
 
   // Contar filtros activos
