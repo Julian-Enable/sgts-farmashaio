@@ -20,11 +20,13 @@ import {
   CheckCircle,
   Add as AddIcon,
   TrendingUp,
+  TrendingDown,
   AccessTime,
   People,
   PieChart as PieChartIcon,
   BarChart as BarChartIcon,
   ShowChart as ShowChartIcon,
+  Category as CategoryIcon,
 } from '@mui/icons-material';
 import {
   PieChart,
@@ -46,6 +48,19 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 import { ticketService } from '../services/ticketService.js';
 
+// Constantes para estados
+const TICKET_STATUS = {
+  NUEVO: 'Nuevo',
+  ASIGNADO: 'Asignado',
+  EN_PROGRESO: 'En Progreso',
+  ESPERANDO_USUARIO: 'Esperando Usuario',
+  RESUELTO: 'Resuelto',
+  CERRADO: 'Cerrado',
+  CANCELADO: 'Cancelado',
+};
+
+const RESOLVED_STATUSES = [TICKET_STATUS.RESUELTO, TICKET_STATUS.CERRADO];
+
 const DashboardPage = () => {
   const theme = useTheme();
   const navigate = useNavigate();
@@ -58,6 +73,7 @@ const DashboardPage = () => {
     resueltos: 0,
     misTickets: 0,
   });
+  const [previousStats, setPreviousStats] = useState(null);
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -71,6 +87,10 @@ const DashboardPage = () => {
           ticketService.getTicketStats(),
           ticketService.getTickets(),
         ]);
+        
+        // Guardar stats anteriores para calcular tendencias
+        setPreviousStats(stats);
+        
         setStats(statsData || {
           total: 0,
           nuevos: 0,
@@ -90,8 +110,27 @@ const DashboardPage = () => {
     loadDashboardData();
   }, []);
 
+  // Calcular tendencia
+  const calculateTrend = (current, previous) => {
+    if (!previous || previous === 0) return null;
+    const change = ((current - previous) / previous) * 100;
+    return {
+      value: Math.abs(change).toFixed(1),
+      isPositive: change > 0,
+    };
+  };
+
+  // Validar y parsear fecha
+  const parseDate = (dateString) => {
+    if (!dateString) return null;
+    const date = new Date(dateString);
+    return isNaN(date.getTime()) ? null : date;
+  };
+
   // Procesar datos para gráficos
   const getStatusChartData = () => {
+    if (tickets.length === 0) return [];
+    
     const statusCount = {};
     tickets.forEach(ticket => {
       const status = ticket.statusName || 'Sin estado';
@@ -105,6 +144,8 @@ const DashboardPage = () => {
   };
 
   const getCategoryChartData = () => {
+    if (tickets.length === 0) return [];
+    
     const categoryCount = {};
     tickets.forEach(ticket => {
       const category = ticket.categoryName || 'Sin categoría';
@@ -118,6 +159,8 @@ const DashboardPage = () => {
   };
 
   const getPriorityChartData = () => {
+    if (tickets.length === 0) return [];
+    
     const priorityCount = {};
     tickets.forEach(ticket => {
       const priority = ticket.priorityName || 'Sin prioridad';
@@ -137,17 +180,20 @@ const DashboardPage = () => {
     for (let i = 6; i >= 0; i--) {
       const date = new Date(today);
       date.setDate(date.getDate() - i);
+      date.setHours(0, 0, 0, 0);
       const dateStr = date.toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
       
       const dayTickets = tickets.filter(ticket => {
-        const ticketDate = new Date(ticket.createdAt);
-        return ticketDate.toDateString() === date.toDateString();
+        const ticketDate = parseDate(ticket.createdAt);
+        if (!ticketDate) return false;
+        ticketDate.setHours(0, 0, 0, 0);
+        return ticketDate.getTime() === date.getTime();
       });
 
       last7Days.push({
         date: dateStr,
-        nuevos: dayTickets.filter(t => t.statusName === 'Nuevo').length,
-        resueltos: dayTickets.filter(t => t.statusName === 'Resuelto' || t.statusName === 'Cerrado').length,
+        nuevos: dayTickets.filter(t => t.statusName === TICKET_STATUS.NUEVO).length,
+        resueltos: dayTickets.filter(t => RESOLVED_STATUSES.includes(t.statusName)).length,
         total: dayTickets.length,
       });
     }
@@ -157,13 +203,22 @@ const DashboardPage = () => {
 
   // Calcular tiempo promedio de resolución
   const getAvgResolutionTime = () => {
-    const resolvedTickets = tickets.filter(ticket => ticket.statusName === 'Resuelto' || ticket.statusName === 'Cerrado');
+    const resolvedTickets = tickets.filter(ticket => 
+      RESOLVED_STATUSES.includes(ticket.statusName)
+    );
+    
     if (resolvedTickets.length === 0) return 0;
+    
     const totalMs = resolvedTickets.reduce((acc, ticket) => {
-      const created = new Date(ticket.createdAt);
-      const updated = new Date(ticket.updatedAt);
-      return acc + (updated - created);
+      const created = parseDate(ticket.createdAt);
+      const updated = parseDate(ticket.updatedAt);
+      
+      if (!created || !updated) return acc;
+      return acc + (updated.getTime() - created.getTime());
     }, 0);
+    
+    if (totalMs === 0) return 0;
+    
     const avgMs = totalMs / resolvedTickets.length;
     // Convertir a horas
     return (avgMs / (1000 * 60 * 60)).toFixed(2);
@@ -172,24 +227,37 @@ const DashboardPage = () => {
   // Últimos tickets resueltos con tiempo de resolución
   const getLastResolvedTickets = () => {
     return tickets
-      .filter(ticket => ticket.statusName === 'Resuelto' || ticket.statusName === 'Cerrado')
-      .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
+      .filter(ticket => RESOLVED_STATUSES.includes(ticket.statusName))
+      .sort((a, b) => {
+        const dateA = parseDate(b.updatedAt);
+        const dateB = parseDate(a.updatedAt);
+        if (!dateA || !dateB) return 0;
+        return dateA.getTime() - dateB.getTime();
+      })
       .slice(0, 5)
-      .map(ticket => ({
-        ...ticket,
-        resolutionTime: ((new Date(ticket.updatedAt) - new Date(ticket.createdAt)) / (1000 * 60 * 60)).toFixed(2),
-      }));
+      .map(ticket => {
+        const created = parseDate(ticket.createdAt);
+        const updated = parseDate(ticket.updatedAt);
+        const resolutionTime = (created && updated) 
+          ? ((updated.getTime() - created.getTime()) / (1000 * 60 * 60)).toFixed(2)
+          : '0.00';
+        
+        return {
+          ...ticket,
+          resolutionTime,
+        };
+      });
   };
 
   // Colores para los gráficos
   const STATUS_COLORS = {
-    'Nuevo': '#2563eb',
-    'Asignado': '#0ea5e9',
-    'En Progreso': '#f59e0b',
-    'Esperando Usuario': '#fbbf24',
-    'Resuelto': '#10b981',
-    'Cerrado': '#6b7280',
-    'Cancelado': '#ef4444',
+    [TICKET_STATUS.NUEVO]: '#2563eb',
+    [TICKET_STATUS.ASIGNADO]: '#0ea5e9',
+    [TICKET_STATUS.EN_PROGRESO]: '#f59e0b',
+    [TICKET_STATUS.ESPERANDO_USUARIO]: '#fbbf24',
+    [TICKET_STATUS.RESUELTO]: '#10b981',
+    [TICKET_STATUS.CERRADO]: '#6b7280',
+    [TICKET_STATUS.CANCELADO]: '#ef4444',
   };
 
   const CHART_COLORS = ['#2563eb', '#0ea5e9', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
@@ -245,12 +313,18 @@ const DashboardPage = () => {
           {trend && (
             <Chip
               size="small"
-              label={trend}
-              icon={<TrendingUp sx={{ fontSize: '0.9rem !important' }} />}
+              label={`${trend.isPositive ? '+' : '-'}${trend.value}%`}
+              icon={trend.isPositive ? 
+                <TrendingUp sx={{ fontSize: '0.9rem !important' }} /> : 
+                <TrendingDown sx={{ fontSize: '0.9rem !important' }} />
+              }
               sx={{
                 height: 24,
-                bgcolor: alpha(theme.palette.success.main, 0.1),
-                color: 'success.main',
+                bgcolor: alpha(
+                  trend.isPositive ? theme.palette.success.main : theme.palette.error.main, 
+                  0.1
+                ),
+                color: trend.isPositive ? 'success.main' : 'error.main',
                 fontWeight: 600,
                 fontSize: '0.75rem',
               }}
@@ -287,6 +361,19 @@ const DashboardPage = () => {
     </Card>
   );
 
+  const EmptyChartMessage = ({ message }) => (
+    <Box 
+      display="flex" 
+      alignItems="center" 
+      justifyContent="center" 
+      height={300}
+    >
+      <Typography variant="body2" color="text.secondary">
+        {message}
+      </Typography>
+    </Box>
+  );
+
   return (
     <>
       {/* Header moderno con gradiente */}
@@ -318,7 +405,7 @@ const DashboardPage = () => {
         
         <Box position="relative" zIndex={1}>
           <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 700, mb: 1 }}>
-            ¡Hola, {user?.firstName}!
+            ¡Hola, {user?.firstName || 'Usuario'}!
           </Typography>
           <Typography variant="h6" sx={{ opacity: 0.9, mb: 2, fontWeight: 400 }}>
             Aquí está el resumen de tus tickets
@@ -333,9 +420,11 @@ const DashboardPage = () => {
                 backdropFilter: 'blur(10px)',
               }}
             />
-            <Typography variant="body1" sx={{ opacity: 0.9 }}>
-              {user?.department}
-            </Typography>
+            {user?.department && (
+              <Typography variant="body1" sx={{ opacity: 0.9 }}>
+                {user.department}
+              </Typography>
+            )}
           </Box>
         </Box>
       </Paper>
@@ -363,6 +452,7 @@ const DashboardPage = () => {
                 color="primary"
                 icon={<ConfirmationNumber sx={{ fontSize: 28 }} />}
                 gradient="linear-gradient(135deg, #2563eb 0%, #1e40af 100%)"
+                trend={previousStats ? calculateTrend(stats.total, previousStats.total) : null}
               />
             </Grid>
             
@@ -373,7 +463,7 @@ const DashboardPage = () => {
                 color="info"
                 icon={<Assignment sx={{ fontSize: 28 }} />}
                 gradient="linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)"
-                trend="+5%"
+                trend={previousStats ? calculateTrend(stats.nuevos, previousStats.nuevos) : null}
               />
             </Grid>
             
@@ -384,6 +474,7 @@ const DashboardPage = () => {
                 color="warning"
                 icon={<Schedule sx={{ fontSize: 28 }} />}
                 gradient="linear-gradient(135deg, #f59e0b 0%, #d97706 100%)"
+                trend={previousStats ? calculateTrend(stats.enProgreso, previousStats.enProgreso) : null}
               />
             </Grid>
             
@@ -394,7 +485,7 @@ const DashboardPage = () => {
                 color="success"
                 icon={<CheckCircle sx={{ fontSize: 28 }} />}
                 gradient="linear-gradient(135deg, #10b981 0%, #059669 100%)"
-                trend="+12%"
+                trend={previousStats ? calculateTrend(stats.resueltos, previousStats.resueltos) : null}
               />
             </Grid>
           </Grid>
@@ -577,29 +668,88 @@ const DashboardPage = () => {
                     </Typography>
                   </Box>
                   
-                  <ResponsiveContainer width="100%" height={300}>
-                    <PieChart>
-                      <Pie
-                        data={getStatusChartData()}
-                        cx="50%"
-                        cy="50%"
-                        labelLine={false}
-                        label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                        outerRadius={80}
-                        fill="#8884d8"
-                        dataKey="value"
-                      >
-                        {getStatusChartData().map((entry, index) => (
-                          <Cell 
-                            key={`cell-${index}`} 
-                            fill={STATUS_COLORS[entry.name] || CHART_COLORS[index % CHART_COLORS.length]} 
-                          />
-                        ))}
-                      </Pie>
-                      <Tooltip />
-                      <Legend />
-                    </PieChart>
-                  </ResponsiveContainer>
+                  {getStatusChartData().length === 0 ? (
+                    <EmptyChartMessage message="No hay datos de tickets disponibles" />
+                  ) : (
+                    <ResponsiveContainer width="100%" height={300}>
+                      <PieChart>
+                        <Pie
+                          data={getStatusChartData()}
+                          cx="50%"
+                          cy="50%"
+                          labelLine={false}
+                          label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                          outerRadius={80}
+                          fill="#8884d8"
+                          dataKey="value"
+                        >
+                          {getStatusChartData().map((entry, index) => (
+                            <Cell 
+                              key={`cell-${index}`} 
+                              fill={STATUS_COLORS[entry.name] || CHART_COLORS[index % CHART_COLORS.length]} 
+                            />
+                          ))}
+                        </Pie>
+                        <Tooltip />
+                        <Legend />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  )}
+                </CardContent>
+              </Card>
+            </Grid>
+
+            {/* Gráfico de Tickets por Categoría (Dona) */}
+            <Grid item xs={12} md={6}>
+              <Card sx={{ height: '100%', border: '1px solid', borderColor: 'divider' }}>
+                <CardContent sx={{ p: 3 }}>
+                  <Box display="flex" alignItems="center" gap={2} mb={3}>
+                    <Box
+                      sx={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: 2,
+                        bgcolor: alpha(theme.palette.secondary.main, 0.1),
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'secondary.main',
+                      }}
+                    >
+                      <CategoryIcon />
+                    </Box>
+                    <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                      Tickets por Categoría
+                    </Typography>
+                  </Box>
+                  
+                  {getCategoryChartData().length === 0 ? (
+                    <EmptyChartMessage message="No hay datos de categorías disponibles" />
+                  ) : (
+                    <ResponsiveContainer width="100%" height={300}>
+                      <PieChart>
+                        <Pie
+                          data={getCategoryChartData()}
+                          cx="50%"
+                          cy="50%"
+                          labelLine={false}
+                          label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                          outerRadius={80}
+                          fill="#8884d8"
+                          dataKey="value"
+                        >
+                          {getCategoryChartData().map((entry, index) => (
+                            <Cell 
+                              key={`cell-${index}`} 
+                              fill={CHART_COLORS[index % CHART_COLORS.length]} 
+                            />
+                          ))}
+                        </Pie>
+                        <Tooltip />
+                        <Legend />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  )}
                 </CardContent>
               </Card>
             </Grid>
@@ -628,15 +778,19 @@ const DashboardPage = () => {
                     </Typography>
                   </Box>
                   
-                  <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={getPriorityChartData()}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                      <XAxis dataKey="name" />
-                      <YAxis />
-                      <Tooltip />
-                      <Bar dataKey="value" fill="#f59e0b" radius={[8, 8, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
+                  {getPriorityChartData().length === 0 ? (
+                    <EmptyChartMessage message="No hay datos de prioridades disponibles" />
+                  ) : (
+                    <ResponsiveContainer width="100%" height={300}>
+                      <BarChart data={getPriorityChartData()}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                        <XAxis dataKey="name" />
+                        <YAxis />
+                        <Tooltip />
+                        <Bar dataKey="value" fill="#f59e0b" radius={[8, 8, 0, 0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  )}
                 </CardContent>
               </Card>
             </Grid>
@@ -665,28 +819,33 @@ const DashboardPage = () => {
                     </Typography>
                   </Box>
                   
-                  <ResponsiveContainer width="100%" height={300}>
-                    <LineChart data={getTimelineChartData()}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                      <XAxis dataKey="date" />
-                      <YAxis />
-                      <Tooltip />
-                      <Legend />
-                      <Line 
-                        type="monotone"
-                        dataKey="nuevos"
-                        stroke="#2563eb"
-                        strokeWidth={2}
-                        activeDot={{ r: 4 }}
-                      />
-                      <Line 
-                        type="monotone"
-                        dataKey="resueltos"
-                        stroke="#10b981"
-                        strokeWidth={2}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
+                  {getTimelineChartData().every(d => d.total === 0) ? (
+                    <EmptyChartMessage message="No hay datos de tickets en los últimos 7 días" />
+                  ) : (
+                    <ResponsiveContainer width="100%" height={300}>
+                      <LineChart data={getTimelineChartData()}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                        <XAxis dataKey="date" />
+                        <YAxis />
+                        <Tooltip />
+                        <Legend />
+                        <Line 
+                          type="monotone"
+                          dataKey="nuevos"
+                          stroke="#2563eb"
+                          strokeWidth={2}
+                          activeDot={{ r: 4 }}
+                        />
+                        <Line 
+                          type="monotone"
+                          dataKey="resueltos"
+                          stroke="#10b981"
+                          strokeWidth={2}
+                          activeDot={{ r: 4 }}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  )}
                 </CardContent>
               </Card>
             </Grid>
@@ -717,41 +876,59 @@ const DashboardPage = () => {
                               border: '1px solid',
                               borderColor: 'divider',
                               transition: 'transform 0.3s ease',
+                              cursor: 'pointer',
                               '&:hover': {
                                 transform: 'translateY(-4px)',
                                 boxShadow: `0 12px 24px ${alpha(theme.palette.primary.main, 0.15)}`,
                               },
                             }}
+                            onClick={() => navigate(`/tickets/${ticket.id}`)}
                           >
                             <CardContent sx={{ flex: 1 }}>
-                              <Typography variant="subtitle1" fontWeight={500} gutterBottom>
+                              <Typography variant="subtitle1" fontWeight={600} gutterBottom>
                                 Ticket #{ticket.id}
                               </Typography>
-                              <Typography variant="body2" color="text.secondary" gutterBottom>
+                              <Typography 
+                                variant="body2" 
+                                color="text.secondary" 
+                                gutterBottom
+                                sx={{
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  display: '-webkit-box',
+                                  WebkitLineClamp: 2,
+                                  WebkitBoxOrient: 'vertical',
+                                }}
+                              >
                                 {ticket.title}
                               </Typography>
                               
-                              <Box display="flex" alignItems="center" justifyContent="space-between" mt={2}>
+                              <Box display="flex" alignItems="center" justifyContent="space-between" mt={2} mb={1}>
                                 <Chip 
-                                  label={ticket.statusName} 
+                                  label={ticket.statusName || 'Sin estado'} 
+                                  size="small"
                                   sx={{ 
-                                    bgcolor: STATUS_COLORS[ticket.statusName] || 'default.main',
+                                    bgcolor: STATUS_COLORS[ticket.statusName] || '#6b7280',
                                     color: 'white',
                                     borderRadius: 1,
                                     fontSize: '0.75rem',
                                     fontWeight: 600,
                                   }}
                                 />
-                                <Typography variant="body2" color="text.secondary">
-                                  {new Date(ticket.updatedAt).toLocaleString('es-ES', { 
-                                    day: 'numeric', 
-                                    month: 'short', 
-                                    year: 'numeric',
-                                    hour: '2-digit',
-                                    minute: '2-digit',
-                                  })}
+                                <Typography variant="caption" color="text.secondary">
+                                  {ticket.resolutionTime} h
                                 </Typography>
                               </Box>
+                              
+                              <Typography variant="caption" color="text.secondary" display="block">
+                                {parseDate(ticket.updatedAt)?.toLocaleString('es-ES', { 
+                                  day: 'numeric', 
+                                  month: 'short', 
+                                  year: 'numeric',
+                                  hour: '2-digit',
+                                  minute: '2-digit',
+                                }) || 'Fecha no disponible'}
+                              </Typography>
                             </CardContent>
                           </Card>
                         </Grid>
@@ -760,11 +937,11 @@ const DashboardPage = () => {
                   )}
                 </CardContent>
               </Card>
-            </Grid> {/* Cierre de Grid de últimos tickets resueltos */}
-          </Grid> {/* Cierre de Grid container de gráficos */}
-        </> {/* Cierre de fragmento de loading false */}
+            </Grid>
+          </Grid>
+        </>
       )}
-    </> {/* Cierre de fragmento principal */}
+    </>
   );
 };
 
