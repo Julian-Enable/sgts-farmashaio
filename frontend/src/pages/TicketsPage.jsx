@@ -127,10 +127,13 @@ const TicketsPage = () => {
 
     // Filtro de estado
     if (filters.status) {
-      filtered = filtered.filter(ticket => 
-        ticket.statusName?.toLowerCase() === TICKET_STATUS[filters.status]?.label?.toLowerCase() ||
-        ticket.status?.toLowerCase() === filters.status.toLowerCase()
-      );
+      const filterStatus = typeof filters.status === 'string' ? filters.status.toLowerCase() : '';
+      filtered = filtered.filter(ticket => {
+        const statusName = typeof ticket.statusName === 'string' ? ticket.statusName.toLowerCase() : '';
+        const status = typeof ticket.status === 'string' ? ticket.status.toLowerCase() : '';
+        const labelStatus = TICKET_STATUS[filters.status]?.label?.toLowerCase() || '';
+        return statusName === labelStatus || status === filterStatus;
+      });
     }
 
     // Filtro de prioridad
