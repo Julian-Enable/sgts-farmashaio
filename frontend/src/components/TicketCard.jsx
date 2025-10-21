@@ -84,43 +84,34 @@ const TicketCard = ({ ticket }) => {
         flexDirection: 'column',
         position: 'relative',
         overflow: 'hidden',
-        transition: 'all 0.3s ease',
-        border: '1px solid',
-        borderColor: 'divider',
+        transition: 'box-shadow 0.2s, transform 0.2s',
+        borderRadius: 3,
+        boxShadow: '0 2px 12px rgba(0,0,0,0.07)',
+        background: '#fafdff',
+        border: 'none',
         cursor: 'pointer',
         '&:hover': {
-          transform: 'translateY(-4px)',
-          boxShadow: `0 12px 24px ${alpha(theme.palette[priorityConfig.color]?.main || '#9e9e9e', 0.15)}`,
+          transform: 'translateY(-2px) scale(1.01)',
+          boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
         },
       }}
     >
-      {/* Gradiente de fondo sutil */}
-      <Box
-        sx={{
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          width: '120px',
-          height: '120px',
-          background: getGradient(),
-          opacity: 0.08,
-          borderRadius: '50%',
-          transform: 'translate(30%, -30%)',
-        }}
-      />
-
       <CardContent sx={{ position: 'relative', p: 3, flexGrow: 1 }}>
-        {/* Número de ticket, prioridad y tiempo transcurrido */}
+        {/* Número de ticket, prioridad y tiempo/estado */}
         <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
           <Box display="flex" alignItems="center" gap={1}>
             <Typography
               variant="caption"
               sx={{
                 fontWeight: 700,
-                color: 'text.secondary',
+                color: '#1976d2',
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
-                fontSize: '0.75rem',
+                fontSize: '0.85rem',
+                background: '#e3f2fd',
+                px: 1.2,
+                py: 0.5,
+                borderRadius: 2,
               }}
             >
               #{ticket.ticketNumber}
@@ -130,26 +121,29 @@ const TicketCard = ({ ticket }) => {
               size="small"
               sx={{
                 height: 24,
-                bgcolor: priorityConfig.color ? alpha(theme.palette[priorityConfig.color]?.main || '#9e9e9e', 0.1) : alpha('#9e9e9e', 0.1),
-                color: priorityConfig.color ? `${priorityConfig.color}.main` : 'grey.500',
-                fontWeight: 600,
-                fontSize: '0.75rem',
+                bgcolor: priorityConfig.color ? alpha(theme.palette[priorityConfig.color]?.main || '#9e9e9e', 0.13) : alpha('#9e9e9e', 0.13),
+                color: priorityConfig.color ? theme.palette[priorityConfig.color]?.main : 'grey.700',
+                fontWeight: 700,
+                fontSize: '0.8rem',
+                borderRadius: 2,
+                boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
               }}
             />
           </Box>
-          {/* Si está resuelto, mostrar chip verde. Si no, mostrar tiempo transcurrido */}
+          {/* Si está resuelto o cerrado, mostrar chip verde. Si no, mostrar tiempo transcurrido */}
           {(statusKey?.toLowerCase() === 'cerrado' || statusKey?.toLowerCase() === 'resuelto') ? (
             <Chip
               label={statusKey?.toLowerCase() === 'cerrado' ? 'Cerrado' : 'Resuelto'}
               size="small"
               sx={{
                 height: 24,
-                bgcolor: alpha(theme.palette.success.main, 0.15),
+                bgcolor: alpha(theme.palette.success.main, 0.18),
                 color: theme.palette.success.main,
                 fontWeight: 700,
-                fontSize: '0.8rem',
-                border: `1px solid ${theme.palette.success.main}`,
-                boxShadow: `0 0 4px ${alpha(theme.palette.success.main, 0.15)}`,
+                fontSize: '0.85rem',
+                borderRadius: 2,
+                boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+                px: 2,
               }}
             />
           ) : (
@@ -158,12 +152,13 @@ const TicketCard = ({ ticket }) => {
               size="small"
               sx={{
                 height: 24,
-                bgcolor: alpha(theme.palette[elapsed.color].main, 0.15),
+                bgcolor: alpha(theme.palette[elapsed.color].main, 0.18),
                 color: theme.palette[elapsed.color].main,
                 fontWeight: 700,
-                fontSize: '0.8rem',
-                border: `1px solid ${theme.palette[elapsed.color].main}`,
-                boxShadow: `0 0 4px ${alpha(theme.palette[elapsed.color].main, 0.15)}`,
+                fontSize: '0.85rem',
+                borderRadius: 2,
+                boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+                px: 2,
               }}
             />
           )}
@@ -187,28 +182,34 @@ const TicketCard = ({ ticket }) => {
           {ticket.title}
         </Typography>
 
-        {/* Estado */}
-        <Box display="flex" gap={1} mb={2} flexWrap="wrap" alignItems="center">
+        {/* Estado y categoría */}
+        <Box display="flex" gap={1.5} mb={2} flexWrap="wrap" alignItems="center">
           <Chip
             label={statusConfig.label || statusKey || 'Sin estado'}
             size="small"
             sx={{
               height: 24,
-              bgcolor: statusConfig.color ? alpha(theme.palette[statusConfig.color]?.main || '#9e9e9e', 0.1) : alpha('#9e9e9e', 0.1),
-              color: statusConfig.color ? `${statusConfig.color}.main` : 'grey.500',
-              fontWeight: 600,
-              fontSize: '0.75rem',
+              bgcolor: statusConfig.color ? alpha(theme.palette[statusConfig.color]?.main || '#9e9e9e', 0.13) : alpha('#9e9e9e', 0.13),
+              color: statusConfig.color ? theme.palette[statusConfig.color]?.main : 'grey.700',
+              fontWeight: 700,
+              fontSize: '0.8rem',
+              borderRadius: 2,
+              boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
             }}
           />
           {ticket.categoryName && (
             <Chip
               label={ticket.categoryName}
               size="small"
-              icon={<CategoryIcon sx={{ fontSize: 14 }} />}
+              icon={<CategoryIcon sx={{ fontSize: 16, color: theme.palette.info.main }} />}
               sx={{
                 height: 24,
-                bgcolor: alpha(theme.palette.info.main, 0.08),
-                fontSize: '0.75rem',
+                bgcolor: alpha(theme.palette.info.main, 0.13),
+                color: theme.palette.info.main,
+                fontWeight: 700,
+                fontSize: '0.8rem',
+                borderRadius: 2,
+                boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
               }}
             />
           )}
@@ -236,56 +237,42 @@ const TicketCard = ({ ticket }) => {
         {/* Divider */}
         <Divider sx={{ my: 2 }} />
 
-        {/* Info compacta */}
-        <Box display="flex" flexDirection="column" gap={1}>
+        {/* Info compacta, sin avatar circular */}
+        <Box display="flex" flexDirection="column" gap={1.2} mt={2}>
           <Typography 
             variant="caption" 
             color="text.secondary" 
             sx={{ 
-              fontWeight: 500,
-              fontSize: '0.75rem',
+              fontWeight: 600,
+              fontSize: '0.85rem',
             }}
           >
             Creado por: {ticket.requesterName || 'Sin creador'}
           </Typography>
-          
           {ticket.assignedName && (
-            <Box display="flex" alignItems="center" gap={1}>
-              <Avatar
-                sx={{
-                  width: 20,
-                  height: 20,
-                  fontSize: '0.7rem',
-                  bgcolor: 'success.main',
-                }}
-              >
-                {ticket.assignedName?.charAt(0)}
-              </Avatar>
-              <Typography 
-                variant="caption" 
-                color="text.secondary"
-                sx={{ 
-                  fontWeight: 500,
-                  fontSize: '0.75rem',
-                }}
-              >
-                {ticket.assignedName}
-              </Typography>
-            </Box>
+            <Typography 
+              variant="caption" 
+              color="success.main"
+              sx={{ 
+                fontWeight: 600,
+                fontSize: '0.85rem',
+              }}
+            >
+              Asignado a: {ticket.assignedName}
+            </Typography>
           )}
-          
           <Typography 
             variant="caption" 
             color="text.secondary"
             sx={{ 
               fontWeight: 500,
-              fontSize: '0.75rem',
+              fontSize: '0.85rem',
               display: 'flex',
               alignItems: 'center',
               gap: 0.5,
             }}
           >
-            <CalendarIcon sx={{ fontSize: 14 }} />
+            <CalendarIcon sx={{ fontSize: 16, color: theme.palette.info.main }} />
             {formatDate(ticket.createdAt)}
           </Typography>
         </Box>
