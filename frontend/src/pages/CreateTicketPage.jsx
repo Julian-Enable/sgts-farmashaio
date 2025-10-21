@@ -307,6 +307,9 @@ const CreateTicketPage = () => {
                           error={!!errors.title}
                           helperText={errors.title?.message}
                           sx={{ mb: 3 }}
+                          onKeyDown={e => {
+                            if (e.key === 'Enter') e.preventDefault();
+                          }}
                         />
                       )}
                     />
@@ -325,6 +328,9 @@ const CreateTicketPage = () => {
                           margin="normal"
                           error={!!errors.description}
                           helperText={errors.description?.message || `${field.value.length}/1000 caracteres`}
+                          onKeyDown={e => {
+                            if (e.key === 'Enter') e.preventDefault();
+                          }}
                         />
                       )}
                     />
@@ -351,6 +357,9 @@ const CreateTicketPage = () => {
                               <Select
                                 {...field}
                                 label="Categoría"
+                                onKeyDown={e => {
+                                  if (e.key === 'Enter') e.preventDefault();
+                                }}
                               >
                                 {categories.map((category) => (
                                   <MenuItem key={category.id} value={category.id}>
@@ -383,6 +392,9 @@ const CreateTicketPage = () => {
                               <Select
                                 {...field}
                                 label="Prioridad"
+                                onKeyDown={e => {
+                                  if (e.key === 'Enter') e.preventDefault();
+                                }}
                               >
                                 {priorities.map((priority) => (
                                   <MenuItem key={priority.id} value={priority.id}>
