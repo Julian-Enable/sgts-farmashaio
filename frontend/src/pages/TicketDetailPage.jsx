@@ -261,9 +261,7 @@ const TicketDetailPage = () => {
             </Typography>
           </Box>
         </Box>
-        <Avatar sx={{ bgcolor: 'primary.main', width: 48, height: 48 }}>
-          {user?.firstName?.[0]}
-        </Avatar>
+        {/* Avatar eliminado por preferencia de usuario */}
       </Box>
 
       {/* Error Alert */}
