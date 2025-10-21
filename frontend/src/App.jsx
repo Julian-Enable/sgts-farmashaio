@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Box, CircularProgress, Typography } from '@mui/material';
 
@@ -6,6 +6,7 @@ import { useAuth } from './context/AuthContext.jsx';
 import Layout from './components/Layout.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import Logo from './components/Logo.jsx';
+import SplashVideo from './components/SplashVideo';
 
 // Lazy loading de componentes
 const LoginPage = React.lazy(() => import('./pages/LoginPage.jsx'));
@@ -40,7 +41,19 @@ const LoadingScreen = () => (
 );
 
 function App() {
-  const { isLoading, isAuthenticated } = useAuth();
+  const { isLoading, isAuthenticated, user } = useAuth();
+  const [showSplash, setShowSplash] = React.useState(false);
+
+  React.useEffect(() => {
+    // Solo muestra el splash si NO hay sesión y es recarga (no navegación interna)
+    if (!user && window.performance?.navigation?.type === 1) {
+      setShowSplash(true);
+    }
+  }, [user]);
+
+  if (showSplash) {
+    return <SplashVideo onFinish={() => setShowSplash(false)} />;
+  }
 
   // Mostrar pantalla de carga mientras se restaura la sesión
   if (isLoading) {
