@@ -137,20 +137,36 @@ const TicketCard = ({ ticket }) => {
               }}
             />
           </Box>
-          {/* Tiempo transcurrido visual */}
-          <Chip
-            label={elapsedLabel}
-            size="small"
-            sx={{
-              height: 24,
-              bgcolor: alpha(theme.palette[elapsed.color].main, 0.15),
-              color: theme.palette[elapsed.color].main,
-              fontWeight: 700,
-              fontSize: '0.8rem',
-              border: `1px solid ${theme.palette[elapsed.color].main}`,
-              boxShadow: `0 0 4px ${alpha(theme.palette[elapsed.color].main, 0.15)}`,
-            }}
-          />
+          {/* Si está resuelto, mostrar chip verde. Si no, mostrar tiempo transcurrido */}
+          {statusKey?.toLowerCase() === 'resuelto' ? (
+            <Chip
+              label="Resuelto"
+              size="small"
+              sx={{
+                height: 24,
+                bgcolor: alpha(theme.palette.success.main, 0.15),
+                color: theme.palette.success.main,
+                fontWeight: 700,
+                fontSize: '0.8rem',
+                border: `1px solid ${theme.palette.success.main}`,
+                boxShadow: `0 0 4px ${alpha(theme.palette.success.main, 0.15)}`,
+              }}
+            />
+          ) : (
+            <Chip
+              label={elapsedLabel}
+              size="small"
+              sx={{
+                height: 24,
+                bgcolor: alpha(theme.palette[elapsed.color].main, 0.15),
+                color: theme.palette[elapsed.color].main,
+                fontWeight: 700,
+                fontSize: '0.8rem',
+                border: `1px solid ${theme.palette[elapsed.color].main}`,
+                boxShadow: `0 0 4px ${alpha(theme.palette[elapsed.color].main, 0.15)}`,
+              }}
+            />
+          )}
         </Box>
 
         {/* Título */}
