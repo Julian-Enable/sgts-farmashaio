@@ -1,7 +1,8 @@
 import React from 'react';
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { Home as HomeIcon } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import FuzzyText from '../components/FuzzyText';
 
 const NotFoundPage = () => {
   const navigate = useNavigate();
@@ -12,26 +13,26 @@ const NotFoundPage = () => {
       flexDirection="column"
       alignItems="center"
       justifyContent="center"
-      minHeight="60vh"
+      minHeight="70vh"
       textAlign="center"
       gap={2}
+      sx={{ background: '#18141c' }}
     >
-      <Typography variant="h1" component="h1" sx={{ fontSize: '4rem', fontWeight: 'bold' }}>
+      <FuzzyText baseIntensity={0.2} hoverIntensity={0.5} enableHover={true} fontSize="clamp(3rem, 10vw, 8rem)" color="#fff">
         404
-      </Typography>
-      <Typography variant="h4" component="h2" gutterBottom>
+      </FuzzyText>
+      <FuzzyText fontSize="clamp(1.5rem, 5vw, 3rem)" fontWeight={700} color="#fff" baseIntensity={0.15} hoverIntensity={0.3} enableHover={true}>
         Página no encontrada
-      </Typography>
-      <Typography variant="body1" color="text.secondary" mb={3}>
-        La página que buscas no existe o ha sido movida.
-      </Typography>
-      <Button
-        variant="contained"
-        startIcon={<HomeIcon />}
-        onClick={() => navigate('/')}
-      >
-        Volver al Dashboard
-      </Button>
+      </FuzzyText>
+      <Box mt={3}>
+        <Button
+          variant="contained"
+          startIcon={<HomeIcon />}
+          onClick={() => navigate('/')}
+        >
+          Volver al Dashboard
+        </Button>
+      </Box>
     </Box>
   );
 };
