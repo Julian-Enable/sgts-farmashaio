@@ -103,6 +103,14 @@ const TicketsPage = () => {
       });
   }, []);
 
+  // Filtro de tickets asignados a mí
+  useEffect(() => {
+    const assignedTo = searchParams.get('assignedTo');
+    if (assignedTo === 'me' && user && user.id) {
+      setFilters((prev) => ({ ...prev, assignedTo: user.id }));
+    }
+  }, [searchParams, user]);
+
   // Aplicar filtros y ordenamiento a los tickets
   const getFilteredAndSortedTickets = () => {
     let filtered = [...ticketsData.tickets];
@@ -142,6 +150,11 @@ const TicketsPage = () => {
         ticket.categoryName?.toLowerCase().includes(filters.category.toLowerCase()) ||
         ticket.category?.toLowerCase().includes(filters.category.toLowerCase())
       );
+    }
+
+    // Filtro de tickets asignados a mí
+    if (filters.assignedTo) {
+      filtered = filtered.filter(ticket => ticket.assignedTo === filters.assignedTo);
     }
 
     // Ordenamiento
