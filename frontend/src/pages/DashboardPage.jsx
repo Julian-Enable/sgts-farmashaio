@@ -94,7 +94,7 @@ const DashboardPage = () => {
   const getStatusChartData = () => {
     const statusCount = {};
     tickets.forEach(ticket => {
-      const status = ticket.statusName || 'Sin estado';
+      const status = ticket.status || 'Sin estado';
       statusCount[status] = (statusCount[status] || 0) + 1;
     });
 
@@ -120,7 +120,7 @@ const DashboardPage = () => {
   const getPriorityChartData = () => {
     const priorityCount = {};
     tickets.forEach(ticket => {
-      const priority = ticket.priorityName || 'Sin prioridad';
+      const priority = ticket.priority || 'Sin prioridad';
       priorityCount[priority] = (priorityCount[priority] || 0) + 1;
     });
 
@@ -640,7 +640,7 @@ const DashboardPage = () => {
                       <Legend />
                       <Line 
                         type="monotone" 
-                        dataKey="tickets"
+                        dataKey="total"
                         stroke="#1976d2"
                         strokeWidth={3}
                         dot={{ r: 4 }}
