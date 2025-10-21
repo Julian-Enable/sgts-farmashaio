@@ -395,52 +395,45 @@ const TicketsPage = () => {
       <Card sx={{ mb: 3, borderRadius: 2 }}>
         <CardContent>
           <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                placeholder="Buscar por título, descripción o número de ticket..."
-                value={filters.search}
-                onChange={(e) => handleFilterChange('search', e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon />
-                    </InputAdornment>
-                  ),
-                  endAdornment: filters.search && (
-                    <InputAdornment position="end">
-                      <Button
-                        size="small"
-                        onClick={() => handleFilterChange('search', '')}
-                      >
-                        <ClearIcon />
-                      </Button>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
-            
-            <Grid item xs={12} md={3}>
-              <FormControl fullWidth size="small">
-                <InputLabel>Ordenar por</InputLabel>
-                <Select
-                  value={sortBy}
-                  label="Ordenar por"
-                  onChange={(e) => handleSortChange(e.target.value)}
-                  startAdornment={
-                    <InputAdornment position="start">
-                      <SortIcon />
-                    </InputAdornment>
-                  }
-                >
-                  <MenuItem value="createdAt">Fecha de creación</MenuItem>
-                  <MenuItem value="updatedAt">Última actualización</MenuItem>
-                  <MenuItem value="priority">Prioridad</MenuItem>
-                  <MenuItem value="status">Estado</MenuItem>
-                  <MenuItem value="title">Título</MenuItem>
-                </Select>
-              </FormControl>
+            <Grid item xs={12} md={9}>
+              <Box display="flex" gap={2}>
+                <TextField
+                  fullWidth
+                  size="small"
+                  variant="outlined"
+                  placeholder="Buscar por título, descripción o número de ticket..."
+                  value={filters.search}
+                  onChange={(e) => handleFilterChange('search', e.target.value)}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <SearchIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                  sx={{ borderRadius: 3, bgcolor: 'background.paper' }}
+                />
+                <FormControl fullWidth size="small" sx={{ minWidth: 220, borderRadius: 3 }}>
+                  <InputLabel>Ordenar por</InputLabel>
+                  <Select
+                    value={sortBy}
+                    label="Ordenar por"
+                    onChange={(e) => handleSortChange(e.target.value)}
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <SortIcon />
+                      </InputAdornment>
+                    }
+                    sx={{ borderRadius: 3, bgcolor: 'background.paper', height: 40 }}
+                  >
+                    <MenuItem value="createdAt">Fecha de creación</MenuItem>
+                    <MenuItem value="updatedAt">Última actualización</MenuItem>
+                    <MenuItem value="priority">Prioridad</MenuItem>
+                    <MenuItem value="status">Estado</MenuItem>
+                    <MenuItem value="title">Título</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
             </Grid>
             
             <Grid item xs={12} md={3}>
