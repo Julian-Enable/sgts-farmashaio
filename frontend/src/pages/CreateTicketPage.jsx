@@ -467,11 +467,12 @@ const CreateTicketPage = () => {
                             <Typography variant="subtitle2" color="text.secondary">
                               Prioridad
                             </Typography>
-                            <Chip
-                              size="small"
-                              label={TICKET_PRIORITY[watchedValues.priority]?.label}
-                              color={getPriorityColor(watchedValues.priority)}
-                            />
+                            <Typography variant="body2">
+                              {priorities.find(p => p.id === watchedValues.priority)?.name}
+                            </Typography>
+                            <Typography variant="caption" color="text.secondary">
+                              {priorities.find(p => p.id === watchedValues.priority)?.description}
+                            </Typography>
                           </Grid>
                         </Grid>
                       </Paper>
