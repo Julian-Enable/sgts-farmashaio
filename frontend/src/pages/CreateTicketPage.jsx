@@ -279,7 +279,7 @@ const CreateTicketPage = () => {
         <Grid item xs={12} md={8}>
           <Card>
             <CardContent>
-              <form onSubmit={handleSubmit(handleCreateTicket)}>
+              <form onSubmit={activeStep === steps.length - 1 ? handleSubmit(handleCreateTicket) : (e) => { e.preventDefault(); handleNext(); }}>
                 {/* Step 0: Información básica */}
                 {activeStep === 0 && (
                   <Box>
