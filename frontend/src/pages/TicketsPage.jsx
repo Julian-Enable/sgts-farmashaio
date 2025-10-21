@@ -127,10 +127,13 @@ const TicketsPage = () => {
 
     // Filtro de prioridad
     if (filters.priority) {
-      filtered = filtered.filter(ticket => 
-        ticket.priorityName?.toLowerCase() === TICKET_PRIORITY[filters.priority]?.label?.toLowerCase() ||
-        ticket.priority?.toLowerCase() === filters.priority.toLowerCase()
-      );
+      filtered = filtered.filter(ticket => {
+        const priorityName = typeof ticket.priorityName === 'string' ? ticket.priorityName.toLowerCase() : '';
+        const priority = typeof ticket.priority === 'string' ? ticket.priority.toLowerCase() : '';
+        const filterPriority = typeof filters.priority === 'string' ? filters.priority.toLowerCase() : '';
+        const labelPriority = TICKET_PRIORITY[filters.priority]?.label?.toLowerCase() || '';
+        return priorityName === labelPriority || priority === filterPriority;
+      });
     }
 
     // Filtro de categoría
@@ -156,8 +159,8 @@ const TicketsPage = () => {
           break;
         case 'priority':
           const priorityOrder = { 'critica': 5, 'alta': 4, 'media': 3, 'baja': 2, 'muy-baja': 1 };
-          aValue = priorityOrder[a.priority?.toLowerCase()] || 0;
-          bValue = priorityOrder[b.priority?.toLowerCase()] || 0;
+          aValue = priorityOrder[typeof a.priority === 'string' ? a.priority.toLowerCase() : ''] || 0;
+          bValue = priorityOrder[typeof b.priority === 'string' ? b.priority.toLowerCase() : ''] || 0;
           break;
         case 'status':
           aValue = a.statusName || '';
