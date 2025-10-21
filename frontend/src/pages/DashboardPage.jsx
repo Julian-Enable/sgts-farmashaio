@@ -155,6 +155,20 @@ const DashboardPage = () => {
     return last7Days;
   };
 
+  // Calcular tiempo promedio de resolución
+  const getAvgResolutionTime = () => {
+    const resolvedTickets = tickets.filter(ticket => ticket.statusName === 'Resuelto' || ticket.statusName === 'Cerrado');
+    if (resolvedTickets.length === 0) return 0;
+    const totalMs = resolvedTickets.reduce((acc, ticket) => {
+      const created = new Date(ticket.createdAt);
+      const updated = new Date(ticket.updatedAt);
+      return acc + (updated - created);
+    }, 0);
+    const avgMs = totalMs / resolvedTickets.length;
+    // Convertir a horas
+    return (avgMs / (1000 * 60 * 60)).toFixed(2);
+  };
+
   // Colores para los gráficos
   const STATUS_COLORS = {
     'Nuevo': '#2563eb',
@@ -509,6 +523,14 @@ const DashboardPage = () => {
                       </Typography>
                       <Typography variant="h4" fontWeight={700} color="primary.main">
                         {stats.nuevos + stats.enProgreso}
+                      </Typography>
+                    </Box>
+                    <Box>
+                      <Typography variant="body2" color="text.secondary" gutterBottom>
+                        Tiempo promedio de resolución
+                      </Typography>
+                      <Typography variant="h4" fontWeight={700} color="success.main">
+                        {getAvgResolutionTime()} h
                       </Typography>
                     </Box>
                   </Box>
