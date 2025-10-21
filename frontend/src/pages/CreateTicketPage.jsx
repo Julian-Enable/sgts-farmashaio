@@ -322,43 +322,7 @@ const CreateTicketPage = () => {
                       )}
                     />
 
-                    {/* Adjuntos */}
-                    <Box sx={{ mt: 3 }}>
-                      <Typography variant="subtitle2" gutterBottom>
-                        Adjuntos (Opcional)
-                      </Typography>
-                      <input
-                        accept="image/*,.pdf,.doc,.docx,.txt"
-                        style={{ display: 'none' }}
-                        id="file-upload"
-                        multiple
-                        type="file"
-                        onChange={handleFileAttach}
-                      />
-                      <label htmlFor="file-upload">
-                        <Button
-                          variant="outlined"
-                          component="span"
-                          startIcon={<AttachIcon />}
-                        >
-                          Adjuntar Archivos
-                        </Button>
-                      </label>
-                      
-                      {attachments.length > 0 && (
-                        <Box sx={{ mt: 2 }}>
-                          {attachments.map((file, index) => (
-                            <Chip
-                              key={index}
-                              label={`${file.name} (${(file.size / 1024).toFixed(1)} KB)`}
-                              onDelete={() => removeAttachment(index)}
-                              deleteIcon={<CloseIcon />}
-                              sx={{ mr: 1, mb: 1 }}
-                            />
-                          ))}
-                        </Box>
-                      )}
-                    </Box>
+                    {/* Adjuntos deshabilitados por requerimiento */}
                   </Box>
                 )}
 
@@ -484,23 +448,7 @@ const CreateTicketPage = () => {
                           />
                         </Grid>
 
-                        {attachments.length > 0 && (
-                          <Grid item xs={12}>
-                            <Typography variant="subtitle2" color="text.secondary">
-                              Archivos Adjuntos
-                            </Typography>
-                            <Box>
-                              {attachments.map((file, index) => (
-                                <Chip
-                                  key={index}
-                                  label={file.name}
-                                  size="small"
-                                  sx={{ mr: 1 }}
-                                />
-                              ))}
-                            </Box>
-                          </Grid>
-                        )}
+                        {/* Adjuntos ocultos en revisión */}
                       </Grid>
                     </Paper>
                   </Box>
