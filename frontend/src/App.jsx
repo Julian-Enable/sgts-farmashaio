@@ -19,7 +19,7 @@ const NotificationsPage = React.lazy(() => import('./pages/NotificationsPage.jsx
 const NotFoundPage = React.lazy(() => import('./pages/NotFoundPage.jsx'));
 
 // Componente de loading unificado
-import SplitText from './components/SplitText';
+
 
 const LoadingScreen = () => (
   <Box
@@ -35,20 +35,9 @@ const LoadingScreen = () => (
   >
     <Logo variant="full" size="large" />
     <CircularProgress size={40} sx={{ color: 'white' }} />
-    <SplitText
-      text="Cargando sistema..."
-      className="text-2xl font-semibold text-center"
-      delay={80}
-      duration={0.7}
-      ease="power3.out"
-      splitType="chars"
-      from={{ opacity: 0, y: 40 }}
-      to={{ opacity: 1, y: 0 }}
-      threshold={0.1}
-      rootMargin="-100px"
-      textAlign="center"
-      tag="p"
-    />
+    <Typography variant="body2" color="white" sx={{ opacity: 0.9, mt: 2 }}>
+      Cargando sistema...
+    </Typography>
   </Box>
 );
 
