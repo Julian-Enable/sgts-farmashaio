@@ -279,21 +279,12 @@ const CreateTicketPage = () => {
         <Grid item xs={12} md={8}>
           <Card>
             <CardContent>
-              <form onSubmit={(e) => {
-                if (activeStep === steps.length - 1) {
-                  handleSubmit(handleCreateTicket)(e);
-                } else {
-                  e.preventDefault();
-                  handleNext();
-                }
-              }}>
                 {/* Step 0: Información básica */}
                 {activeStep === 0 && (
                   <Box>
                     <Typography variant="h6" gutterBottom>
                       Información Básica del Ticket
                     </Typography>
-                    
                     <Controller
                       name="title"
                       control={control}
@@ -313,7 +304,6 @@ const CreateTicketPage = () => {
                         />
                       )}
                     />
-
                     <Controller
                       name="description"
                       control={control}
@@ -334,8 +324,15 @@ const CreateTicketPage = () => {
                         />
                       )}
                     />
-
-                    {/* Adjuntos deshabilitados por requerimiento */}
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 4 }}>
+                      <Button
+                        type="button"
+                        variant="contained"
+                        onClick={handleNext}
+                      >
+                        Siguiente
+                      </Button>
+                    </Box>
                   </Box>
                 )}
 
@@ -345,7 +342,6 @@ const CreateTicketPage = () => {
                     <Typography variant="h6" gutterBottom>
                       Categorización del Ticket
                     </Typography>
-
                     <Grid container spacing={3}>
                       <Grid item xs={12} md={6}>
                         <Controller
@@ -381,7 +377,6 @@ const CreateTicketPage = () => {
                           )}
                         />
                       </Grid>
-
                       <Grid item xs={12} md={6}>
                         <Controller
                           name="priority"
@@ -417,82 +412,13 @@ const CreateTicketPage = () => {
                         />
                       </Grid>
                     </Grid>
-                  </Box>
-                )}
-
-                {/* Step 2: Revisión */}
-                {activeStep === 2 && (
-                  <Box>
-                    <Typography variant="h6" gutterBottom>
-                      Revisión del Ticket
-                    </Typography>
-
-                    <Paper sx={{ p: 3, bgcolor: 'grey.50' }}>
-                      <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                          <Typography variant="subtitle2" color="text.secondary">
-                            Título
-                          </Typography>
-                          <Typography variant="body1" gutterBottom>
-                            {watchedValues.title}
-                          </Typography>
-                        </Grid>
-
-                        <Grid item xs={12}>
-                          <Typography variant="subtitle2" color="text.secondary">
-                            Descripción
-                          </Typography>
-                          <Typography variant="body2" gutterBottom>
-                            {watchedValues.description}
-                          </Typography>
-                        </Grid>
-
-                        <Grid item xs={6}>
-                          <Typography variant="subtitle2" color="text.secondary">
-                            Categoría
-                          </Typography>
-                          <Typography variant="body2">
-                            {categories.find(c => c.id === watchedValues.category)?.name}
-                          </Typography>
-                        </Grid>
-
-                        <Grid item xs={6}>
-                          <Typography variant="subtitle2" color="text.secondary">
-                            Prioridad
-                          </Typography>
-                          <Chip
-                            size="small"
-                            label={TICKET_PRIORITY[watchedValues.priority]?.label}
-                            color={getPriorityColor(watchedValues.priority)}
-                          />
-                        </Grid>
-
-                        {/* Adjuntos ocultos en revisión */}
-                      </Grid>
-                    </Paper>
-                  </Box>
-                )}
-
-                {/* Navigation Buttons */}
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
-                  <Button
-                    disabled={activeStep === 0}
-                    onClick={handleBack}
-                  >
-                    Anterior
-                  </Button>
-
-                  <Box>
-                    {activeStep === steps.length - 1 ? (
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
                       <Button
-                        type="submit"
-                        variant="contained"
-                        disabled={loading || !isValid}
-                        startIcon={loading ? null : <SendIcon />}
+                        disabled={activeStep === 0}
+                        onClick={handleBack}
                       >
-                        {loading ? 'Creando...' : 'Crear Ticket'}
+                        Anterior
                       </Button>
-                    ) : (
                       <Button
                         type="button"
                         variant="contained"
@@ -500,10 +426,73 @@ const CreateTicketPage = () => {
                       >
                         Siguiente
                       </Button>
-                    )}
+                    </Box>
                   </Box>
-                </Box>
-              </form>
+                )}
+
+                {/* Step 2: Revisión */}
+                {activeStep === 2 && (
+                  <form onSubmit={handleSubmit(handleCreateTicket)}>
+                    <Box>
+                      <Typography variant="h6" gutterBottom>
+                        Revisión del Ticket
+                      </Typography>
+                      <Paper sx={{ p: 3, bgcolor: 'grey.50' }}>
+                        <Grid container spacing={2}>
+                          <Grid item xs={12}>
+                            <Typography variant="subtitle2" color="text.secondary">
+                              Título
+                            </Typography>
+                            <Typography variant="body1" gutterBottom>
+                              {watchedValues.title}
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={12}>
+                            <Typography variant="subtitle2" color="text.secondary">
+                              Descripción
+                            </Typography>
+                            <Typography variant="body2" gutterBottom>
+                              {watchedValues.description}
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography variant="subtitle2" color="text.secondary">
+                              Categoría
+                            </Typography>
+                            <Typography variant="body2">
+                              {categories.find(c => c.id === watchedValues.category)?.name}
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography variant="subtitle2" color="text.secondary">
+                              Prioridad
+                            </Typography>
+                            <Chip
+                              size="small"
+                              label={TICKET_PRIORITY[watchedValues.priority]?.label}
+                              color={getPriorityColor(watchedValues.priority)}
+                            />
+                          </Grid>
+                        </Grid>
+                      </Paper>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
+                        <Button
+                          onClick={handleBack}
+                        >
+                          Anterior
+                        </Button>
+                        <Button
+                          type="submit"
+                          variant="contained"
+                          disabled={loading || !isValid}
+                          startIcon={loading ? null : <SendIcon />}
+                        >
+                          {loading ? 'Creando...' : 'Crear Ticket'}
+                        </Button>
+                      </Box>
+                    </Box>
+                  </form>
+                )}
             </CardContent>
           </Card>
         </Grid>
