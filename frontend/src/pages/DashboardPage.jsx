@@ -288,7 +288,7 @@ const DashboardPage = () => {
   );
 
   return (
-  <>
+    <>
       {/* Header moderno con gradiente */}
       <Paper 
         elevation={0}
@@ -338,7 +338,7 @@ const DashboardPage = () => {
             </Typography>
           </Box>
         </Box>
-  </Paper>
+      </Paper>
 
       {/* Error Alert */}
       {error && (
@@ -673,46 +673,98 @@ const DashboardPage = () => {
                       <Tooltip />
                       <Legend />
                       <Line 
-                        type="monotone" 
-                        dataKey="total"
-                        stroke="#1976d2"
-                        strokeWidth={3}
-                        dot={{ r: 4 }}
-                        activeDot={{ r: 6 }}
+                        type="monotone"
+                        dataKey="nuevos"
+                        stroke="#2563eb"
+                        strokeWidth={2}
+                        activeDot={{ r: 4 }}
+                      />
+                      <Line 
+                        type="monotone"
+                        dataKey="resueltos"
+                        stroke="#10b981"
+                        strokeWidth={2}
                       />
                     </LineChart>
                   </ResponsiveContainer>
                 </CardContent>
               </Card>
             </Grid>
+          </Grid>
 
-            {/* Últimos tickets resueltos */}
-            <Grid item xs={12} md={6}>
-              <Card sx={{ height: '100%', border: '1px solid', borderColor: 'divider' }}>
+          {/* Últimos Tickets Resueltos */}
+          <Grid container spacing={3} mt={4}>
+            <Grid item xs={12}>
+              <Card sx={{ border: '1px solid', borderColor: 'divider' }}>
                 <CardContent sx={{ p: 3 }}>
-                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-                    Últimos tickets resueltos
+                  <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, mb: 2 }}>
+                    Últimos Tickets Resueltos
                   </Typography>
-                  <Box>
-                    {getLastResolvedTickets().length === 0 ? (
-                      <Typography variant="body2" color="text.secondary">No hay tickets resueltos recientemente.</Typography>
-                    ) : (
-                      getLastResolvedTickets().map(ticket => (
-                        <Box key={ticket.id} sx={{ mb: 2, p: 2, borderRadius: 2, bgcolor: 'rgba(16,185,129,0.08)' }}>
-                          <Typography variant="subtitle2" fontWeight={700}>{ticket.title}</Typography>
-                          <Typography variant="body2" color="text.secondary">Resuelto en {ticket.resolutionTime} h</Typography>
-                          <Typography variant="caption" color="text.secondary">{new Date(ticket.updatedAt).toLocaleString('es-ES')}</Typography>
-                        </Box>
-                      ))
-                    }
-                  </Box>
+                  
+                  {getLastResolvedTickets().length === 0 ? (
+                    <Typography variant="body2" color="text.secondary">
+                      No hay tickets resueltos recientemente.
+                    </Typography>
+                  ) : (
+                    <Grid container spacing={2}>
+                      {getLastResolvedTickets().map(ticket => (
+                        <Grid item xs={12} sm={6} md={4} key={ticket.id}>
+                          <Card 
+                            sx={{ 
+                              display: 'flex',
+                              flexDirection: 'column',
+                              height: '100%',
+                              border: '1px solid',
+                              borderColor: 'divider',
+                              transition: 'transform 0.3s ease',
+                              '&:hover': {
+                                transform: 'translateY(-4px)',
+                                boxShadow: `0 12px 24px ${alpha(theme.palette.primary.main, 0.15)}`,
+                              },
+                            }}
+                          >
+                            <CardContent sx={{ flex: 1 }}>
+                              <Typography variant="subtitle1" fontWeight={500} gutterBottom>
+                                Ticket #{ticket.id}
+                              </Typography>
+                              <Typography variant="body2" color="text.secondary" gutterBottom>
+                                {ticket.title}
+                              </Typography>
+                              
+                              <Box display="flex" alignItems="center" justifyContent="space-between" mt={2}>
+                                <Chip 
+                                  label={ticket.statusName} 
+                                  sx={{ 
+                                    bgcolor: STATUS_COLORS[ticket.statusName] || 'default.main',
+                                    color: 'white',
+                                    borderRadius: 1,
+                                    fontSize: '0.75rem',
+                                    fontWeight: 600,
+                                  }}
+                                />
+                                <Typography variant="body2" color="text.secondary">
+                                  {new Date(ticket.updatedAt).toLocaleString('es-ES', { 
+                                    day: 'numeric', 
+                                    month: 'short', 
+                                    year: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                  })}
+                                </Typography>
+                              </Box>
+                            </CardContent>
+                          </Card>
+                        </Grid>
+                      ))}
+                    </Grid>
+                  )}
                 </CardContent>
               </Card>
-            </Grid>
-          </Grid>
-        </>
+            </Grid> {/* Cierre de Grid de últimos tickets resueltos */}
+          </Grid> {/* Cierre de Grid container de gráficos */}
+        </> {/* Cierre de fragmento de loading false */}
       )}
-    </>
+    </> {/* Cierre de fragmento principal */}
   );
 };
 
