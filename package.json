@@ -1,7 +1,9 @@
 {
   "dependencies": {
+    "@gsap/react": "^2.1.2",
     "@react-three/fiber": "^9.4.0",
     "@react-three/postprocessing": "^3.0.4",
+    "gsap": "^3.13.0",
     "postprocessing": "^6.37.8",
     "three": "^0.180.0"
   }

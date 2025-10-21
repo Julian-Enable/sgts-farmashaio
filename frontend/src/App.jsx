@@ -19,52 +19,38 @@ const NotificationsPage = React.lazy(() => import('./pages/NotificationsPage.jsx
 const NotFoundPage = React.lazy(() => import('./pages/NotFoundPage.jsx'));
 
 // Componente de loading unificado
-import { keyframes } from '@emotion/react';
+import SplitText from './components/SplitText';
 
-const jump = keyframes`
-  0% { transform: translateY(0); }
-  30% { transform: translateY(-18px); }
-  50% { transform: translateY(0); }
-  100% { transform: translateY(0); }
-`;
-
-const LoadingScreen = () => {
-  const text = 'Cargando sistema...';
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '100vh',
-        background: 'linear-gradient(135deg, rgb(37,99,235) 0%, rgb(30,64,175) 100%)',
-        gap: 3,
-      }}
-    >
-      <Logo variant="full" size="large" />
-      <CircularProgress size={40} sx={{ color: 'white' }} />
-      <Box sx={{ display: 'flex', gap: 0.5, mt: 2 }}>
-        {text.split('').map((char, i) => (
-          <Typography
-            key={i}
-            variant="body2"
-            color="white"
-            sx={{
-              opacity: 0.9,
-              display: 'inline-block',
-              animation: `${jump} 1.2s ${i * 0.07}s infinite`,
-              fontWeight: 500,
-              fontSize: '1.2rem',
-            }}
-          >
-            {char === ' ' ? '\u00A0' : char}
-          </Typography>
-        ))}
-      </Box>
-    </Box>
-  );
-};
+const LoadingScreen = () => (
+  <Box
+    sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, rgb(37,99,235) 0%, rgb(30,64,175) 100%)',
+      gap: 3,
+    }}
+  >
+    <Logo variant="full" size="large" />
+    <CircularProgress size={40} sx={{ color: 'white' }} />
+    <SplitText
+      text="Cargando sistema..."
+      className="text-2xl font-semibold text-center"
+      delay={80}
+      duration={0.7}
+      ease="power3.out"
+      splitType="chars"
+      from={{ opacity: 0, y: 40 }}
+      to={{ opacity: 1, y: 0 }}
+      threshold={0.1}
+      rootMargin="-100px"
+      textAlign="center"
+      tag="p"
+    />
+  </Box>
+);
 
 
 function App() {
