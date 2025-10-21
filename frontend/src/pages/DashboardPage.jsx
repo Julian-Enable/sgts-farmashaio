@@ -169,6 +169,18 @@ const DashboardPage = () => {
     return (avgMs / (1000 * 60 * 60)).toFixed(2);
   };
 
+  // Últimos tickets resueltos con tiempo de resolución
+  const getLastResolvedTickets = () => {
+    return tickets
+      .filter(ticket => ticket.statusName === 'Resuelto' || ticket.statusName === 'Cerrado')
+      .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
+      .slice(0, 5)
+      .map(ticket => ({
+        ...ticket,
+        resolutionTime: ((new Date(ticket.updatedAt) - new Date(ticket.createdAt)) / (1000 * 60 * 60)).toFixed(2),
+      }));
+  };
+
   // Colores para los gráficos
   const STATUS_COLORS = {
     'Nuevo': '#2563eb',
@@ -670,6 +682,30 @@ const DashboardPage = () => {
                       />
                     </LineChart>
                   </ResponsiveContainer>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            {/* Últimos tickets resueltos */}
+            <Grid item xs={12} md={6}>
+              <Card sx={{ height: '100%', border: '1px solid', borderColor: 'divider' }}>
+                <CardContent sx={{ p: 3 }}>
+                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+                    Últimos tickets resueltos
+                  </Typography>
+                  <Box>
+                    {getLastResolvedTickets().length === 0 ? (
+                      <Typography variant="body2" color="text.secondary">No hay tickets resueltos recientemente.</Typography>
+                    ) : (
+                      getLastResolvedTickets().map(ticket => (
+                        <Box key={ticket.id} sx={{ mb: 2, p: 2, borderRadius: 2, bgcolor: 'rgba(16,185,129,0.08)' }}>
+                          <Typography variant="subtitle2" fontWeight={700}>{ticket.title}</Typography>
+                          <Typography variant="body2" color="text.secondary">Resuelto en {ticket.resolutionTime} h</Typography>
+                          <Typography variant="caption" color="text.secondary">{new Date(ticket.updatedAt).toLocaleString('es-ES')}</Typography>
+                        </Box>
+                      ))
+                    }
+                  </Box>
                 </CardContent>
               </Card>
             </Grid>
