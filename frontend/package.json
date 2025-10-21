@@ -36,7 +36,7 @@
   "@react-three/postprocessing": "^2.5.5",
   "postprocessing": "^6.30.2",
   "gsap": "^3.12.5",
-  "@gsap/react": "^1.1.2"
+  "@gsap/react": "2.1.2"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.17.0",
