@@ -138,9 +138,9 @@ const TicketCard = ({ ticket }) => {
             />
           </Box>
           {/* Si está resuelto, mostrar chip verde. Si no, mostrar tiempo transcurrido */}
-          {statusKey?.toLowerCase() === 'resuelto' ? (
+          {statusKey?.toLowerCase() === 'cerrado' ? (
             <Chip
-              label="Resuelto"
+              label="Cerrado"
               size="small"
               sx={{
                 height: 24,
