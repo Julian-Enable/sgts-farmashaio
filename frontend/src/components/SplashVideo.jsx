@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import splashVideo from '../assets/splash.mp4';
 
 const SplashVideo = ({ onFinish }) => {
   const videoRef = useRef(null);
@@ -24,7 +25,7 @@ const SplashVideo = ({ onFinish }) => {
     }}>
       <video
         ref={videoRef}
-        src={require('../assets/splash.mp4')}
+        src={splashVideo}
         autoPlay
         muted
         style={{ width: '100vw', height: '100vh', objectFit: 'cover' }}
