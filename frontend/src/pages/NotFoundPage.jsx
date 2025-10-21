@@ -32,10 +32,10 @@ const NotFoundPage = () => {
         gap={2}
         sx={{ position: 'relative', zIndex: 1 }}
       >
-        <FuzzyText baseIntensity={0.2} hoverIntensity={0.5} enableHover={true} fontSize="clamp(3rem, 10vw, 8rem)" color="#222">
+        <FuzzyText baseIntensity={0.2} hoverIntensity={0.5} enableHover={true} fontSize="clamp(3rem, 10vw, 8rem)" color="#fff">
           404
         </FuzzyText>
-        <FuzzyText fontSize="clamp(1.5rem, 5vw, 3rem)" fontWeight={700} color="#222" baseIntensity={0.15} hoverIntensity={0.3} enableHover={true}>
+        <FuzzyText fontSize="clamp(1.5rem, 5vw, 3rem)" fontWeight={700} color="#fff" baseIntensity={0.15} hoverIntensity={0.3} enableHover={true}>
           Aqui no hay nada
         </FuzzyText>
         <Box mt={4}>
@@ -44,17 +44,17 @@ const NotFoundPage = () => {
             startIcon={<HomeIcon />}
             onClick={() => navigate('/')}
             sx={{
-              background: 'linear-gradient(90deg, #1976d2 0%, #1565c0 100%)',
+              background: 'rgba(20,20,20,0.85)',
               color: '#fff',
               fontWeight: 700,
               fontSize: '1.1rem',
               px: 4,
               py: 1.5,
               borderRadius: 3,
-              boxShadow: '0 2px 8px rgba(25, 118, 210, 0.12)',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.18)',
               '&:hover': {
-                background: 'linear-gradient(90deg, #1565c0 0%, #1976d2 100%)',
-                boxShadow: '0 4px 16px rgba(25, 118, 210, 0.18)',
+                background: 'rgba(40,40,40,1)',
+                boxShadow: '0 4px 16px rgba(0,0,0,0.28)',
               },
             }}
           >
