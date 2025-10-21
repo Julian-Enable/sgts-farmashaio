@@ -245,21 +245,24 @@ const TicketDetailPage = () => {
 
   return (
     <Box>
-      {/* Header */}
+      {/* Header mejorado */}
       <Box display="flex" alignItems="center" justifyContent="space-between" mb={3}>
         <Box display="flex" alignItems="center">
           <IconButton onClick={() => navigate('/tickets')} sx={{ mr: 2 }}>
             <BackIcon />
           </IconButton>
           <Box>
-            <Typography variant="h4" component="h1">
-              Ticket #{ticket.id}
+            <Typography variant="h4" component="h1" sx={{ fontWeight: 700 }}>
+              Detalle del Ticket
             </Typography>
             <Typography variant="subtitle1" color="text.secondary">
-              {ticket.title}
+              Sistema de Gestión de Tickets
             </Typography>
           </Box>
         </Box>
+        <Avatar sx={{ bgcolor: 'primary.main', width: 48, height: 48 }}>
+          {user?.firstName?.[0]}
+        </Avatar>
       </Box>
 
       {/* Error Alert */}
@@ -272,32 +275,35 @@ const TicketDetailPage = () => {
       <Grid container spacing={3}>
         {/* Contenido Principal */}
         <Grid item xs={12} md={8}>
-          {/* Información del Ticket */}
-          <Card sx={{ mb: 3 }}>
-            <CardHeader
-              title={ticket.title}
-              subheader={`Creado el ${formatDate(ticket.createdAt)}`}
-              action={
+          {/* Información del Ticket mejorada */}
+          <Card sx={{ mb: 3, boxShadow: 3 }}>
+            <CardContent>
+              <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
+                <Box>
+                  <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                    Ticket #{ticket.id} - {ticket.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Creado el {formatDate(ticket.createdAt)}
+                  </Typography>
+                </Box>
                 <Box display="flex" gap={1}>
                   <Chip
                     label={ticket.status?.name || 'Sin estado'}
-                    sx={{ bgcolor: ticket.status?.color || '#gray', color: 'white' }}
+                    color={getStatusColor(ticket.status?.key || ticket.status?.name)}
+                    sx={{ fontWeight: 700, fontSize: '0.95rem', height: 28 }}
                   />
                   <Chip
                     label={ticket.priority?.name || 'Sin prioridad'}
-                    sx={{ bgcolor: ticket.priority?.color || '#gray', color: 'white' }}
-                    variant="outlined"
+                    color={getPriorityColor(ticket.priority?.key || ticket.priority?.name)}
+                    sx={{ fontWeight: 700, fontSize: '0.95rem', height: 28 }}
                   />
                 </Box>
-              }
-            />
-            <Divider />
-            <CardContent>
-              <Typography variant="body1" paragraph>
+              </Box>
+              <Divider sx={{ mb: 2 }} />
+              <Typography variant="body1" paragraph sx={{ mb: 2 }}>
                 {ticket.description}
               </Typography>
-              
-              {/* Información adicional */}
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
                   <Box display="flex" alignItems="center" gap={1}>
@@ -329,11 +335,11 @@ const TicketDetailPage = () => {
             </CardContent>
           </Card>
 
-          {/* Comentarios */}
-          <Card>
+          {/* Comentarios mejorados */}
+          <Card sx={{ boxShadow: 1 }}>
             <CardHeader
-              title={`Comentarios (${comments.length})`}
-              avatar={<CommentIcon />}
+              title={<Box display="flex" alignItems="center" gap={1}><CommentIcon /> Comentarios ({comments.length})</Box>}
+              sx={{ bgcolor: 'grey.100' }}
             />
             <Divider />
             <CardContent>
@@ -368,11 +374,11 @@ const TicketDetailPage = () => {
                   {comments.map((comment, index) => (
                     <Box key={comment.id || index} sx={{ mb: 3 }}>
                       <Box display="flex" alignItems="center" gap={2} mb={1}>
-                        <Avatar sx={{ width: 32, height: 32 }}>
+                        <Avatar sx={{ width: 32, height: 32, bgcolor: 'primary.light' }}>
                           {comment.author?.firstName?.[0]}
                         </Avatar>
                         <Box>
-                          <Typography variant="subtitle2">
+                          <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
                             {comment.author?.firstName} {comment.author?.lastName}
                           </Typography>
                           <Typography variant="caption" color="text.secondary">
@@ -380,7 +386,7 @@ const TicketDetailPage = () => {
                           </Typography>
                         </Box>
                       </Box>
-                      <Paper sx={{ p: 2, bgcolor: 'grey.50' }}>
+                      <Paper sx={{ p: 2, bgcolor: 'grey.50', borderRadius: 2 }}>
                         <Typography variant="body2">
                           {comment.content}
                         </Typography>
@@ -393,11 +399,11 @@ const TicketDetailPage = () => {
           </Card>
         </Grid>
 
-        {/* Panel Lateral */}
+        {/* Panel Lateral mejorado */}
         <Grid item xs={12} md={4}>
           {/* Acciones */}
-          <Card sx={{ mb: 3 }}>
-            <CardHeader title="Acciones" />
+          <Card sx={{ mb: 3, boxShadow: 1 }}>
+            <CardHeader title={<Box display="flex" alignItems="center" gap={1}><CheckIcon /> Acciones</Box>} sx={{ bgcolor: 'grey.100' }} />
             <Divider />
             <CardContent>
               <Box display="flex" flexDirection="column" gap={2}>
@@ -411,7 +417,6 @@ const TicketDetailPage = () => {
                     >
                       Cambiar Estado
                     </Button>
-                    
                     {user.role === 'administrador' && (
                       <Button
                         variant="outlined"
@@ -428,9 +433,9 @@ const TicketDetailPage = () => {
             </CardContent>
           </Card>
 
-          {/* Historial */}
-          <Card>
-            <CardHeader title="Historial" avatar={<HistoryIcon />} />
+          {/* Historial mejorado */}
+          <Card sx={{ boxShadow: 1 }}>
+            <CardHeader title={<Box display="flex" alignItems="center" gap={1}><HistoryIcon /> Historial</Box>} sx={{ bgcolor: 'grey.100' }} />
             <Divider />
             <CardContent>
               {history.length === 0 ? (
@@ -447,7 +452,9 @@ const TicketDetailPage = () => {
                         p: 2, 
                         mb: 2, 
                         borderLeft: '4px solid',
-                        borderLeftColor: 'primary.main'
+                        borderLeftColor: 'primary.main',
+                        borderRadius: 2,
+                        bgcolor: 'grey.50'
                       }}
                     >
                       <Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={1}>
