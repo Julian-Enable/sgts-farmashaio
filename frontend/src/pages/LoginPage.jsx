@@ -276,70 +276,7 @@ const LoginPage = () => {
               </Button>
             </Box>
 
-            {/* Información de usuarios de prueba con diseño moderno */}
-            <Box 
-              sx={{ 
-                mt: 4, 
-                p: 3, 
-                bgcolor: alpha(theme.palette.primary.main, 0.04),
-                borderRadius: 3,
-                border: '2px dashed',
-                borderColor: alpha(theme.palette.primary.main, 0.2),
-              }}
-            >
-              <Typography 
-                variant="subtitle2" 
-                gutterBottom 
-                sx={{ 
-                  fontWeight: 700,
-                  color: 'primary.main',
-                  mb: 2,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 1,
-                }}
-              >
-                👥 Usuarios de Prueba
-              </Typography>
-              <Box sx={{ display: 'grid', gap: 1.5, fontSize: '0.9rem' }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <Box 
-                    sx={{ 
-                      width: 8, 
-                      height: 8, 
-                      borderRadius: '50%', 
-                      bgcolor: 'error.main' 
-                    }} 
-                  />
-                  <Typography variant="body2" sx={{ fontWeight: 600 }}>Admin:</Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>admin@farmashaio.com / admin123</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <Box 
-                    sx={{ 
-                      width: 8, 
-                      height: 8, 
-                      borderRadius: '50%', 
-                      bgcolor: 'warning.main' 
-                    }} 
-                  />
-                  <Typography variant="body2" sx={{ fontWeight: 600 }}>Técnico:</Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>tecnico1@farmashaio.com / tecnico123</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <Box 
-                    sx={{ 
-                      width: 8, 
-                      height: 8, 
-                      borderRadius: '50%', 
-                      bgcolor: 'info.main' 
-                    }} 
-                  />
-                  <Typography variant="body2" sx={{ fontWeight: 600 }}>Empleado:</Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>empleado1@farmashaio.com / empleado123</Typography>
-                </Box>
-              </Box>
-            </Box>
+            {/* ...existing code... */}
           </CardContent>
 
           {/* Footer mejorado */}
